@@ -60,6 +60,7 @@
     DOM.generate = $(".generate");
     DOM.seed = $(".seed");
     DOM.rootKey = $(".root-key");
+    DOM.fingerprint = $(".fingerprint");
     DOM.litecoinLtubContainer = $(".litecoin-ltub-container");
     DOM.litecoinUseLtub = $(".litecoin-use-ltub");
     DOM.extendedPrivKey = $(".extended-priv-key");
@@ -634,7 +635,16 @@
                 phraseChanged();
             }
             else {
-                DOM.generate.trigger("click");
+                // Generate a new phrase in the selected language
+                clearDisplay();
+                showPending();
+                setTimeout(function() {
+                    var phrase = generateRandomPhrase();
+                    if (phrase) {
+                        DOM.phrase.val(phrase);
+                        phraseChanged();
+                    }
+                }, 50);
             }
         }, 50);
     }
@@ -1057,6 +1067,9 @@
         DOM.seed.val(seed);
         var rootKey = bip32RootKey.toBase58();
         DOM.rootKey.val(rootKey);
+        // Display the fingerprint
+        var fingerprint = bip32RootKey.fingerprint.toString('hex');
+        DOM.fingerprint.val(fingerprint);
         var xprvkeyB58 = "NA";
         if (!bip32ExtendedKey.isNeutered()) {
             xprvkeyB58 = bip32ExtendedKey.toBase58();
