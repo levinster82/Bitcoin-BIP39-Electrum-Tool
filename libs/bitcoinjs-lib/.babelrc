@@ -1,0 +1,13 @@
+{
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "targets": {
+          "browsers": ["defaults"]
+        },
+        "modules": "cjs"
+      }
+    ]
+  ]
+}

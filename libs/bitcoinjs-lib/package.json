@@ -2,13 +2,20 @@
   "name": "bitcoinjs-lib",
   "version": "3.3.2",
   "scripts": {
-    "build": "browserify bitcoinjs-lib.js --standalone bitcoinjs > /tmp/bitcoinjs-lib.js"
+    "build": "browserify bitcoinjs-lib.js -p esmify --standalone bitcoinjs > /tmp/bitcoinjs-lib.js"
   },
   "dependencies": {
-    "bitcoinjs-lib": "3.3.2"
+    "@babel/core": "^7.28.3",
+    "@babel/preset-env": "^7.28.3",
+    "@bitcoinerlab/secp256k1": "^1.2.0",
+    "babelify": "^10.0.0",
+    "bip32": "^4.0.0",
+    "bitcoinjs-lib": "^6.1.7",
+    "ecpair": "^3.0.0",
+    "esmify": "^2.1.1"
   },
   "devDependencies": {
-    "browserify": "^16.2.3",
+    "browserify": "^17.0.1",
     "uglify-es": "^3.3.9"
   }
 }

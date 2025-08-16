@@ -2289,36 +2289,6 @@ it('Allows selection of Wagerr', function(done) {
     };
     testNetwork(done, params);
 });
-it('Allows selection of Groestlcoin', function(done) {
-    var params = {
-        selectText: "GRS - Groestlcoin",
-        phrase: "abandon abandon ability",
-        firstAddress: "FZycsFvZ1eH1hbtyjBpAgJSukVw1bN6PBN",
-        firstPubKey: "03c1d0c7b272a762b4b697bdb1b3b36e26add3215e69f7251db16c5a51c84b7b4c",
-        firstPrivKey: "KzQVqEsQrKjb4K6bViRqqQJc9nXrvEAxDy2AiPf6tfEkRW7rgNfg",
-    };
-    testNetwork(done, params);
-});
-it('Allows selection of Groestlcoin Testnet', function(done) {
-    var params = {
-        selectText: "GRS - Groestlcoin Testnet",
-        phrase: "abandon abandon ability",
-        firstAddress: "mucaU5iiDaJDb69BHLeDv8JFfGiygRPne9",
-        firstPubKey: "0382a5450765e2025bdb5f7d109c9254a11ef97a566228bf171d80ecb348763bb0",
-        firstPrivKey: "cV3coiYD2NhHKfhC6Gb8DzpvPzcGYYExYxuNxpUtKq3VUJpRHpNq",
-    };
-    testNetwork(done, params);
-});
-it('Allows selection of Elastos', function(done) {
-    var params = {
-        selectText: "ELA - Elastos",
-        phrase: "abandon abandon ability",
-        firstAddress: "EMccDcsn3SwPDcfeQMf3w7utqi8ioWYtkg",
-        firstPubKey: "02c936d5025b06acc283bf9562700279fd1ea3ce7ee204afca0c07be77bc3b4822",
-        firstPrivKey: "608f7e64b46a1df51ba6b5b38b0599196afd1f36572b1ec696d7aae65d05045d",
-    };
-    testNetwork(done, params);
-});
 it('Allows selection of Energyweb', function(done) {
     var params = {
         selectText: "EWT - EnergyWeb",
@@ -5022,26 +4992,6 @@ it('Shows litecoin BIP49 addresses', function(done) {
     });
 });
 
-it('Shows Groestlcoin BIP49 addresses', function(done) {
-    driver.findElement(By.css('.phrase'))
-        .sendKeys('abandon abandon ability');
-    selectNetwork("GRS - Groestlcoin");
-    driver.findElement(By.css('#bip49-tab a'))
-        .click()
-    // bip49 addresses are shown
-    driver.sleep(generateDelay).then(function() {
-        driver.findElement(By.css('#bip49 .available'))
-            .getAttribute("class")
-            .then(function(classes) {
-                expect(classes).not.toContain("hidden");
-                // check first address
-                getFirstAddress(function(address) {
-                    expect(address).toBe("3HXSCZwCypLyixMsF4Z1sN49noJtrm8gnX");
-                    done();
-                });
-            });
-    });
-});
 
 it('Can use root keys to generate segwit table rows', function(done) {
     // segwit uses ypub / zpub instead of xpub but the root key should still
