@@ -214,8 +214,8 @@
         DOM.litecoinLtubContainer.addClass("hidden");
         DOM.bitcoinCashAddressTypeContainer.addClass("hidden");
         var networkIndex = e.target.value;
-        var network = networks[networkIndex];
-        network.onSelect();
+        var selectedNetwork = networks[networkIndex];
+        selectedNetwork.onSelect();
         adjustNetworkForSegwit();
         if (seed != null) {
             seedChanged()
@@ -1231,7 +1231,8 @@
                         address = libs.bitcoin.payments.p2wsh({
                             redeem: libs.bitcoin.payments.p2ms({ 
                                 m: 1, 
-                                pubkeys: [key.publicKey] 
+                                pubkeys: [key.publicKey],
+                                network: network
                             }),
                             network: network
                         }).address;
@@ -1242,7 +1243,8 @@
                             redeem: libs.bitcoin.payments.p2wsh({
                                 redeem: libs.bitcoin.payments.p2ms({ 
                                     m: 1, 
-                                    pubkeys: [key.publicKey] 
+                                    pubkeys: [key.publicKey],
+                                    network: network
                                 }),
                                 network: network
                             }),
