@@ -109,3 +109,14 @@ body {
 .text-weight-normal {
     font-weight: normal !important;
 }
+
+/* Electrum mode styling - gray out BIP39-specific fields */
+.disabled-for-electrum {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.electrum-generated {
+    background-color: #f5f5f5;
+    color: #666;
+}

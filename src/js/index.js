@@ -14,8 +14,7 @@
     var showPubKey = true;
     var showPrivKey = true;
     var showQr = false;
-    var litecoinUseLtub = true;
-
+    
     var entropyTypeAutoDetect = true;
     var entropyChangeTimeoutEvent = null;
     var phraseChangeTimeoutEvent = null;
@@ -50,6 +49,16 @@
     DOM.entropyWeakEntropyOverrideWarning = DOM.entropyContainer.find(".weak-entropy-override-warning");
     DOM.entropyFilterWarning = DOM.entropyContainer.find(".filter-warning");
     DOM.phrase = $(".phrase");
+    DOM.mnemonicType = $(".mnemonic-type");
+    DOM.mnemonicLabel = $(".mnemonic-label");
+    DOM.electrumTabs = $(".electrum-tab");
+    DOM.electrumTabPanels = $(".electrum-tab-panel");
+    DOM.electrumLegacyTab = $("#electrum-legacy-tab");
+    DOM.electrumSegwitTab = $("#electrum-segwit-tab");
+    DOM.electrumLegacyAccountXpub = $("#account-xpub-electrum-legacy");
+    DOM.electrumSegwitAccountXpub = $("#account-xpub-electrum-segwit");
+    DOM.electrumLegacyChange = $(".electrum-legacy-change");
+    DOM.electrumSegwitChange = $(".electrum-segwit-change");
     DOM.autoCompute = $(".autoCompute");
     DOM.splitMnemonic = $(".splitMnemonic");
     DOM.showSplitMnemonic = $(".showSplitMnemonic");
@@ -61,8 +70,6 @@
     DOM.seed = $(".seed");
     DOM.rootKey = $(".root-key");
     DOM.fingerprint = $(".fingerprint");
-    DOM.litecoinLtubContainer = $(".litecoin-ltub-container");
-    DOM.litecoinUseLtub = $(".litecoin-use-ltub");
     DOM.extendedPrivKey = $(".extended-priv-key");
     DOM.extendedPubKey = $(".extended-pub-key");
     DOM.bip32tab = $("#bip32-tab");
@@ -155,6 +162,7 @@
         DOM.pbkdf2CustomInput.on("change", pbkdf2RoundsChanged);
         DOM.entropyTypeInputs.on("change", entropyTypeChanged);
         DOM.phrase.on("input", delayedPhraseChanged);
+        DOM.mnemonicType.on("change", mnemonicTypeChanged);
         DOM.showSplitMnemonic.on("change", toggleSplitMnemonic);
         DOM.passphrase.on("input", delayedPhraseChanged);
         DOM.generate.on("click", generateClicked);
@@ -162,7 +170,6 @@
         DOM.seed.on("input", delayedSeedChanged);
         DOM.rootKey.on("input", delayedRootKeyChanged);
         DOM.showBip85.on('change', toggleBip85);
-        DOM.litecoinUseLtub.on("change", litecoinUseLtubChanged);
         DOM.bip32path.on("input", calcForDerivationPath);
         DOM.bip44account.on("input", calcForDerivationPath);
         DOM.bip44change.on("input", calcForDerivationPath);
@@ -179,6 +186,8 @@
         DOM.bip141semantics.on("change", tabChanged);
         DOM.tab.on("shown.bs.tab", tabChanged);
         DOM.hardenedAddresses.on("change", calcForDerivationPath);
+        DOM.electrumLegacyChange.on("change", electrumChangeAddressToggled);
+        DOM.electrumSegwitChange.on("change", electrumChangeAddressToggled);
         DOM.useBip38.on("change", calcForDerivationPath);
         DOM.bip38Password.on("change", calcForDerivationPath);
         DOM.indexToggle.on("click", toggleIndexes);
@@ -194,6 +203,8 @@
         hideValidationError();
         populateNetworkSelect();
         populateClientSelect();
+        // Hide Electrum forms by default (BIP39 is default)
+        $("#electrum-legacy form, #electrum-segwit form").addClass("hidden");
     }
 
     // Event handlers
@@ -211,7 +222,6 @@
     function networkChanged(e) {
         clearDerivedKeys();
         clearAddressesList();
-        DOM.litecoinLtubContainer.addClass("hidden");
         DOM.bitcoinCashAddressTypeContainer.addClass("hidden");
         var networkIndex = e.target.value;
         var selectedNetwork = networks[networkIndex];
@@ -309,6 +319,22 @@
     function tabChanged() {
         showPending();
         adjustNetworkForSegwit();
+        // Handle Electrum tab field visibility
+        if (DOM.mnemonicType.val() === "electrum") {
+            if (electrumLegacyTabSelected()) {
+                // Show Legacy fields, hide SegWit fields
+                $("#electrum-legacy").addClass("active");
+                $("#electrum-segwit").removeClass("active");
+                $("#electrum-segwit form").addClass("hidden");
+                $("#electrum-legacy form").removeClass("hidden");
+            } else if (electrumSegwitTabSelected()) {
+                // Show SegWit fields, hide Legacy fields  
+                $("#electrum-segwit").addClass("active");
+                $("#electrum-legacy").removeClass("active");
+                $("#electrum-legacy form").addClass("hidden");
+                $("#electrum-segwit form").removeClass("hidden");
+            }
+        }
         var phrase = DOM.phrase.val();
         var seed = DOM.seed.val();
         if (phrase != "") {
@@ -479,18 +505,6 @@
         calcBip85();
     }
 
-    function litecoinUseLtubChanged() {
-        litecoinUseLtub = DOM.litecoinUseLtub.prop("checked");
-        if (litecoinUseLtub) {
-            network = libs.bitcoin.networks.litecoin;
-        }
-        else {
-            network = libs.bitcoin.networks.litecoinXprv;
-        }
-        // Can't use rootKeyChanged because validation will fail as we changed
-        // the network but the version bytes stayed as previously.
-        seedChanged();
-    }
 
     function toggleSplitMnemonic() {
         if (DOM.showSplitMnemonic.prop("checked")) {
@@ -498,6 +512,158 @@
         }
         else {
             DOM.splitMnemonic.addClass("hidden");
+        }
+    }
+
+    // Handle switching between BIP39 and Electrum mnemonic types
+    function mnemonicTypeChanged() {
+        var mnemonicType = DOM.mnemonicType.val();
+        
+        if (mnemonicType === "electrum") {
+            DOM.mnemonicLabel.text("Electrum");
+            // Hide BIP tabs and show Electrum tabs
+            $("#bip32-tab, #bip44-tab, #bip49-tab, #bip84-tab, #bip141-tab").addClass("hidden").removeClass("active");
+            // Hide BIP tab content panels
+            $("#bip32, #bip44, #bip49, #bip84, #bip141").removeClass("active");
+            DOM.electrumTabs.removeClass("hidden");
+            // Activate first Electrum tab by default
+            DOM.electrumLegacyTab.addClass("active");
+            DOM.electrumLegacyTab.find("a").tab("show");
+            // Hide SegWit fields initially (since Legacy is default)
+            $("#electrum-segwit form").addClass("hidden");
+            $("#electrum-legacy form").removeClass("hidden");
+            // Show spacer for Electrum
+            $(".electrum-spacer").removeClass("hidden");
+            
+            // Gray out/disable BIP39-specific fields
+            $(".entropy-container, .passphrase, .splitMnemonic").addClass("disabled-for-electrum");
+            $(".entropy-container input, .entropy-container select, .passphrase, .phraseSplit").prop("disabled", true);
+            $(".seed, .root-key, .fingerprint").prop("readonly", true).addClass("electrum-generated");
+            
+            // Restrict mnemonic length to 12 words for Electrum
+            DOM.generatedStrength.find("option").addClass("hidden");
+            DOM.generatedStrength.find("option[value='12']").removeClass("hidden");
+            DOM.generatedStrength.val("12");
+        } else {
+            DOM.mnemonicLabel.text("BIP39");
+            // Show BIP tabs and hide Electrum tabs
+            $("#bip32-tab, #bip44-tab, #bip49-tab, #bip84-tab, #bip141-tab").removeClass("hidden");
+            DOM.electrumTabs.addClass("hidden");
+            DOM.electrumTabPanels.removeClass("active");
+            // Hide Electrum form content
+            $("#electrum-legacy form, #electrum-segwit form").addClass("hidden");
+            // Hide spacer for BIP39
+            $(".electrum-spacer").addClass("hidden");
+            // Reactivate BIP44 tab as default
+            $("#bip44-tab").addClass("active");
+            $("#bip44").addClass("active");
+            $("#bip44-tab a").tab("show");
+            
+            // Re-enable BIP39 fields
+            $(".entropy-container, .passphrase, .splitMnemonic").removeClass("disabled-for-electrum");
+            $(".entropy-container input, .entropy-container select, .passphrase, .phraseSplit").prop("disabled", false);
+            $(".seed, .root-key, .fingerprint").prop("readonly", true).removeClass("electrum-generated");
+            
+            // Restore all mnemonic length options for BIP39
+            DOM.generatedStrength.find("option").removeClass("hidden");
+        }
+        
+        // Trigger phrase validation/processing if there's existing content
+        delayedPhraseChanged();
+    }
+
+    // Map Electrum tabs to wallet type prefixes and derivation paths
+    function getElectrumPrefixFromTab() {
+        // Check which Electrum derivation tab is active
+        if (electrumSegwitTabSelected()) {
+            return "100"; // Segwit (bech32) prefix for Electrum SegWit
+        } else if (electrumLegacyTabSelected()) {
+            return "01";  // Standard (legacy) prefix for Electrum Legacy
+        } else {
+            return "01";  // Default to legacy
+        }
+    }
+
+    // Get Electrum derivation path (m/0' for receive, m/1' for change at account level)
+    function getElectrumDerivationPath() {
+        if (electrumChangeAddressSelected()) {
+            return "m/1'"; // Change addresses
+        } else {
+            return "m/0'"; // Receiving addresses (default)
+        }
+    }
+    
+    function electrumChangeAddressSelected() {
+        if (electrumLegacyTabSelected()) {
+            return DOM.electrumLegacyChange.prop("checked");
+        } else if (electrumSegwitTabSelected()) {
+            return DOM.electrumSegwitChange.prop("checked");
+        }
+        return false;
+    }
+    
+    function electrumChangeAddressToggled() {
+        // Electrum always uses m/0' account, change/receive is at the chain level
+        // No need to update path display since it stays m/0'
+        
+        // Recalculate addresses with new change/receive setting
+        clearAddressesList();
+        calcForDerivationPath();
+    }
+
+    // Generate Electrum addresses using proper Electrum derivation method
+    function generateElectrumAddressData(phrase, passphrase, index) {
+        var prefix = getElectrumPrefixFromTab();
+        var isSegwit = electrumSegwitTabSelected();
+        
+        try {
+            // Generate seed using Electrum method
+            var seedBuffer = electrumMnemonic.mnemonicToSeedSync(phrase, { 
+                passphrase: passphrase || "",
+                prefix: prefix 
+            });
+            
+            // Create master key from Electrum seed using standard BIP32
+            var masterKey = libs.bip32.fromSeed(seedBuffer, network);
+            
+            // Use Electrum's actual derivation paths
+            var key;
+            var derivationPath;
+            var changeChain = electrumChangeAddressSelected() ? 1 : 0;
+            var changePath = electrumChangeAddressSelected() ? "1" : "0";
+            
+            // Electrum: account key m/0' then derive change/receive chain  
+            var accountKey = masterKey.deriveHardened(0);
+            key = accountKey.derive(changeChain).derive(index);
+            derivationPath = "m/0'/" + changePath + "/" + index;
+            
+            
+            // Generate address based on Electrum wallet type
+            var address;
+            if (isSegwit) {
+                // Electrum SegWit: native P2WPKH (bc1...)
+                address = libs.bitcoin.payments.p2wpkh({ 
+                    pubkey: key.publicKey, 
+                    network: network 
+                }).address;
+            } else {
+                // Electrum Legacy: P2PKH (1...)
+                address = libs.bitcoin.payments.p2pkh({ 
+                    pubkey: key.publicKey, 
+                    network: network 
+                }).address;
+            }
+            
+            return {
+                address: address,
+                privateKey: key.toWIF(),
+                publicKey: key.publicKey.toString('hex'),
+                path: derivationPath,
+                key: key
+            };
+        } catch (e) {
+            console.error("Electrum address generation error:", e);
+            return null;
         }
     }
 
@@ -599,6 +765,12 @@
         else if (bip84TabSelected()) {
             displayBip84Info();
         }
+        else if (electrumLegacyTabSelected()) {
+            displayElectrumLegacyInfo();
+        }
+        else if (electrumSegwitTabSelected()) {
+            displayElectrumSegwitInfo();
+        }
         displayBip32Info();
     }
 
@@ -692,25 +864,73 @@
             showValidationError(errorText);
             return;
         }
-        // get the amount of entropy to use
-        var numWords = parseInt(DOM.generatedStrength.val());
-        var strength = numWords / 3 * 32;
-        var buffer = new Uint8Array(strength / 8);
-        // create secure entropy
-        var data = crypto.getRandomValues(buffer);
-        // show the words
-        var words = mnemonic.toMnemonic(data);
-        DOM.phrase.val(words);
-        // show the entropy
-        var entropyHex = uint8ArrayToHex(data);
-        DOM.entropy.val(entropyHex);
-        // ensure entropy fields are consistent with what is being displayed
-        DOM.entropyMnemonicLength.val("raw");
-        return words;
+        
+        // Check which mnemonic type is selected (BIP39 or Electrum)
+        var mnemonicType = DOM.mnemonicType.val();
+        var words;
+        
+        if (mnemonicType === "electrum") {
+            // Generate Electrum mnemonic with wallet type based on active BIP tab
+            var prefix = getElectrumPrefixFromTab();
+            try {
+                words = electrumMnemonic.generateMnemonic({ prefix: prefix });
+                DOM.phrase.val(words);
+                // Clear entropy display for Electrum (doesn't use same entropy model)
+                DOM.entropy.val("");
+                DOM.entropyMnemonicLength.val("raw");
+                return words;
+            } catch (e) {
+                showValidationError("Error generating Electrum mnemonic: " + e.message);
+                return;
+            }
+        } else {
+            // Generate BIP39 mnemonic using existing logic
+            // get the amount of entropy to use
+            var numWords = parseInt(DOM.generatedStrength.val());
+            var strength = numWords / 3 * 32;
+            var buffer = new Uint8Array(strength / 8);
+            // create secure entropy
+            var data = crypto.getRandomValues(buffer);
+            // show the words
+            var words = mnemonic.toMnemonic(data);
+            DOM.phrase.val(words);
+            // show the entropy
+            var entropyHex = uint8ArrayToHex(data);
+            DOM.entropy.val(entropyHex);
+            // ensure entropy fields are consistent with what is being displayed
+            DOM.entropyMnemonicLength.val("raw");
+            return words;
+        }
     }
 
     function calcBip32RootKeyFromSeed(phrase, passphrase) {
-        seed = mnemonic.toSeed(phrase, passphrase);
+        // Check which mnemonic type is selected for proper seed calculation
+        var mnemonicType = DOM.mnemonicType.val();
+        
+        if (mnemonicType === "electrum") {
+            // Use Electrum seed generation with wallet type based on active BIP tab
+            var prefix = getElectrumPrefixFromTab();
+            try {
+                // Validate the mnemonic against the derived prefix from active tab
+                if (!electrumMnemonic.validateMnemonic(phrase, prefix)) {
+                    throw new Error("Invalid Electrum mnemonic for selected derivation path");
+                }
+                // Generate seed using Electrum method (different from BIP39)
+                var seedBuffer = electrumMnemonic.mnemonicToSeedSync(phrase, { 
+                    passphrase: passphrase || "",
+                    prefix: prefix 
+                });
+                seed = seedBuffer.toString('hex');
+            } catch (e) {
+                showValidationError("Electrum mnemonic error: " + e.message);
+                return;
+            }
+        } else {
+            // Use BIP39 seed generation (existing logic)
+            seed = mnemonic.toSeed(phrase, passphrase);
+        }
+        
+        // Create BIP32 root key from the seed (same for both types)
         bip32RootKey = libs.bip32.fromSeed(libs.buffer.Buffer.from(seed, 'hex'), network);
     }
 
@@ -809,30 +1029,54 @@
     }
 
     function findPhraseErrors(phrase) {
-        // Preprocess the words
-        phrase = mnemonic.normalizeString(phrase);
-        var words = phraseToWordArray(phrase);
-        // Detect blank phrase
-        if (words.length == 0) {
-            return "Blank mnemonic";
-        }
-        // Check each word
-        for (var i=0; i<words.length; i++) {
-            var word = words[i];
-            var language = getLanguage();
-            if (WORDLISTS[language].indexOf(word) == -1) {
-                console.log("Finding closest match to " + word);
-                var nearestWord = findNearestWord(word);
-                return word + " not in wordlist, did you mean " + nearestWord + "?";
+        // Check which mnemonic type is selected for proper validation
+        var mnemonicType = DOM.mnemonicType.val();
+        
+        if (mnemonicType === "electrum") {
+            // Validate Electrum mnemonic
+            // Detect blank phrase
+            if (!phrase || phrase.trim().length == 0) {
+                return "Blank mnemonic";
             }
+            
+            // Check if mnemonic is valid for Electrum wallet type based on active BIP tab
+            var prefix = getElectrumPrefixFromTab();
+            try {
+                var isValid = electrumMnemonic.validateMnemonic(phrase, prefix);
+                if (!isValid) {
+                    return "Invalid Electrum mnemonic for selected derivation path";
+                }
+            } catch (e) {
+                return "Electrum validation error: " + e.message;
+            }
+            return false;
+        } else {
+            // Validate BIP39 mnemonic using existing logic
+            // Preprocess the words
+            phrase = mnemonic.normalizeString(phrase);
+            var words = phraseToWordArray(phrase);
+            // Detect blank phrase
+            if (words.length == 0) {
+                return "Blank mnemonic";
+            }
+            // Check each word
+            for (var i=0; i<words.length; i++) {
+                var word = words[i];
+                var language = getLanguage();
+                if (WORDLISTS[language].indexOf(word) == -1) {
+                    console.log("Finding closest match to " + word);
+                    var nearestWord = findNearestWord(word);
+                    return word + " not in wordlist, did you mean " + nearestWord + "?";
+                }
+            }
+            // Check the words are valid
+            var properPhrase = wordArrayToPhrase(words);
+            var isValid = mnemonic.check(properPhrase);
+            if (!isValid) {
+                return "Invalid mnemonic";
+            }
+            return false;
         }
-        // Check the words are valid
-        var properPhrase = wordArrayToPhrase(words);
-        var isValid = mnemonic.check(properPhrase);
-        if (!isValid) {
-            return "Invalid mnemonic";
-        }
-        return false;
     }
 
     function validateRootKey(rootKeyBase58) {
@@ -895,6 +1139,13 @@
 
 
     function getDerivationPath() {
+        // Check if using Electrum mnemonic type - use Electrum's simplified paths
+        var mnemonicType = DOM.mnemonicType.val();
+        if (mnemonicType === "electrum") {
+            return getElectrumDerivationPath();
+        }
+        
+        // Standard BIP derivation paths for BIP39
         if (bip44TabSelected()) {
             var purpose = parseIntNoNaN(DOM.bip44purpose.val(), 44);
             var coin = parseIntNoNaN(DOM.bip44coin.val(), 0);
@@ -907,7 +1158,6 @@
             path += change;
             DOM.bip44path.val(path);
             var derivationPath = DOM.bip44path.val();
-            console.log("Using derivation path from BIP44 tab: " + derivationPath);
             return derivationPath;
         }
         else if (bip49TabSelected()) {
@@ -922,7 +1172,6 @@
             path += change;
             DOM.bip49path.val(path);
             var derivationPath = DOM.bip49path.val();
-            console.log("Using derivation path from BIP49 tab: " + derivationPath);
             return derivationPath;
         }
         else if (bip84TabSelected()) {
@@ -937,21 +1186,17 @@
             path += change;
             DOM.bip84path.val(path);
             var derivationPath = DOM.bip84path.val();
-            console.log("Using derivation path from BIP84 tab: " + derivationPath);
             return derivationPath;
         }
         else if (bip32TabSelected()) {
             var derivationPath = DOM.bip32path.val();
-            console.log("Using derivation path from BIP32 tab: " + derivationPath);
             return derivationPath;
         }
         else if (bip141TabSelected()) {
             var derivationPath = DOM.bip141path.val();
-            console.log("Using derivation path from BIP141 tab: " + derivationPath);
             return derivationPath;
         }
         else {
-            console.log("Unknown derivation path");
         }
     }
 
@@ -1061,6 +1306,18 @@
         DOM.bip84accountXprv.val(accountXprv);
         DOM.bip84accountXpub.val(accountXpub);
     }
+    function displayElectrumLegacyInfo() {
+        // Electrum Legacy account level key (m/0')
+        var accountExtendedKey = calcBip32ExtendedKey("m/0'");
+        var accountXpub = accountExtendedKey.neutered().toBase58();
+        DOM.electrumLegacyAccountXpub.val(accountXpub);
+    }
+    function displayElectrumSegwitInfo() {
+        // Electrum SegWit account level key (m/0') with zpub encoding
+        var accountExtendedKey = calcBip32ExtendedKey("m/0'");
+        var accountXpub = accountExtendedKey.neutered().toBase58();
+        DOM.electrumSegwitAccountXpub.val(accountXpub);
+    }
 
     function displayBip32Info() {
         // Display the key
@@ -1107,12 +1364,22 @@
     }
 
     function segwitSelected() {
-        return bip49TabSelected() || bip84TabSelected() || bip141TabSelected();
+        return bip49TabSelected() || bip84TabSelected() || bip141TabSelected() || electrumSegwitTabSelected();
+    }
+
+    // Electrum tab selection functions
+    function electrumLegacyTabSelected() {
+        return DOM.electrumLegacyTab.hasClass("active");
+    }
+
+    function electrumSegwitTabSelected() {
+        return DOM.electrumSegwitTab.hasClass("active");
     }
 
     function p2wpkhSelected() {
         return bip84TabSelected() ||
-                bip141TabSelected() && DOM.bip141semantics.val() == "p2wpkh";
+                bip141TabSelected() && DOM.bip141semantics.val() == "p2wpkh" ||
+                electrumSegwitTabSelected();
     }
 
     function p2wpkhInP2shSelected() {
@@ -1151,7 +1418,44 @@
                 if (!self.shouldGenerate) {
                     return;
                 }
-                // derive HDkey for this row of the table
+                
+                // Check if using Electrum - use pure Electrum derivation
+                var mnemonicType = DOM.mnemonicType.val();
+                if (mnemonicType === "electrum") {
+                    var phrase = DOM.phrase.val();
+                    var passphrase = DOM.passphrase.val();
+                    var electrumData = generateElectrumAddressData(phrase, passphrase, index);
+                    
+                    if (electrumData) {
+                        // Use Electrum-generated data directly
+                        self.index = index;
+                        self.path = electrumData.path;
+                        self.address = electrumData.address;
+                        self.pubkey = electrumData.publicKey;
+                        self.privkey = electrumData.privateKey;
+                        
+                        var indexText = electrumData.path;
+                        addAddressToList(indexText, electrumData.address, electrumData.publicKey, electrumData.privateKey);
+                        if (isLast) {
+                            hidePending();
+                            updateCsv();
+                        }
+                        return;
+                    } else {
+                        // Error case
+                        self.address = "Error";
+                        self.pubkey = "Error";
+                        self.privkey = "Error";
+                        addAddressToList("Error", "Error", "Error", "Error");
+                        if (isLast) {
+                            hidePending();
+                            updateCsv();
+                        }
+                        return;
+                    }
+                }
+
+                // Standard BIP39 derivation for non-Electrum mode
                 var key = "NA";
                 if (useHardenedAddresses) {
                     key = bip32ExtendedKey.deriveHardened(index);
@@ -1325,6 +1629,8 @@
         DOM.extendedPubKey.val("");
         DOM.bip44accountXprv.val("");
         DOM.bip44accountXpub.val("");
+        DOM.electrumLegacyAccountXpub.val("");
+        DOM.electrumSegwitAccountXpub.val("");
     }
 
     function addAddressToList(indexText, address, pubkey, privkey) {
