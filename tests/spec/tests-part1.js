@@ -932,4 +932,75 @@ it('Sets the correct hidden column state on new rows', async function() {
     });
 });
 
+// Electrum Mnemonic Tests
+describe("Electrum mnemonic functionality", function() {
+
+    // Electrum mnemonic generation works
+    xit('Generates valid electrum mnemonic', async function() {
+        // Switch to Electrum mode
+        await driver.findElement(By.css('.mnemonic-type'))
+            .click();
+        await driver.findElement(By.css('.mnemonic-type option[value="electrum"]'))
+            .click();
+        await driver.sleep(100);
+        // Generate mnemonic
+        await driver.findElement(By.css('.generate'))
+            .click();
+        await driver.sleep(generateDelay);
+        const phrase = await driver.findElement(By.css('.phrase'))
+            .getAttribute("value");
+        expect(phrase.length).toBeGreaterThan(0);
+        expect(phrase.split(' ').length).toBeGreaterThan(10);
+    });
+
+    // Electrum prefix selection works
+    xit('Shows electrum prefix options when electrum is selected', async function() {
+        // Switch to Electrum mode
+        await driver.findElement(By.css('.mnemonic-type'))
+            .click();
+        await driver.findElement(By.css('.mnemonic-type option[value="electrum"]'))
+            .click();
+        await driver.sleep(100);
+        // Check that prefix group is visible
+        const prefixGroup = await driver.findElement(By.css('.electrum-prefix-group'));
+        const isVisible = await prefixGroup.isDisplayed();
+        expect(isVisible).toBe(true);
+    });
+
+    // Mnemonic label updates correctly
+    xit('Updates mnemonic label when switching types', async function() {
+        // Start with BIP39
+        const labelBip39 = await driver.findElement(By.css('.mnemonic-label'))
+            .getText();
+        expect(labelBip39).toBe("BIP39");
+        // Switch to Electrum
+        await driver.findElement(By.css('.mnemonic-type'))
+            .click();
+        await driver.findElement(By.css('.mnemonic-type option[value="electrum"]'))
+            .click();
+        await driver.sleep(100);
+        const labelElectrum = await driver.findElement(By.css('.mnemonic-label'))
+            .getText();
+        expect(labelElectrum).toBe("Electrum");
+    });
+
+    // Electrum validation works
+    xit('Validates electrum mnemonic correctly', async function() {
+        // Switch to Electrum mode
+        await driver.findElement(By.css('.mnemonic-type'))
+            .click();
+        await driver.findElement(By.css('.mnemonic-type option[value="electrum"]'))
+            .click();
+        await driver.sleep(100);
+        // Enter a BIP39 mnemonic (should be invalid for Electrum)
+        await driver.findElement(By.css('.phrase'))
+            .sendKeys("abandon abandon ability");
+        await driver.sleep(feedbackDelay);
+        const feedback = await driver.findElement(By.css('.feedback'))
+            .getText();
+        expect(feedback).toContain("Invalid Electrum mnemonic");
+    });
+
+});
+
 }); 
