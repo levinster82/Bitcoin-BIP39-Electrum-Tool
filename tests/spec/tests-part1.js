@@ -1001,6 +1001,198 @@ describe("Electrum mnemonic functionality", function() {
         expect(feedback).toContain("Invalid Electrum mnemonic");
     });
 
+    // Comprehensive Electrum Legacy test case with passphrase
+    it('Generates correct Electrum Legacy wallet with passphrase', async function() {
+        const MNEMONIC = "menu behave define only stove asset such gate clown anchor avoid project";
+        const PASSPHRASE = "baseball";
+        const EXPECTED_SEED = "ca9609fe5880dc2463312e2678203b5a4ee01e363b6a3bf628710a7830eca56845fd14b416c32247c554f1b8d1a95080f74e747e2b52e63d6beab19722b86aee";
+        const EXPECTED_FINGERPRINT = "8f907dc2";
+        const EXPECTED_XPUB = "xpub661MyMwAqRbcEruu1VRbTCNR6FjTALuMWyKrbqbsYxwbe5e5kVcPQHawN3r6taAEmJd7mFtVrw2YSQNGX1o7n9BYMaTkSkHcStS8KNesacJ";
+        const EXPECTED_RECEIVE_ADDRESS = "1HmNeDUJhXpuLmGEYncDF7ytQHd6Ww8NVx";
+        const EXPECTED_RECEIVE_PUBKEY = "035565877a88fafcae116515bdef9826eb1238bc5b6e11299a4f06d633e428b9db";
+        const EXPECTED_RECEIVE_PRIVKEY = "Kz6fDjNCXiBuTJzBXAg69tvr2bHpDKZCfDv6vG4vDf1LHgdDD5gg";
+        const EXPECTED_CHANGE_ADDRESS = "1M5VPPpad7CZVgdH3ZtQB1awNYPaokq1qb";
+        const EXPECTED_CHANGE_PUBKEY = "02546565ff4c7864e98b8f4a448f1b3a48034db64c684fe9e3677276d1f55beebe";
+        const EXPECTED_CHANGE_PRIVKEY = "KzPWuXgM94oxyWcH6zKaZAQaeUELfN7i7g8M4wcTABhjKSgUvwaU";
+
+        // Switch to Electrum mode
+        await driver.findElement(By.css('.mnemonic-type'))
+            .click();
+        await driver.findElement(By.css('.mnemonic-type option[value="electrum"]'))
+            .click();
+        await driver.sleep(100);
+
+        // Switch to Electrum Legacy tab
+        await driver.findElement(By.css('#electrum-legacy-tab a'))
+            .click();
+        await driver.sleep(100);
+
+        // Enter the test mnemonic
+        await driver.findElement(By.css('.phrase'))
+            .clear();
+        await driver.findElement(By.css('.phrase'))
+            .sendKeys(MNEMONIC);
+        await driver.sleep(feedbackDelay);
+
+        // Enter the passphrase
+        await driver.findElement(By.css('.passphrase'))
+            .clear();
+        await driver.findElement(By.css('.passphrase'))
+            .sendKeys(PASSPHRASE);
+        await driver.sleep(generateDelay);
+
+        // Test 1: Validate Electrum Seed
+        const actualSeed = await driver.findElement(By.css('.seed'))
+            .getAttribute("value");
+        expect(actualSeed).toBe(EXPECTED_SEED);
+
+        // Test 2: Validate Fingerprint
+        const actualFingerprint = await driver.findElement(By.css('.fingerprint'))
+            .getAttribute("value");
+        expect(actualFingerprint).toBe(EXPECTED_FINGERPRINT);
+
+        // Test 3: Validate Account Extended Public Key
+        const actualXpub = await driver.findElement(By.css('#account-xpub-electrum-legacy'))
+            .getAttribute("value");
+        expect(actualXpub).toBe(EXPECTED_XPUB);
+
+        // Wait for addresses to be generated
+        await driver.sleep(generateDelay);
+
+        // Test 4: Validate Receive Address (m/0/0)
+        const firstRow = await driver.findElement(By.css('.addresses tr:first-child'));
+        const addressCell = await firstRow.findElement(By.css('td:nth-child(2)'));
+        const receiveAddress = await addressCell.getText();
+        expect(receiveAddress).toBe(EXPECTED_RECEIVE_ADDRESS);
+
+        // Test 5: Validate Receive Public Key
+        const pubkeyCell = await firstRow.findElement(By.css('td:nth-child(3)'));
+        const receivePubKey = await pubkeyCell.getText();
+        expect(receivePubKey).toBe(EXPECTED_RECEIVE_PUBKEY);
+
+        // Test 6: Validate Receive Private Key
+        const privkeyCell = await firstRow.findElement(By.css('td:nth-child(4)'));
+        const receivePrivKey = await privkeyCell.getText();
+        expect(receivePrivKey).toBe(EXPECTED_RECEIVE_PRIVKEY);
+
+        // Test 7: Switch to change addresses
+        await driver.findElement(By.css('.electrum-legacy-change'))
+            .click();
+        await driver.sleep(generateDelay);
+
+        // Test 8: Validate Change Address (m/1/0)
+        const firstRowChange = await driver.findElement(By.css('.addresses tr:first-child'));
+        const addressCellChange = await firstRowChange.findElement(By.css('td:nth-child(2)'));
+        const changeAddress = await addressCellChange.getText();
+        expect(changeAddress).toBe(EXPECTED_CHANGE_ADDRESS);
+
+        // Test 9: Validate Change Public Key
+        const pubkeyCellChange = await firstRowChange.findElement(By.css('td:nth-child(3)'));
+        const changePubKey = await pubkeyCellChange.getText();
+        expect(changePubKey).toBe(EXPECTED_CHANGE_PUBKEY);
+
+        // Test 10: Validate Change Private Key
+        const privkeyCellChange = await firstRowChange.findElement(By.css('td:nth-child(4)'));
+        const changePrivKey = await privkeyCellChange.getText();
+        expect(changePrivKey).toBe(EXPECTED_CHANGE_PRIVKEY);
+    }, 15000);
+
+    // Comprehensive Electrum SegWit test case with passphrase
+    it('Generates correct Electrum SegWit wallet with passphrase', async function() {
+        const MNEMONIC = "rocket exhibit food surprise army horse march bind quote captain seed web involve thought have page prefer rely resemble inside obvious fatal seek seed";
+        const PASSPHRASE = "baseball";
+        const EXPECTED_SEED = "0da0ceda073fb64a3125a24945da7f91bae4b04bc01a3c7e2c742533d2890eef7a31fa4c25d196ea893c4a4c80b9ebb269d6234b1dd1535c8f5eaa7321467542";
+        const EXPECTED_FINGERPRINT = "e70c0846";
+        const EXPECTED_ZPUB = "zpub6oFXJxRUkmCfhHDyfJiykYarCwDFn9AoEkHUbdn6eGr6DK5ZELW1BK5CJdyGVxxK2vyPrtQgDKLLrbxMjCmR3B7zBv8KCNkGZAJWepWWyuc";
+        const EXPECTED_RECEIVE_ADDRESS = "bc1qaxl8nfq9yv9z75qlqvul4cmqueksctvlhlmt9q";
+        const EXPECTED_RECEIVE_PUBKEY = "0365d9e1b3e8ee74dec85b24872d03805eafac54b0568873976d481550b7b3f2e3";
+        const EXPECTED_RECEIVE_PRIVKEY = "KwSWhimrd2bmnvrHHjN1SkARn2wuV2Y2wAcBEixPKJ6bboDMXsjF";
+        const EXPECTED_CHANGE_ADDRESS = "bc1qghpw4jtl0wq7c3uwz9qhzglw6uq69tu4kt40x9";
+        const EXPECTED_CHANGE_PUBKEY = "03bcb0e9c32f9b9115ca6c3065f92cb96cb52328d417fb44be9858ba4212835072";
+        const EXPECTED_CHANGE_PRIVKEY = "KysZQaoD9souqLyQ2jjdLH4KdSyavSxsuroV36bZ65Lwds2YJV2p";
+
+        // Switch to Electrum mode
+        await driver.findElement(By.css('.mnemonic-type'))
+            .click();
+        await driver.findElement(By.css('.mnemonic-type option[value="electrum"]'))
+            .click();
+        await driver.sleep(100);
+
+        // Switch to Electrum SegWit tab
+        await driver.findElement(By.css('#electrum-segwit-tab a'))
+            .click();
+        await driver.sleep(100);
+
+        // Enter the test mnemonic
+        await driver.findElement(By.css('.phrase'))
+            .clear();
+        await driver.findElement(By.css('.phrase'))
+            .sendKeys(MNEMONIC);
+        await driver.sleep(feedbackDelay);
+
+        // Enter the passphrase
+        await driver.findElement(By.css('.passphrase'))
+            .clear();
+        await driver.findElement(By.css('.passphrase'))
+            .sendKeys(PASSPHRASE);
+        await driver.sleep(generateDelay);
+
+        // Test 1: Validate Electrum Seed (same as Legacy)
+        const actualSeed = await driver.findElement(By.css('.seed'))
+            .getAttribute("value");
+        expect(actualSeed).toBe(EXPECTED_SEED);
+
+        // Test 2: Validate Fingerprint (same as Legacy)
+        const actualFingerprint = await driver.findElement(By.css('.fingerprint'))
+            .getAttribute("value");
+        expect(actualFingerprint).toBe(EXPECTED_FINGERPRINT);
+
+        // Test 3: Validate Account Extended Public Key (zpub for SegWit)
+        const actualZpub = await driver.findElement(By.css('#account-xpub-electrum-segwit'))
+            .getAttribute("value");
+        expect(actualZpub).toBe(EXPECTED_ZPUB);
+
+        // Wait for addresses to be generated
+        await driver.sleep(generateDelay);
+
+        // Test 4: Validate Receive Address (m/0'/0/0)
+        const firstRow = await driver.findElement(By.css('.addresses tr:first-child'));
+        const addressCell = await firstRow.findElement(By.css('td:nth-child(2)'));
+        const receiveAddress = await addressCell.getText();
+        expect(receiveAddress).toBe(EXPECTED_RECEIVE_ADDRESS);
+
+        // Test 5: Validate Receive Public Key
+        const pubkeyCell = await firstRow.findElement(By.css('td:nth-child(3)'));
+        const receivePubKey = await pubkeyCell.getText();
+        expect(receivePubKey).toBe(EXPECTED_RECEIVE_PUBKEY);
+
+        // Test 6: Validate Receive Private Key
+        const privkeyCell = await firstRow.findElement(By.css('td:nth-child(4)'));
+        const receivePrivKey = await privkeyCell.getText();
+        expect(receivePrivKey).toBe(EXPECTED_RECEIVE_PRIVKEY);
+
+        // Test 7: Switch to change addresses
+        await driver.findElement(By.css('.electrum-segwit-change'))
+            .click();
+        await driver.sleep(generateDelay);
+
+        // Test 8: Validate Change Address (m/0'/1/0)
+        const firstRowChange = await driver.findElement(By.css('.addresses tr:first-child'));
+        const addressCellChange = await firstRowChange.findElement(By.css('td:nth-child(2)'));
+        const changeAddress = await addressCellChange.getText();
+        expect(changeAddress).toBe(EXPECTED_CHANGE_ADDRESS);
+
+        // Test 9: Validate Change Public Key
+        const pubkeyCellChange = await firstRowChange.findElement(By.css('td:nth-child(3)'));
+        const changePubKey = await pubkeyCellChange.getText();
+        expect(changePubKey).toBe(EXPECTED_CHANGE_PUBKEY);
+
+        // Test 10: Validate Change Private Key
+        const privkeyCellChange = await firstRowChange.findElement(By.css('td:nth-child(4)'));
+        const changePrivKey = await privkeyCellChange.getText();
+        expect(changePrivKey).toBe(EXPECTED_CHANGE_PRIVKEY);
+    }, 15000);
+
 });
 
 }); 

@@ -51,6 +51,8 @@
     DOM.phrase = $(".phrase");
     DOM.mnemonicType = $(".mnemonic-type");
     DOM.mnemonicLabel = $(".mnemonic-label");
+    DOM.seedLabel = $("label[for='seed']");
+    DOM.passphraseLabel = $("label[for='passphrase']");
     DOM.electrumTabs = $(".electrum-tab");
     DOM.electrumTabPanels = $(".electrum-tab-panel");
     DOM.electrumLegacyTab = $("#electrum-legacy-tab");
@@ -521,6 +523,8 @@
         
         if (mnemonicType === "electrum") {
             DOM.mnemonicLabel.text("Electrum");
+            DOM.seedLabel.text("Electrum Seed");
+            DOM.passphraseLabel.text("Passphrase (optional)");
             // Hide BIP tabs and show Electrum tabs
             $("#bip32-tab, #bip44-tab, #bip49-tab, #bip84-tab, #bip141-tab").addClass("hidden").removeClass("active");
             // Hide BIP tab content panels
@@ -535,17 +539,21 @@
             // Show spacer for Electrum
             $(".electrum-spacer").removeClass("hidden");
             
-            // Gray out/disable BIP39-specific fields
-            $(".entropy-container, .passphrase, .splitMnemonic").addClass("disabled-for-electrum");
-            $(".entropy-container input, .entropy-container select, .passphrase, .phraseSplit").prop("disabled", true);
+            // Gray out/disable BIP39-specific fields (but keep passphrase enabled for Electrum)
+            $(".entropy-container, .splitMnemonic").addClass("disabled-for-electrum");
+            $(".entropy-container input, .entropy-container select, .phraseSplit").prop("disabled", true);
             $(".seed, .root-key, .fingerprint").prop("readonly", true).addClass("electrum-generated");
             
-            // Restrict mnemonic length to 12 words for Electrum
+            // Restrict mnemonic length to 12 and 24 words for Electrum
             DOM.generatedStrength.find("option").addClass("hidden");
             DOM.generatedStrength.find("option[value='12']").removeClass("hidden");
-            DOM.generatedStrength.val("12");
+            DOM.generatedStrength.find("option[value='24']").removeClass("hidden");
+            // Default to 24 words for Electrum (as per user request)
+            DOM.generatedStrength.val("24");
         } else {
             DOM.mnemonicLabel.text("BIP39");
+            DOM.seedLabel.text("BIP39 Seed");
+            DOM.passphraseLabel.text("BIP39 Passphrase (optional)");
             // Show BIP tabs and hide Electrum tabs
             $("#bip32-tab, #bip44-tab, #bip49-tab, #bip84-tab, #bip141-tab").removeClass("hidden");
             DOM.electrumTabs.addClass("hidden");
@@ -584,12 +592,13 @@
         }
     }
 
-    // Get Electrum derivation path (m/0' for receive, m/1' for change at account level)
+    // Get Electrum derivation path - different for Legacy vs SegWit
     function getElectrumDerivationPath() {
+        var isLegacy = electrumLegacyTabSelected();
         if (electrumChangeAddressSelected()) {
-            return "m/1'"; // Change addresses
+            return isLegacy ? "m/1" : "m/1'"; // Change addresses - Legacy: m/1, SegWit: m/1'
         } else {
-            return "m/0'"; // Receiving addresses (default)
+            return isLegacy ? "m/0" : "m/0'"; // Receiving addresses - Legacy: m/0, SegWit: m/0'
         }
     }
     
@@ -623,19 +632,26 @@
                 prefix: prefix 
             });
             
-            // Create master key from Electrum seed using standard BIP32
-            var masterKey = libs.bip32.fromSeed(seedBuffer, network);
+            // Create master key from Electrum seed - use correct network for each type
+            var keyNetwork = isSegwit ? network : libs.bitcoin.networks.bitcoin;
+            var masterKey = libs.bip32.fromSeed(seedBuffer, keyNetwork);
             
-            // Use Electrum's actual derivation paths
+            // Use Electrum's actual derivation paths - different for Legacy vs SegWit
             var key;
             var derivationPath;
             var changeChain = electrumChangeAddressSelected() ? 1 : 0;
             var changePath = electrumChangeAddressSelected() ? "1" : "0";
             
-            // Electrum: account key m/0' then derive change/receive chain  
-            var accountKey = masterKey.deriveHardened(0);
-            key = accountKey.derive(changeChain).derive(index);
-            derivationPath = "m/0'/" + changePath + "/" + index;
+            if (isSegwit) {
+                // Electrum SegWit: account key m/0' then derive change/receive chain  
+                var accountKey = masterKey.deriveHardened(0);
+                key = accountKey.derive(changeChain).derive(index);
+                derivationPath = "m/0'/" + changePath + "/" + index;
+            } else {
+                // Electrum Legacy: derive directly from root m/change/index
+                key = masterKey.derive(changeChain).derive(index);
+                derivationPath = "m/" + changePath + "/" + index;
+            }
             
             
             // Generate address based on Electrum wallet type
@@ -872,8 +888,11 @@
         if (mnemonicType === "electrum") {
             // Generate Electrum mnemonic with wallet type based on active BIP tab
             var prefix = getElectrumPrefixFromTab();
+            var numWords = parseInt(DOM.generatedStrength.val());
+            // Electrum strength calculation: 12 words = 132 bits, 24 words = 264 bits
+            var strength = numWords === 24 ? 264 : 132;
             try {
-                words = electrumMnemonic.generateMnemonic({ prefix: prefix });
+                words = electrumMnemonic.generateMnemonic({ prefix: prefix, strength: strength });
                 DOM.phrase.val(words);
                 // Clear entropy display for Electrum (doesn't use same entropy model)
                 DOM.entropy.val("");
@@ -1307,14 +1326,31 @@
         DOM.bip84accountXpub.val(accountXpub);
     }
     function displayElectrumLegacyInfo() {
-        // Electrum Legacy account level key (m/0')
-        var accountExtendedKey = calcBip32ExtendedKey("m/0'");
-        var accountXpub = accountExtendedKey.neutered().toBase58();
+        // Electrum Legacy account extended key - use ROOT level (m/) based on Electrum source code
+        var bitcoinMainnet = libs.bitcoin.networks.bitcoin;
+        
+        // Create root key with Bitcoin mainnet parameters for xpub encoding
+        var legacyRootKey = libs.bip32.fromSeed(libs.buffer.Buffer.from(seed, 'hex'), bitcoinMainnet);
+        
+        // For Electrum Legacy, the account extended public key is at ROOT level (m/)
+        var accountXpub = legacyRootKey.neutered().toBase58();
         DOM.electrumLegacyAccountXpub.val(accountXpub);
     }
     function displayElectrumSegwitInfo() {
         // Electrum SegWit account level key (m/0') with zpub encoding
-        var accountExtendedKey = calcBip32ExtendedKey("m/0'");
+        var baseNetwork = network;
+        if ("baseNetwork" in network) {
+            baseNetwork = libs.bitcoin.networks[network.baseNetwork];
+        }
+        
+        var segwitNetwork = baseNetwork;
+        if ("p2wpkh" in baseNetwork) {
+            segwitNetwork = baseNetwork.p2wpkh; // use SegWit network params for zpub encoding
+        }
+        
+        // Create a new root key with SegWit network parameters for zpub encoding
+        var segwitRootKey = libs.bip32.fromSeed(libs.buffer.Buffer.from(seed, 'hex'), segwitNetwork);
+        var accountExtendedKey = segwitRootKey.deriveHardened(0); // m/0'
         var accountXpub = accountExtendedKey.neutered().toBase58();
         DOM.electrumSegwitAccountXpub.val(accountXpub);
     }
