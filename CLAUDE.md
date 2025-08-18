@@ -112,7 +112,7 @@ When making changes:
 - Master branch: unchanged
 
 ### Project Status
-✅ **ELECTRUM SUPPORT INTEGRATION COMPLETE**
+✅ **ELECTRUM SUPPORT INTEGRATION COMPLETE + UI FIXES**
 
 **✅ Completed Electrum Features:**
 1. **Library Integration**: electrum-mnemonic browserified and integrated  
@@ -125,10 +125,26 @@ When making changes:
 8. **Layout**: Clean spacing and tab switching without duplicates
 9. **Code Cleanup**: Removed unused Litecoin refs and debug scripts
 
+**✅ Recent UI Fixes (2025-08-18):**
+10. **Derivation Path Display**: Fixed path fields to show correct values
+    - Electrum Legacy: `m/` (root level)
+    - Electrum SegWit: `m/0'` (account level)
+    - Fields update automatically when switching tabs
+11. **Help Text Corrections**: 
+    - Legacy: Fixed to show `m/0/n` and `m/1/n` (unhardened paths)
+    - SegWit: Added P2WPKH specification and corrected address prefix to `bc1q`
+12. **Field Reordering**: Both Electrum tabs now show fields in logical order:
+    - Electrum Derivation Path
+    - Change Address checkbox  
+    - Account Extended Public Key
+    - BIP32 Extended Private Key
+    - BIP32 Extended Public Key
+13. **Change Address Labels**: Fixed Legacy tab to show correct `(m/1/n)` instead of `(m/0'/1/n)`
+
 **Technical Implementation:**
 - Seed: PBKDF2 with "electrum" salt and version prefixes
-- Derivation: m/0' account level, then 0/1 chains, then address index
+- Derivation: Legacy uses `m/` root, SegWit uses `m/0'` account level, then 0/1 chains, then address index
 - Address Types: P2PKH (Legacy) and P2WPKH (SegWit) 
-- UI Logic: Dynamic field visibility and proper tab management
+- UI Logic: Dynamic field visibility and proper tab management with correct path display
 
-**Ready for commit** - All Electrum functionality working correctly
+**Status**: All Electrum functionality working correctly with polished UI

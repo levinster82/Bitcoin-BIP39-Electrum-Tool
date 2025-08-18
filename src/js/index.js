@@ -59,6 +59,8 @@
     DOM.electrumSegwitTab = $("#electrum-segwit-tab");
     DOM.electrumLegacyAccountXpub = $("#account-xpub-electrum-legacy");
     DOM.electrumSegwitAccountXpub = $("#account-xpub-electrum-segwit");
+    DOM.electrumLegacyPath = $("#electrum-legacy-path");
+    DOM.electrumSegwitPath = $("#electrum-segwit-path");
     DOM.electrumLegacyChange = $(".electrum-legacy-change");
     DOM.electrumSegwitChange = $(".electrum-segwit-change");
     DOM.autoCompute = $(".autoCompute");
@@ -329,12 +331,16 @@
                 $("#electrum-segwit").removeClass("active");
                 $("#electrum-segwit form").addClass("hidden");
                 $("#electrum-legacy form").removeClass("hidden");
+                // Update derivation path field for Electrum Legacy (root level)
+                DOM.electrumLegacyPath.val("m/");
             } else if (electrumSegwitTabSelected()) {
                 // Show SegWit fields, hide Legacy fields  
                 $("#electrum-segwit").addClass("active");
                 $("#electrum-legacy").removeClass("active");
                 $("#electrum-legacy form").addClass("hidden");
                 $("#electrum-segwit form").removeClass("hidden");
+                // Update derivation path field for Electrum SegWit (account level)
+                DOM.electrumSegwitPath.val("m/0'");
             }
         }
         var phrase = DOM.phrase.val();
@@ -535,6 +541,8 @@
             DOM.electrumLegacyTab.find("a").tab("show");
             // Hide SegWit fields initially (since Legacy is default)
             $("#electrum-segwit form").addClass("hidden");
+            // Set initial derivation path for Electrum Legacy
+            DOM.electrumLegacyPath.val("m/");
             $("#electrum-legacy form").removeClass("hidden");
             // Show spacer for Electrum
             $(".electrum-spacer").removeClass("hidden");
