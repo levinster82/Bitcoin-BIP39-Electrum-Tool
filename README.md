@@ -15,6 +15,8 @@ A Bitcoin-focused fork of [iancoleman/bip39](https://github.com/iancoleman/bip39
 ### Tool Enhancements
 - **Bitcoin-Only Libraries**: Removed altcoin dependencies
 - **Modernized Test Suite**: Updated to Bitcoin-only with 182 tests
+- **Auto Day/Night Theme**: Automatically follows system dark/light mode preference
+- **Manual Theme Toggle**: Three-way toggle (Light → Dark → Auto) for user control
 
 ## Usage
 
