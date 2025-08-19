@@ -1,8 +1,67 @@
+:root {
+    --bg-color: #ffffff;
+    --text-color: #333333;
+    --border-color: #cccccc;
+    --input-bg: #ffffff;
+    --input-border: #cccccc;
+    --feedback-bg: orange;
+    --feedback-text: #444;
+    --qr-bg: #ffffff;
+    --electrum-bg: #f5f5f5;
+    --electrum-text: #666;
+    --link-color: #007bff;
+    --danger-color: #dc3545;
+}
+
+[data-theme="dark"] {
+    --bg-color: #121212;
+    --text-color: #ffffff;
+    --border-color: #444444;
+    --input-bg: #2d2d2d;
+    --input-border: #555555;
+    --feedback-bg: #ff8c00;
+    --feedback-text: #000000;
+    --qr-bg: #2d2d2d;
+    --electrum-bg: #1e1e1e;
+    --electrum-text: #aaaaaa;
+    --link-color: #66b3ff;
+    --danger-color: #ff6b6b;
+}
+
 body {
     padding-bottom: 32px;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 .form-control[readonly] {
     cursor: text;
+}
+
+/* Dark mode styles for form controls */
+.form-control {
+    background-color: var(--input-bg);
+    border-color: var(--input-border);
+    color: var(--text-color);
+}
+
+.form-control:focus {
+    border-color: var(--link-color);
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+[data-theme="dark"] .form-control:focus {
+    box-shadow: 0 0 0 0.2rem rgba(102, 179, 255, 0.25);
+}
+
+/* Dark mode for links */
+a {
+    color: var(--link-color);
+}
+
+/* Dark mode for text-danger elements */
+.text-danger {
+    color: var(--danger-color) !important;
 }
 .feedback-container {
     position: fixed;
@@ -14,11 +73,11 @@ body {
 .feedback {
     display: table;
     padding: 0.5em 1em;
-    background-color: orange;
+    background-color: var(--feedback-bg);
     margin: 0 auto;
     font-size: 2em;
-    color: #444;
-    border: 2px solid #555;
+    color: var(--feedback-text);
+    border: 2px solid var(--border-color);
     border-top: 0;
     border-bottom-left-radius: 20px 20px;
     border-bottom-right-radius: 20px 20px;
@@ -74,8 +133,8 @@ body {
     top: 0;
     right: 0;
     text-align: center;
-    background-color: #FFF;
-    border: 1px solid #CCC;
+    background-color: var(--qr-bg);
+    border: 1px solid var(--border-color);
 }
 .qr-image {
     margin: 5px;
@@ -87,8 +146,9 @@ body {
 }
 .more-info {
     cursor: help;
-    border-bottom: 1px dashed #000;
+    border-bottom: 1px dashed var(--text-color);
     text-decoration: none;
+    color: var(--text-color);
 }
 .version {
     position: absolute;
@@ -117,6 +177,135 @@ body {
 }
 
 .electrum-generated {
-    background-color: #f5f5f5;
-    color: #666;
+    background-color: var(--electrum-bg);
+    color: var(--electrum-text);
+}
+
+/* Dark mode toggle button */
+.theme-toggle {
+    position: fixed;
+    top: 10px;
+    right: 80px;
+    z-index: 1000;
+    background-color: var(--input-bg);
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.theme-toggle:hover {
+    background-color: var(--link-color);
+    color: var(--bg-color);
+}
+
+/* Dark mode button styles */
+[data-theme="dark"] .btn.generate {
+    background-color: #404040 !important;
+    color: #ffffff !important;
+    border-color: #606060 !important;
+}
+
+[data-theme="dark"] .btn.generate:hover {
+    background-color: #505050 !important;
+    border-color: #707070 !important;
+}
+
+/* Dark mode for toggle and more rows buttons */
+[data-theme="dark"] .index-toggle,
+[data-theme="dark"] .address-toggle,
+[data-theme="dark"] .public-key-toggle,
+[data-theme="dark"] .private-key-toggle,
+[data-theme="dark"] .more {
+    background-color: #404040 !important;
+    color: #ffffff !important;
+    border-color: #606060 !important;
+}
+
+[data-theme="dark"] .index-toggle:hover,
+[data-theme="dark"] .address-toggle:hover,
+[data-theme="dark"] .public-key-toggle:hover,
+[data-theme="dark"] .private-key-toggle:hover,
+[data-theme="dark"] .more:hover {
+    background-color: #505050 !important;
+    border-color: #707070 !important;
+}
+
+/* Dark mode for specific readonly fields */
+[data-theme="dark"] .seed,
+[data-theme="dark"] .root-key,
+[data-theme="dark"] .fingerprint {
+    background-color: var(--input-bg) !important;
+    color: var(--text-color) !important;
+    border-color: var(--input-border) !important;
+}
+
+/* Dark mode for electrum-generated fields */
+[data-theme="dark"] .electrum-generated {
+    background-color: var(--electrum-bg) !important;
+    color: var(--electrum-text) !important;
+}
+
+/* Dark mode for navigation tabs */
+[data-theme="dark"] .nav-tabs > li.active > a,
+[data-theme="dark"] .nav-tabs > li.active > a:hover,
+[data-theme="dark"] .nav-tabs > li.active > a:focus {
+    background-color: #404040 !important;
+    color: var(--text-color) !important;
+    border-color: var(--border-color) !important;
+}
+
+[data-theme="dark"] .nav-tabs > li > a {
+    color: var(--text-color) !important;
+    border-color: var(--border-color) !important;
+}
+
+[data-theme="dark"] .nav-tabs {
+    border-bottom-color: var(--border-color) !important;
+}
+
+/* Dark mode for derivation path and related fields */
+[data-theme="dark"] .purpose,
+[data-theme="dark"] .coin,
+[data-theme="dark"] .path,
+[data-theme="dark"] .extended-pub-key,
+[data-theme="dark"] .extended-priv-key,
+[data-theme="dark"] .account-xpub,
+[data-theme="dark"] .account-xprv {
+    background-color: var(--input-bg) !important;
+    color: var(--text-color) !important;
+    border-color: var(--input-border) !important;
+}
+
+/* Dark mode for remaining input fields */
+[data-theme="dark"] .bip38-password,
+[data-theme="dark"] .rows-to-add,
+[data-theme="dark"] .more-rows-start-index,
+[data-theme="dark"] .electrum-legacy-path,
+[data-theme="dark"] .electrum-segwit-path {
+    background-color: var(--input-bg) !important;
+    color: var(--text-color) !important;
+    border-color: var(--input-border) !important;
+}
+
+/* Dark mode for tables */
+[data-theme="dark"] .table {
+    color: var(--text-color) !important;
+}
+
+[data-theme="dark"] .table-striped > tbody > tr:nth-of-type(odd) {
+    background-color: #2a2a2a !important;
+}
+
+[data-theme="dark"] .table-striped > tbody > tr:nth-of-type(even) {
+    background-color: #1e1e1e !important;
+}
+
+[data-theme="dark"] .table th,
+[data-theme="dark"] .table td {
+    border-color: var(--border-color) !important;
+    color: var(--text-color) !important;
 }

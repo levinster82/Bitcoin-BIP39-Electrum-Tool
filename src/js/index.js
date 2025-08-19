@@ -2397,3 +2397,69 @@
     init();
 
 })();
+
+// Dark mode toggle functionality
+let currentThemeMode = 'auto'; // 'auto', 'light', 'dark'
+
+function toggleTheme() {
+    const html = document.documentElement;
+    const toggleButton = document.getElementById('theme-toggle');
+    
+    if (currentThemeMode === 'auto') {
+        // Auto → Light
+        currentThemeMode = 'light';
+        html.removeAttribute('data-theme');
+        toggleButton.innerHTML = '🌙 Dark';
+    } else if (currentThemeMode === 'light') {
+        // Light → Dark
+        currentThemeMode = 'dark';
+        html.setAttribute('data-theme', 'dark');
+        toggleButton.innerHTML = '☀️ Light';
+    } else {
+        // Dark → Auto
+        currentThemeMode = 'auto';
+        const systemIsDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (systemIsDark) {
+            html.setAttribute('data-theme', 'dark');
+        } else {
+            html.removeAttribute('data-theme');
+        }
+        toggleButton.innerHTML = '🌙/☀️ Auto';
+    }
+}
+
+// Initialize theme on page load
+document.addEventListener('DOMContentLoaded', function() {
+    const toggleButton = document.getElementById('theme-toggle');
+    
+    // Always start in Auto mode - follow system preference
+    currentThemeMode = 'auto';
+    const systemIsDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    
+    if (systemIsDark) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+    } else {
+        document.documentElement.removeAttribute('data-theme');
+    }
+    
+    if (toggleButton) {
+        toggleButton.innerHTML = '🌙/☀️ Auto';
+    }
+    
+    // Listen for system theme changes
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+        // Only apply system theme if in auto mode
+        if (currentThemeMode === 'auto') {
+            const toggleButton = document.getElementById('theme-toggle');
+            if (e.matches) {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            } else {
+                document.documentElement.removeAttribute('data-theme');
+            }
+            // Keep the Auto button text
+            if (toggleButton) {
+                toggleButton.innerHTML = '🌙/☀️ Auto';
+            }
+        }
+    });
+});
