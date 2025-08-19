@@ -3,7 +3,7 @@ import re
 import datetime
 from io import open
 
-# This script generates the bip39-standalone.html file.
+# This script generates the bip39-electrum-standalone.html file.
 
 # It removes script and style tags and replaces with the file content.
 
@@ -42,7 +42,7 @@ for style in styles:
 
 # Write the standalone file
 
-f = open('bip39-standalone.html', 'w', encoding="utf-8")
+f = open('bip39-electrum-standalone.html', 'w', encoding="utf-8")
 f.write(page)
 f.close()
 

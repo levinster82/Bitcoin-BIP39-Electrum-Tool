@@ -1,3 +1,15 @@
+# 1.0.0
+
+* Fork from iancoleman/bip39 as "Bitcoin BIP39 + Electrum Mnemonic Tool"
+* Add Electrum wallet support (Legacy and SegWit)
+* Add wallet fingerprint display for identification
+* Remove altcoin libraries (Bitcoin-only focus)
+* Modernize test suite to selenium-webdriver v4
+* Consolidated from 387 tests to 182 Bitcoin-only tests
+* Add bip39-electrum-standalone.html build target
+
+# Forked created from https://github.com/iancoleman/bip39
+
 # 0.5.6
 
 * Add warning to not share info from the page
