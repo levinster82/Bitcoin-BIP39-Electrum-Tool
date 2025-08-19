@@ -13,6 +13,23 @@
     --danger-color: #dc3545;
 }
 
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg-color: #121212;
+        --text-color: #ffffff;
+        --border-color: #444444;
+        --input-bg: #2d2d2d;
+        --input-border: #555555;
+        --feedback-bg: #ff8c00;
+        --feedback-text: #000000;
+        --qr-bg: #2d2d2d;
+        --electrum-bg: #1e1e1e;
+        --electrum-text: #aaaaaa;
+        --link-color: #66b3ff;
+        --danger-color: #ff6b6b;
+    }
+}
+
 [data-theme="dark"] {
     --bg-color: #121212;
     --text-color: #ffffff;
