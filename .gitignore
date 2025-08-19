@@ -1,2 +1,5 @@
 node_modules
 bip39-standalone.html
+bip39-electrum-standalone.html
+bip39-electrum-standalone.html.sha256sum
+bip39-electrum-standalone.html.sha256sum.asc
