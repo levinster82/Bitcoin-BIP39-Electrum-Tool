@@ -1,6 +1,7 @@
 import os
 import re
 import datetime
+import hashlib
 from io import open
 
 # This script generates the bip39-electrum-standalone.html file.
@@ -42,8 +43,24 @@ for style in styles:
 
 # Write the standalone file
 
-f = open('bip39-electrum-standalone.html', 'w', encoding="utf-8")
+standalone_filename = 'bip39-electrum-standalone.html'
+f = open(standalone_filename, 'w', encoding="utf-8")
 f.write(page)
 f.close()
 
-print("%s - DONE" % datetime.datetime.now())
+# Generate SHA256 checksum
+sha256_hash = hashlib.sha256()
+with open(standalone_filename, "rb") as f:
+    for chunk in iter(lambda: f.read(4096), b""):
+        sha256_hash.update(chunk)
+
+checksum = sha256_hash.hexdigest()
+checksum_filename = standalone_filename + '.sha256sum'
+
+# Write checksum file
+with open(checksum_filename, 'w', encoding="utf-8") as f:
+    f.write("%s  %s\n" % (checksum, standalone_filename))
+
+print("%s - Generated %s" % (datetime.datetime.now(), standalone_filename))
+print("%s - Generated %s" % (datetime.datetime.now(), checksum_filename))
+print("SHA256: %s" % checksum)
