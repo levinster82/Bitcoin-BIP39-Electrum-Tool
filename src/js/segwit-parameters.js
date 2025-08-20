@@ -2,7 +2,7 @@
 
 // p2wpkh
 
-libs.bitcoin.networks.bitcoin.p2wpkh = {
+bitcoinjs.bitcoin.networks.bitcoin.p2wpkh = {
     baseNetwork: "bitcoin",
     messagePrefix: '\x18Bitcoin Signed Message:\n',
     bech32: 'bc',
@@ -15,7 +15,7 @@ libs.bitcoin.networks.bitcoin.p2wpkh = {
     wif: 0x80
 };
 
-libs.bitcoin.networks.testnet.p2wpkh = {
+bitcoinjs.bitcoin.networks.testnet.p2wpkh = {
     baseNetwork: "testnet",
     messagePrefix: '\x18Bitcoin Signed Message:\n',
     bech32: 'tb',
@@ -28,7 +28,7 @@ libs.bitcoin.networks.testnet.p2wpkh = {
     wif: 0xef
 };
 
-libs.bitcoin.networks.regtest.p2wpkh = {
+bitcoinjs.bitcoin.networks.regtest.p2wpkh = {
     baseNetwork: "regtest",
     messagePrefix: '\x18Bitcoin Signed Message:\n',
     bech32: 'bcrt',
@@ -43,7 +43,7 @@ libs.bitcoin.networks.regtest.p2wpkh = {
 
 // p2wpkh in p2sh
 
-libs.bitcoin.networks.bitcoin.p2wpkhInP2sh = {
+bitcoinjs.bitcoin.networks.bitcoin.p2wpkhInP2sh = {
     baseNetwork: "bitcoin",
     messagePrefix: '\x18Bitcoin Signed Message:\n',
     bech32: 'bc',
@@ -56,7 +56,7 @@ libs.bitcoin.networks.bitcoin.p2wpkhInP2sh = {
     wif: 0x80
 };
 
-libs.bitcoin.networks.testnet.p2wpkhInP2sh = {
+bitcoinjs.bitcoin.networks.testnet.p2wpkhInP2sh = {
     baseNetwork: "testnet",
     messagePrefix: '\x18Bitcoin Signed Message:\n',
     bech32: 'tb',
@@ -69,7 +69,7 @@ libs.bitcoin.networks.testnet.p2wpkhInP2sh = {
     wif: 0xef
 };
 
-libs.bitcoin.networks.regtest.p2wpkhInP2sh = {
+bitcoinjs.bitcoin.networks.regtest.p2wpkhInP2sh = {
     baseNetwork: "regtest",
     messagePrefix: '\x18Bitcoin Signed Message:\n',
     bech32: 'bcrt',
@@ -84,7 +84,7 @@ libs.bitcoin.networks.regtest.p2wpkhInP2sh = {
 
 // p2wsh
 
-libs.bitcoin.networks.bitcoin.p2wsh = {
+bitcoinjs.bitcoin.networks.bitcoin.p2wsh = {
     baseNetwork: "bitcoin",
     messagePrefix: '\x18Bitcoin Signed Message:\n',
     bech32: 'bc',
@@ -97,7 +97,7 @@ libs.bitcoin.networks.bitcoin.p2wsh = {
     wif: 0x80
 };
 
-libs.bitcoin.networks.testnet.p2wsh = {
+bitcoinjs.bitcoin.networks.testnet.p2wsh = {
     baseNetwork: "testnet",
     messagePrefix: '\x18Bitcoin Signed Message:\n',
     bech32: 'tb',
@@ -110,7 +110,7 @@ libs.bitcoin.networks.testnet.p2wsh = {
     wif: 0xef
 };
 
-libs.bitcoin.networks.regtest.p2wsh = {
+bitcoinjs.bitcoin.networks.regtest.p2wsh = {
     baseNetwork: "regtest",
     messagePrefix: '\x18Bitcoin Signed Message:\n',
     bech32: 'bcrt',
@@ -125,7 +125,7 @@ libs.bitcoin.networks.regtest.p2wsh = {
 
 // p2wsh in p2sh
 
-libs.bitcoin.networks.bitcoin.p2wshInP2sh = {
+bitcoinjs.bitcoin.networks.bitcoin.p2wshInP2sh = {
     baseNetwork: "bitcoin",
     messagePrefix: '\x18Bitcoin Signed Message:\n',
     bech32: 'bc',
@@ -138,7 +138,7 @@ libs.bitcoin.networks.bitcoin.p2wshInP2sh = {
     wif: 0x80
 };
 
-libs.bitcoin.networks.testnet.p2wshInP2sh = {
+bitcoinjs.bitcoin.networks.testnet.p2wshInP2sh = {
     baseNetwork: "testnet",
     messagePrefix: '\x18Bitcoin Signed Message:\n',
     bech32: 'tb',
@@ -151,7 +151,7 @@ libs.bitcoin.networks.testnet.p2wshInP2sh = {
     wif: 0xef
 };
 
-libs.bitcoin.networks.regtest.p2wshInP2sh = {
+bitcoinjs.bitcoin.networks.regtest.p2wshInP2sh = {
     baseNetwork: "regtest",
     messagePrefix: '\x18Bitcoin Signed Message:\n',
     bech32: 'bcrt',

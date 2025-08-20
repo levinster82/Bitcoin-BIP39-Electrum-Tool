@@ -6,7 +6,7 @@
     var seed = null;
     var bip32RootKey = null;
     var bip32ExtendedKey = null;
-    var network = libs.bitcoin.networks.bitcoin;
+    var network = bitcoinjs.bitcoin.networks.bitcoin;
     var addressRowTemplate = $("#address-row-template");
 
     var showIndex = true;
@@ -110,6 +110,16 @@
     DOM.bip84accountXprv = $("#bip84 .account-xprv");
     DOM.bip84accountXpub = $("#bip84 .account-xpub");
     DOM.bip84change = $("#bip84 .change");
+    DOM.bip86tab = $("#bip86-tab");
+    DOM.bip86unavailable = $("#bip86 .unavailable");
+    DOM.bip86available = $("#bip86 .available");
+    DOM.bip86path = $("#bip86-path");
+    DOM.bip86purpose = $("#bip86 .purpose");
+    DOM.bip86coin = $("#bip86 .coin");
+    DOM.bip86account = $("#bip86 .account");
+    DOM.bip86accountXprv = $("#bip86 .account-xprv");
+    DOM.bip86accountXpub = $("#bip86 .account-xpub");
+    DOM.bip86change = $("#bip86 .change");
     DOM.bip85 = $('.bip85');
     DOM.showBip85 = $('.showBip85');
     DOM.bip85Field = $('.bip85Field');
@@ -181,6 +191,8 @@
         DOM.bip49change.on("input", calcForDerivationPath);
         DOM.bip84account.on("input", calcForDerivationPath);
         DOM.bip84change.on("input", calcForDerivationPath);
+        DOM.bip86account.on("input", calcForDerivationPath);
+        DOM.bip86change.on("input", calcForDerivationPath);
         DOM.bip85application.on('input', calcBip85);
         DOM.bip85mnemonicLanguage.on('change', calcBip85);
         DOM.bip85mnemonicLength.on('change', calcBip85);
@@ -357,7 +369,7 @@
             calcBip32RootKeyFromSeed(phrase, passphrase);
         }
         else if (seed != "") {
-          bip32RootKey = libs.bip32.fromSeed(libs.buffer.Buffer.from(seed, 'hex'), network);
+          bip32RootKey = bitcoinjs.bip32.fromSeed(bitcoinjs.buffer.Buffer.from(seed, 'hex'), network);
           var rootKeyBase58 = bip32RootKey.toBase58();
           DOM.rootKey.val(rootKeyBase58);
         }
@@ -485,7 +497,7 @@
         showPending();
         hideValidationError();
         seed = DOM.seed.val();
-        bip32RootKey = libs.bip32.fromSeed(libs.buffer.Buffer.from(seed, 'hex'), network);
+        bip32RootKey = bitcoinjs.bip32.fromSeed(bitcoinjs.buffer.Buffer.from(seed, 'hex'), network);
         var rootKeyBase58 = bip32RootKey.toBase58();
         DOM.rootKey.val(rootKeyBase58);
         var errorText = validateRootKey(rootKeyBase58);
@@ -641,8 +653,8 @@
             });
             
             // Create master key from Electrum seed - use correct network for each type
-            var keyNetwork = isSegwit ? network : libs.bitcoin.networks.bitcoin;
-            var masterKey = libs.bip32.fromSeed(seedBuffer, keyNetwork);
+            var keyNetwork = isSegwit ? network : bitcoinjs.bitcoin.networks.bitcoin;
+            var masterKey = bitcoinjs.bip32.fromSeed(seedBuffer, keyNetwork);
             
             // Use Electrum's actual derivation paths - different for Legacy vs SegWit
             var key;
@@ -666,13 +678,13 @@
             var address;
             if (isSegwit) {
                 // Electrum SegWit: native P2WPKH (bc1...)
-                address = libs.bitcoin.payments.p2wpkh({ 
+                address = bitcoinjs.bitcoin.payments.p2wpkh({ 
                     pubkey: key.publicKey, 
                     network: network 
                 }).address;
             } else {
                 // Electrum Legacy: P2PKH (1...)
-                address = libs.bitcoin.payments.p2pkh({ 
+                address = bitcoinjs.bitcoin.payments.p2pkh({ 
                     pubkey: key.publicKey, 
                     network: network 
                 }).address;
@@ -731,8 +743,8 @@
       }
       try {
         // BIP85 requires mainnet format - derive from the same seed but with mainnet network
-        var mainnetRootKey = libs.bip32.fromSeed(libs.buffer.Buffer.from(seed, 'hex'), libs.bitcoin.networks.bitcoin);
-        var master = libs.bip85.BIP85.fromBase58(mainnetRootKey.toBase58());
+        var mainnetRootKey = bitcoinjs.bip32.fromSeed(bitcoinjs.buffer.Buffer.from(seed, 'hex'), bitcoinjs.bitcoin.networks.bitcoin);
+        var master = bitcoinjs.bip85.BIP85.fromBase58(mainnetRootKey.toBase58());
 
         var result;
 
@@ -788,6 +800,9 @@
         }
         else if (bip84TabSelected()) {
             displayBip84Info();
+        }
+        else if (bip86TabSelected()) {
+            displayBip86Info();
         }
         else if (electrumLegacyTabSelected()) {
             displayElectrumLegacyInfo();
@@ -958,7 +973,7 @@
         }
         
         // Create BIP32 root key from the seed (same for both types)
-        bip32RootKey = libs.bip32.fromSeed(libs.buffer.Buffer.from(seed, 'hex'), network);
+        bip32RootKey = bitcoinjs.bip32.fromSeed(bitcoinjs.buffer.Buffer.from(seed, 'hex'), network);
     }
 
     function calcBip32RootKeyFromBase58(rootKeyBase58) {
@@ -967,18 +982,18 @@
         if (networkHasSegwit()) {
             var n = network;
             if ("baseNetwork" in n) {
-                n = libs.bitcoin.networks[n.baseNetwork];
+                n = bitcoinjs.bitcoin.networks[n.baseNetwork];
             }
             // try parsing using base network params
             try {
-                bip32RootKey = libs.bip32.fromBase58(rootKeyBase58, n);
+                bip32RootKey = bitcoinjs.bip32.fromBase58(rootKeyBase58, n);
                 return;
             }
             catch (e) {}
             // try parsing using p2wpkh params
             if ("p2wpkh" in n) {
                 try {
-                    bip32RootKey = libs.bip32.fromBase58(rootKeyBase58, n.p2wpkh);
+                    bip32RootKey = bitcoinjs.bip32.fromBase58(rootKeyBase58, n.p2wpkh);
                     return;
                 }
                 catch (e) {}
@@ -986,7 +1001,7 @@
             // try parsing using p2wpkh-in-p2sh network params
             if ("p2wpkhInP2sh" in n) {
                 try {
-                    bip32RootKey = libs.bip32.fromBase58(rootKeyBase58, n.p2wpkhInP2sh);
+                    bip32RootKey = bitcoinjs.bip32.fromBase58(rootKeyBase58, n.p2wpkhInP2sh);
                     return;
                 }
                 catch (e) {}
@@ -994,7 +1009,7 @@
             // try parsing using p2wsh network params
             if ("p2wsh" in n) {
                 try {
-                    bip32RootKey = libs.bip32.fromBase58(rootKeyBase58, n.p2wsh);
+                    bip32RootKey = bitcoinjs.bip32.fromBase58(rootKeyBase58, n.p2wsh);
                     return;
                 }
                 catch (e) {}
@@ -1002,14 +1017,14 @@
             // try parsing using p2wsh-in-p2sh network params
             if ("p2wshInP2sh" in n) {
                 try {
-                    bip32RootKey = libs.bip32.fromBase58(rootKeyBase58, n.p2wshInP2sh);
+                    bip32RootKey = bitcoinjs.bip32.fromBase58(rootKeyBase58, n.p2wshInP2sh);
                     return;
                 }
                 catch (e) {}
             }
         }
         // try the network params as currently specified
-        bip32RootKey = libs.bip32.fromBase58(rootKeyBase58, network);
+        bip32RootKey = bitcoinjs.bip32.fromBase58(rootKeyBase58, network);
     }
 
 
@@ -1113,18 +1128,18 @@
         if (networkHasSegwit()) {
             var n = network;
             if ("baseNetwork" in n) {
-                n = libs.bitcoin.networks[n.baseNetwork];
+                n = bitcoinjs.bitcoin.networks[n.baseNetwork];
             }
             // try parsing using base network params
             try {
-                libs.bip32.fromBase58(rootKeyBase58, n);
+                bitcoinjs.bip32.fromBase58(rootKeyBase58, n);
                 return "";
             }
             catch (e) {}
             // try parsing using p2wpkh params
             if ("p2wpkh" in n) {
                 try {
-                    libs.bip32.fromBase58(rootKeyBase58, n.p2wpkh);
+                    bitcoinjs.bip32.fromBase58(rootKeyBase58, n.p2wpkh);
                     return "";
                 }
                 catch (e) {}
@@ -1132,7 +1147,7 @@
             // try parsing using p2wpkh-in-p2sh network params
             if ("p2wpkhInP2sh" in n) {
                 try {
-                    libs.bip32.fromBase58(rootKeyBase58, n.p2wpkhInP2sh);
+                    bitcoinjs.bip32.fromBase58(rootKeyBase58, n.p2wpkhInP2sh);
                     return "";
                 }
                 catch (e) {}
@@ -1140,7 +1155,7 @@
             // try parsing using p2wsh network params
             if ("p2wsh" in n) {
                 try {
-                    libs.bip32.fromBase58(rootKeyBase58, n.p2wsh);
+                    bitcoinjs.bip32.fromBase58(rootKeyBase58, n.p2wsh);
                     return "";
                 }
                 catch (e) {}
@@ -1148,7 +1163,7 @@
             // try parsing using p2wsh-in-p2sh network params
             if ("p2wshInP2sh" in n) {
                 try {
-                    libs.bip32.fromBase58(rootKeyBase58, n.p2wshInP2sh);
+                    bitcoinjs.bip32.fromBase58(rootKeyBase58, n.p2wshInP2sh);
                     return "";
                 }
                 catch (e) {}
@@ -1156,7 +1171,7 @@
         }
         // try the network params as currently specified
         try {
-            libs.bip32.fromBase58(rootKeyBase58, network);
+            bitcoinjs.bip32.fromBase58(rootKeyBase58, network);
         }
         catch (e) {
             return "Invalid root key";
@@ -1213,6 +1228,20 @@
             path += change;
             DOM.bip84path.val(path);
             var derivationPath = DOM.bip84path.val();
+            return derivationPath;
+        }
+        else if (bip86TabSelected()) {
+            var purpose = parseIntNoNaN(DOM.bip86purpose.val(), 86);
+            var coin = parseIntNoNaN(DOM.bip86coin.val(), 0);
+            var account = parseIntNoNaN(DOM.bip86account.val(), 0);
+            var change = parseIntNoNaN(DOM.bip86change.val(), 0);
+            var path = "m/";
+            path += purpose + "'/";
+            path += coin + "'/";
+            path += account + "'/";
+            path += change;
+            DOM.bip86path.val(path);
+            var derivationPath = DOM.bip86path.val();
             return derivationPath;
         }
         else if (bip32TabSelected()) {
@@ -1333,12 +1362,31 @@
         DOM.bip84accountXprv.val(accountXprv);
         DOM.bip84accountXpub.val(accountXpub);
     }
+    
+    function displayBip86Info() {
+        // Get the derivation path for the account
+        var purpose = parseIntNoNaN(DOM.bip86purpose.val(), 86);
+        var coin = parseIntNoNaN(DOM.bip86coin.val(), 0);
+        var account = parseIntNoNaN(DOM.bip86account.val(), 0);
+        var path = "m/";
+        path += purpose + "'/";
+        path += coin + "'/";
+        path += account + "'/";
+        // Calculate the account extended keys
+        var accountExtendedKey = calcBip32ExtendedKey(path);
+        var accountXprv = accountExtendedKey.toBase58();
+        var accountXpub = accountExtendedKey.neutered().toBase58();
+        // Display the extended keys
+        DOM.bip86accountXprv.val(accountXprv);
+        DOM.bip86accountXpub.val(accountXpub);
+    }
+    
     function displayElectrumLegacyInfo() {
         // Electrum Legacy account extended key - use ROOT level (m/) based on Electrum source code
-        var bitcoinMainnet = libs.bitcoin.networks.bitcoin;
+        var bitcoinMainnet = bitcoinjs.bitcoin.networks.bitcoin;
         
         // Create root key with Bitcoin mainnet parameters for xpub encoding
-        var legacyRootKey = libs.bip32.fromSeed(libs.buffer.Buffer.from(seed, 'hex'), bitcoinMainnet);
+        var legacyRootKey = bitcoinjs.bip32.fromSeed(bitcoinjs.buffer.Buffer.from(seed, 'hex'), bitcoinMainnet);
         
         // For Electrum Legacy, the account extended public key is at ROOT level (m/)
         var accountXpub = legacyRootKey.neutered().toBase58();
@@ -1348,7 +1396,7 @@
         // Electrum SegWit account level key (m/0') with zpub encoding
         var baseNetwork = network;
         if ("baseNetwork" in network) {
-            baseNetwork = libs.bitcoin.networks[network.baseNetwork];
+            baseNetwork = bitcoinjs.bitcoin.networks[network.baseNetwork];
         }
         
         var segwitNetwork = baseNetwork;
@@ -1357,7 +1405,7 @@
         }
         
         // Create a new root key with SegWit network parameters for zpub encoding
-        var segwitRootKey = libs.bip32.fromSeed(libs.buffer.Buffer.from(seed, 'hex'), segwitNetwork);
+        var segwitRootKey = bitcoinjs.bip32.fromSeed(bitcoinjs.buffer.Buffer.from(seed, 'hex'), segwitNetwork);
         var accountExtendedKey = segwitRootKey.deriveHardened(0); // m/0'
         var accountXpub = accountExtendedKey.neutered().toBase58();
         DOM.electrumSegwitAccountXpub.val(accountXpub);
@@ -1408,7 +1456,7 @@
     }
 
     function segwitSelected() {
-        return bip49TabSelected() || bip84TabSelected() || bip141TabSelected() || electrumSegwitTabSelected();
+        return bip49TabSelected() || bip84TabSelected() || bip86TabSelected() || bip141TabSelected() || electrumSegwitTabSelected();
     }
 
     // Electrum tab selection functions
@@ -1439,6 +1487,10 @@
         return (bip141TabSelected() && DOM.bip141semantics.val() == "p2wsh-p2sh");
     }
 
+    function p2trSelected() {
+        return bip86TabSelected();
+    }
+
     function TableRow(index, isLast) {
 
         var self = this;
@@ -1452,6 +1504,7 @@
         var isP2wpkhInP2sh = p2wpkhInP2shSelected();
         var isP2wsh = p2wshSelected();
         var isP2wshInP2sh = p2wshInP2shSelected();
+        var isP2tr = p2trSelected();
 
         function init() {
             calculateValues();
@@ -1518,7 +1571,7 @@
                 var publicKeyForAddress = key.publicKey;
                 
                 if (hasPrivkey) {
-                    keyPair = libs.ECPair.fromPrivateKey(key.privateKey, { 
+                    keyPair = bitcoinjs.ECPair.fromPrivateKey(key.privateKey, { 
                         network: network, 
                         compressed: !useUncompressed 
                     });
@@ -1530,8 +1583,8 @@
                 
                 // get address using appropriate public key (compressed or uncompressed)
                 // Convert to Buffer if needed (for compatibility with bitcoinjs-lib)
-                var pubkeyBuffer = libs.buffer.Buffer.from(publicKeyForAddress);
-                var address = libs.bitcoin.payments.p2pkh({ 
+                var pubkeyBuffer = bitcoinjs.buffer.Buffer.from(publicKeyForAddress);
+                var address = bitcoinjs.bitcoin.payments.p2pkh({ 
                     pubkey: pubkeyBuffer, 
                     network: network 
                 }).address;
@@ -1541,14 +1594,14 @@
                     // BIP38 encode private key if required
                     if (useBip38) {
                         console.log("Starting BIP38 encryption for index " + index);
-                        privkey = libs.bip38.encrypt(keyPair.privateKey, !useUncompressed, bip38password, function(p) {
+                        privkey = bitcoinjs.bip38.encrypt(keyPair.privateKey, !useUncompressed, bip38password, function(p) {
                             console.log("Progressed " + p.percent.toFixed(1) + "% for index " + index);
                         });
                         console.log("BIP38 encryption completed for index " + index + ", result: " + privkey);
                     }
                 }
                 // get pubkey (uncompressed if BIP38, compressed otherwise)
-                var pubkey = libs.buffer.Buffer.from(publicKeyForAddress).toString('hex');
+                var pubkey = bitcoinjs.buffer.Buffer.from(publicKeyForAddress).toString('hex');
                 var indexText = getDerivationPath() + "/" + index;
                 if (useHardenedAddresses) {
                     indexText = indexText + "'";
@@ -1560,14 +1613,14 @@
                         return;
                     }
                     if (isP2wpkh) {
-                        address = libs.bitcoin.payments.p2wpkh({ 
+                        address = bitcoinjs.bitcoin.payments.p2wpkh({ 
                             pubkey: key.publicKey, 
                             network: network 
                         }).address;
                     }
                     else if (isP2wpkhInP2sh) {
-                        address = libs.bitcoin.payments.p2sh({
-                            redeem: libs.bitcoin.payments.p2wpkh({ 
+                        address = bitcoinjs.bitcoin.payments.p2sh({
+                            redeem: bitcoinjs.bitcoin.payments.p2wpkh({ 
                                 pubkey: key.publicKey, 
                                 network: network 
                             }),
@@ -1576,8 +1629,8 @@
                     }
                     else if (isP2wsh) {
                         // 1-of-1 multisig wrapped in P2WSH
-                        address = libs.bitcoin.payments.p2wsh({
-                            redeem: libs.bitcoin.payments.p2ms({ 
+                        address = bitcoinjs.bitcoin.payments.p2wsh({
+                            redeem: bitcoinjs.bitcoin.payments.p2ms({ 
                                 m: 1, 
                                 pubkeys: [key.publicKey],
                                 network: network
@@ -1587,9 +1640,9 @@
                     }
                     else if (isP2wshInP2sh) {
                         // 1-of-1 multisig wrapped in P2SH-P2WSH
-                        address = libs.bitcoin.payments.p2sh({
-                            redeem: libs.bitcoin.payments.p2wsh({
-                                redeem: libs.bitcoin.payments.p2ms({ 
+                        address = bitcoinjs.bitcoin.payments.p2sh({
+                            redeem: bitcoinjs.bitcoin.payments.p2wsh({
+                                redeem: bitcoinjs.bitcoin.payments.p2ms({ 
                                     m: 1, 
                                     pubkeys: [key.publicKey],
                                     network: network
@@ -1598,6 +1651,19 @@
                             }),
                             network: network
                         }).address;
+                    }
+                    else if (isP2tr) {
+                        // BIP-86 Taproot addresses (P2TR)
+                        try {
+                            address = bitcoinjs.bitcoin.payments.p2tr({ 
+                                internalPubkey: key.publicKey.slice(1, 33), // Use internal pubkey (32 bytes) for BIP-86
+                                network: network 
+                            }).address;
+                        } catch (e) {
+                            // Fallback if P2TR is not available in this bitcoinjs-lib version
+                            console.warn("P2TR (Taproot) not supported in this bitcoinjs-lib version:", e.message);
+                            address = "Taproot not supported";
+                        }
                     }
                 }
 
@@ -1741,7 +1807,7 @@
             if (comparedTo.indexOf(word) == 0) {
                 return comparedTo;
             }
-            var distance = libs.levenshtein.get(word, comparedTo);
+            var distance = bitcoinjs.levenshtein.get(word, comparedTo);
             if (distance < minDistance) {
                 closestWord = comparedTo;
                 minDistance = distance;
@@ -1969,7 +2035,7 @@
             // Get bits by hashing entropy with SHA256
             var hash = sjcl.hash.sha256.hash(entropy.cleanStr);
             var hex = sjcl.codec.hex.fromBits(hash);
-            bits = libs.BigInteger.BigInteger.parse(hex, 16).toString(2);
+            bits = bitcoinjs.BigInteger.BigInteger.parse(hex, 16).toString(2);
             while (bits.length % 256 != 0) {
                 bits = "0" + bits;
             }
@@ -2026,7 +2092,7 @@
         var numberOfBits = entropy.binaryStr.length;
         var timeToCrack = "unknown";
         try {
-            var z = libs.zxcvbn(entropy.base.events.join(""));
+            var z = bitcoinjs.zxcvbn(entropy.base.events.join(""));
             timeToCrack = z.crack_times_display.offline_fast_hashing_1e10_per_second;
             if (z.feedback.warning != "") {
                 timeToCrack = timeToCrack + " - " + z.feedback.warning;
@@ -2134,7 +2200,7 @@
     function createQr(e) {
         var content = e.target.textContent || e.target.value;
         if (content) {
-            var qrEl = libs.kjua({
+            var qrEl = bitcoinjs.kjua({
                 text: content,
                 render: "canvas",
                 size: 310,
@@ -2174,7 +2240,7 @@
     function networkHasSegwit() {
         var n = network;
         if ("baseNetwork" in network) {
-            n = libs.bitcoin.networks[network.baseNetwork];
+            n = bitcoinjs.bitcoin.networks[network.baseNetwork];
         }
         // check if only p2wpkh params are required
         if (p2wpkhSelected()) {
@@ -2196,6 +2262,10 @@
         return DOM.bip84tab.hasClass("active");
     }
 
+    function bip86TabSelected() {
+        return DOM.bip86tab.hasClass("active");
+    }
+
     function bip141TabSelected() {
         return DOM.bip141tab.hasClass("active");
     }
@@ -2204,6 +2274,7 @@
         DOM.bip44coin.val(coinValue);
         DOM.bip49coin.val(coinValue);
         DOM.bip84coin.val(coinValue);
+        DOM.bip86coin.val(coinValue);
     }
 
     function showSegwitAvailable() {
@@ -2211,6 +2282,8 @@
         DOM.bip49available.removeClass("hidden");
         DOM.bip84unavailable.addClass("hidden");
         DOM.bip84available.removeClass("hidden");
+        DOM.bip86unavailable.addClass("hidden");
+        DOM.bip86available.removeClass("hidden");
         DOM.bip141unavailable.addClass("hidden");
         DOM.bip141available.removeClass("hidden");
     }
@@ -2220,6 +2293,8 @@
         DOM.bip49unavailable.removeClass("hidden");
         DOM.bip84available.addClass("hidden");
         DOM.bip84unavailable.removeClass("hidden");
+        DOM.bip86available.addClass("hidden");
+        DOM.bip86unavailable.removeClass("hidden");
         DOM.bip141available.addClass("hidden");
         DOM.bip141unavailable.removeClass("hidden");
     }
@@ -2233,7 +2308,7 @@
         // if a segwit network is alread selected, need to use base network to
         // look up new parameters
         if ("baseNetwork" in network) {
-            network = libs.bitcoin.networks[network.baseNetwork];
+            network = bitcoinjs.bitcoin.networks[network.baseNetwork];
         }
         // choose the right segwit params
         if (p2wpkhSelected() && "p2wpkh" in network) {
@@ -2341,21 +2416,21 @@
         {
             name: "BTC - Bitcoin",
             onSelect: function() {
-                network = libs.bitcoin.networks.bitcoin;
+                network = bitcoinjs.bitcoin.networks.bitcoin;
                 setHdCoin(0);
             },
         },
         {
             name: "BTC - Bitcoin Testnet",
             onSelect: function() {
-                network = libs.bitcoin.networks.testnet;
+                network = bitcoinjs.bitcoin.networks.testnet;
                 setHdCoin(1);
             },
         },
         {
             name: "BTC - Bitcoin RegTest",
             onSelect: function() {
-                network = libs.bitcoin.networks.regtest;
+                network = bitcoinjs.bitcoin.networks.regtest;
                 setHdCoin(1);
             },
         }

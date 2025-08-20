@@ -2,21 +2,21 @@
         {
             name: "BTC - Bitcoin",
             onSelect: function() {
-                network = libs.bitcoin.networks.bitcoin;
+                network = bitcoinjs.bitcoin.networks.bitcoin;
                 setHdCoin(0);
             },
         },
         {
             name: "BTC - Bitcoin Testnet",
             onSelect: function() {
-                network = libs.bitcoin.networks.testnet;
+                network = bitcoinjs.bitcoin.networks.testnet;
                 setHdCoin(1);
             },
         },
         {
             name: "BTC - Bitcoin RegTest",
             onSelect: function() {
-                network = libs.bitcoin.networks.regtest;
+                network = bitcoinjs.bitcoin.networks.regtest;
                 setHdCoin(1);
             },
         }
