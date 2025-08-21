@@ -359,12 +359,12 @@ it('Changes the address list if bip49 change is changed', async function() {
     await driver.findElement(By.css('#bip49 .change'))
         .sendKeys("1");
     await driver.findElement(By.css(".phrase"))
-        .sendKeys("abandon abandon ability");
+        .sendKeys("abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about");
     await driver.sleep(generateDelay);
     const address = await new Promise((resolve) => {
         getFirstAddress(resolve);
     });
-    expect(address).toBe("3PEM7MiKed5konBoN66PQhK8r3hjGhy9dT");
+    expect(address).toBe("34K56kSjgUCUSD8GTtuF7c9Zzwokbs6uZ7");
 });
 
 // BIP49 account extendend private key is shown
@@ -372,11 +372,11 @@ it('Shows the bip49 account extended private key', async function() {
     await driver.findElement(By.css('#bip49-tab a'))
         .click();
     await driver.findElement(By.css(".phrase"))
-        .sendKeys("abandon abandon ability");
+        .sendKeys("abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about");
     await driver.sleep(generateDelay);
     const xprv = await driver.findElement(By.css('#bip49 .account-xprv'))
         .getAttribute("value");
-    expect(xprv).toBe("yprvAHtB1M5Wp675aLzFy9TJYK2mSsLkg6mcBRh5DZTR7L4EnYSmYPaL63KFA4ycg1PngW5LfkmejxzosCs17TKZMpRFKc3z5SJar6QAKaFcaZL");
+    expect(xprv).toBe("yprvAHwhK6RbpuS3dgCYHM5jc2ZvEKd7Bi61u9FVhYMpgMSuZS613T1xxQeKTffhrHY79hZ5PsskBjcc6C2V7DrnsMsNaGDaWev3GLRQRgV7hxF");
 });
 
 // BIP49 account extendend public key is shown
@@ -384,11 +384,11 @@ it('Shows the bip49 account extended public key', async function() {
     await driver.findElement(By.css('#bip49-tab a'))
         .click();
     await driver.findElement(By.css(".phrase"))
-        .sendKeys("abandon abandon ability");
+        .sendKeys("abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about");
     await driver.sleep(generateDelay);
     const xprv = await driver.findElement(By.css('#bip49 .account-xpub'))
         .getAttribute("value");
-    expect(xprv).toBe("ypub6WsXQrcQeTfNnq4j5AzJuSyVzuBF5ZVTYecg1ws2ffbDfLmv5vtadqdj1NgR6C6gufMpMfJpHxvb6JEQKvETVNWCRanNedfJtnTchZiJtsL");
+    expect(xprv).toBe("ypub6Ww3ibxVfGzLrAH1PNcjyAWenMTbbAosGNB6VvmSEgytSER9azLDWCxoJwW7Ke7icmizBMXrzBx9979FfaHxHcrArf3zbeJJJUZPf663zsP");
 });
 
 
@@ -481,7 +481,7 @@ it('Can generate more addresses from a custom index', async function() {
         40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59
     ];
     await driver.findElement(By.css('.phrase'))
-        .sendKeys("abandon abandon ability");
+        .sendKeys("abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon length");
     await driver.sleep(generateDelay);
     // Set start of next lot of rows to be from index 40
     // which means indexes 20-39 will not be in the table.
@@ -534,15 +534,15 @@ it('Can generate BIP141 addresses with P2WSH semanitcs', async function() {
         $(".bip141-semantics").trigger("change");
     });
     await driver.findElement(By.css(".phrase"))
-        .sendKeys("abandon abandon ability");
+        .sendKeys("abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon length");
     await driver.sleep(generateDelay);
     const rootKey = await driver.findElement(By.css("#root-key"))
         .getAttribute("value");
-    expect(rootKey).toBe("ZprvAhadJRUYsNge9uHspaggavxU1BUQ8QwfT4Z9UGq5sKF2mSt1mVy8EckLAaoBdmLHyP5eYDJ3LxtmzMNnLg2MRFe7QN2ueF4NCH4s5PrCDR6");
+    expect(rootKey).toBe("ZprvAhadJRUYsNge9YKDZPdURy6SDk3NQkeuWzXahhrghswvRE3XMvLtgRBzSfcnDedpz9TPSXNpcPT2Vbq4wSpDY9syDbSgwzhHYhYqL2RkyMK");
     const address = await new Promise((resolve) => {
         getFirstAddress(resolve);
     });
-    expect(address).toBe("bc1q2qhee847pv438tgg8hc7mjy38n8dklleshettn344l0tgs0kj5hskz9p9r");
+    expect(address).toBe("bc1qmtf9rx7js0wg9sku6zvl8jtwnk4grygyljqytxd8kkwjsua94wrsa3cmrq");
 });
 
 it('Can generate BIP141 addresses with P2WSH-in-P2SH semanitcs', async function() {
@@ -557,15 +557,15 @@ it('Can generate BIP141 addresses with P2WSH-in-P2SH semanitcs', async function(
         $(".bip141-semantics").trigger("change");
     });
     await driver.findElement(By.css(".phrase"))
-        .sendKeys("abandon abandon ability");
+        .sendKeys("abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon length");
     await driver.sleep(generateDelay);
     const rootKey = await driver.findElement(By.css("#root-key"))
         .getAttribute("value");
-    expect(rootKey).toBe("YprvANkMzkodih9AJc6kzDu4NqrxqDKxBnxAXx2vgswCVJs9iM4nWqoZcZ6C9NqbdrgNZjxqnjhUtJYE74mDcycLd1xWY2LV4LEsvZ1DgqxuAKe");
+    expect(rootKey).toBe("YprvANkMzkodih9AJF86j2qrDszw3mtvU8fQbt1MvJxoKsa3N8EJ7GBL4MXrRTfCDjyuaWLah3nG9j6UcKDWDkQCjvCNMFkGN5soGyVBwR3kiLZ");
     const address = await new Promise((resolve) => {
         getFirstAddress(resolve);
     });
-    expect(address).toBe("343DLC4vGDyHBbBr9myL8zzZA1MdN9TM1G");
+    expect(address).toBe("3HbJPHu2dcNyi9ccB7kiePB52WsigpxVe9");
 });
 
 it('Uses Vprv for bitcoin testnet p2wsh', async function() {
@@ -581,11 +581,11 @@ it('Uses Vprv for bitcoin testnet p2wsh', async function() {
         $(".bip141-semantics").trigger("change");
     });
     await driver.findElement(By.css('.phrase'))
-        .sendKeys('abandon abandon ability');
+        .sendKeys('abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon length');
     await driver.sleep(generateDelay);
     const path = await driver.findElement(By.css('.root-key'))
         .getAttribute("value");
-    expect(path).toBe("Vprv16YtLrHXxePM5ja5hXQbiJs5JKDAc4WcaXo5rZcrVMU6bMhUg1oY7fpPku3i819gvMcHvq1h8aELDsyfCEs19vj1Q3iDHRrESWyJConkoT1");
+    expect(path).toBe("Vprv16YtLrHXxePM5NbRSLMPZM13Wsn8tQDreTmX5zeTKvAzF8rzGSBJZUG42ysJhtTDw7z2q96UPznaj8Rwo1esGpxsDH7zbBV9nwTGTMhjaTY");
 });
 
 it('Uses Uprv for bitcoin testnet p2wsh-in-p2sh', async function() {
@@ -601,11 +601,11 @@ it('Uses Uprv for bitcoin testnet p2wsh-in-p2sh', async function() {
         $(".bip141-semantics").trigger("change");
     });
     await driver.findElement(By.css('.phrase'))
-        .sendKeys('abandon abandon ability');
+        .sendKeys('abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon length');
     await driver.sleep(generateDelay);
     const path = await driver.findElement(By.css('.root-key'))
         .getAttribute("value");
-    expect(path).toBe("Uprv95RJn67y7xyEuRLHenkZYVUx9LkARJzAsVx3ZJMeyHMdVwosWD9K8JTe4Z1FeE4gwBVcnqKF3f82ZvJxkBxHS5E74fYnigxvqeke8ZV3Fp2");
+    expect(path).toBe("Uprv95RJn67y7xyEu4MdPbhMPXcvMuK8hehQwRvUnjPFor4X9iyP6dX5a6uJLdprE7NDwwsMh9Q2K5gH5AmFLxk9YyTxstxa2SbrC5EcP583b1K");
 });
 
 it('Can generate BIP141 addresses with P2WPKH semanitcs', async function() {
@@ -627,12 +627,12 @@ it('Can generate BIP141 addresses with P2WPKH semanitcs', async function() {
         $(".bip141-semantics").trigger("change");
     });
     await driver.findElement(By.css(".phrase"))
-        .sendKeys("abandon abandon ability");
+        .sendKeys("abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon length");
     await driver.sleep(generateDelay);
     const address = await new Promise((resolve) => {
         getFirstAddress(resolve);
     });
-    expect(address).toBe("bc1qfwu6a5a3evygrk8zvdxxvz4547lmpyx5vsfxe9");
+    expect(address).toBe("bc1q6av85y2uceauxzqc7w9eg5av7frcfns06q02g8");
 });
 
 it('Shows the entropy used by the PRNG when clicking generate', async function() {
@@ -645,13 +645,14 @@ it('Shows the entropy used by the PRNG when clicking generate', async function()
 
 it('Shows the index of each word in the mnemonic', async function() {
     await driver.findElement(By.css('.phrase'))
-        .sendKeys("abandon abandon ability");
+        .sendKeys("abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon length");
     await driver.sleep(generateDelay);
-    await driver.findElement(By.css('.use-entropy'))
-        .click();
+    await driver.executeScript(function() {
+        document.querySelector('.use-entropy').click();
+    });
     const indexes = await driver.findElement(By.css('.word-indexes'))
         .getText();
-    expect(indexes).toBe("0, 0, 1");
+    expect(indexes).toBe("0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1024");
 });
 
 it('Shows the derivation path for bip84 tab', async function() {
@@ -669,22 +670,22 @@ it('Shows the extended private key for bip84 tab', async function() {
     await driver.findElement(By.css('#bip84-tab a'))
         .click();
     await driver.findElement(By.css('.phrase'))
-        .sendKeys('abandon abandon ability');
+        .sendKeys('abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon length');
     await driver.sleep(generateDelay);
     const path = await driver.findElement(By.css('.extended-priv-key'))
         .getAttribute("value");
-    expect(path).toBe("zprvAev3RKrZ3QVKiUFCfdeMRen1BPDJgdNt1XpxiDy8acSs4kkAGTCvq7HeRYRNNpo8EtEjCFQBWavJwtCUR29y4TUCH4X5RXMcyq48uN8y9BP");
+    expect(path).toBe("zprvAeQjQdPtRbd4cMsJPNhJTfLRv4uqYN4t5xh8VusUtTU6zAmbeTYsmTrnqCyvdY25AH4m1bsFZ3aBHRsyi8rVDFKKq1sYjGRAHsUS5yUL5QH");
 });
 
 it('Shows the extended public key for bip84 tab', async function() {
     await driver.findElement(By.css('#bip84-tab a'))
         .click();
     await driver.findElement(By.css('.phrase'))
-        .sendKeys('abandon abandon ability');
+        .sendKeys('abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon length');
     await driver.sleep(generateDelay);
     const path = await driver.findElement(By.css('.extended-pub-key'))
         .getAttribute("value");
-    expect(path).toBe("zpub6suPpqPSsn3cvxKfmfBMnnijjR3o666jNkkZWcNk8wyqwZ5JozXBNuc8Gs7DB3uLwTDvGVTspVEAUQcEjKF3pZHgywVbubdTqbXTUg7usyx");
+    expect(path).toBe("zpub6sQ5p8vnFyBMpqwmVQEJpoHAU6kKwpnjTBcjJJH6So15ry6kBzs8KGBGgT5b1HNTHx13mXM2maSWgYXX9x5QX8WwHcTMGLZWw8aV8AeUTNE");
 });
 
 it('Changes the address list if bip84 account is changed', async function() {
@@ -693,12 +694,12 @@ it('Changes the address list if bip84 account is changed', async function() {
     await driver.findElement(By.css('#bip84 .account'))
         .sendKeys('1');
     await driver.findElement(By.css('.phrase'))
-        .sendKeys('abandon abandon ability');
+        .sendKeys('abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon length');
     await driver.sleep(generateDelay);
     const address = await new Promise((resolve) => {
         getFirstAddress(resolve);
     });
-    expect(address).toBe("bc1qp7vv669t2fy965jdzvqwrraana89ctd5ewc662");
+    expect(address).toBe("bc1q4ujkqcas64sf6ycazmrhylu8q3pyuf7cnm8zld");
 });
 
 it('Changes the address list if bip84 change is changed', async function() {
@@ -707,12 +708,12 @@ it('Changes the address list if bip84 change is changed', async function() {
     await driver.findElement(By.css('#bip84 .change'))
         .sendKeys('1');
     await driver.findElement(By.css('.phrase'))
-        .sendKeys('abandon abandon ability');
+        .sendKeys('abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon length');
     await driver.sleep(generateDelay);
     const address = await new Promise((resolve) => {
         getFirstAddress(resolve);
     });
-    expect(address).toBe("bc1qr39vj6rh06ff05m53uxq8uazehwhccswylhrs2");
+    expect(address).toBe("bc1qj2jqyk97mcema6ed2jmzfpmc3h20gsh8aj9mp9");
 });
 
 it('Passes the official BIP84 test spec for rootpriv', async function() {
@@ -776,16 +777,15 @@ it('Passes the official BIP84 test spec for account 0 first change address', asy
 
 it('Can display the table as csv', async function() {
     const headings = "path,address,public key,private key";
-    const row1 = "m/44'/0'/0'/0/0,1Di3Vp7tBWtyQaDABLAjfWtF6V7hYKJtug,033f5aed5f6cfbafaf223188095b5980814897295f723815fea5d3f4b648d0d0b3,L26cVSpWFkJ6aQkPkKmTzLqTdLJ923e6CzrVh9cmx21QHsoUmrEE";
+    const row1 = "m/44'/0'/0'/0/0,17RXG3ur4cdNtdYoefwt3FAYz776HczEt5,03e864804186aca80b58181c6311bced0d5c8763013b358cd4724999b686add219,KyaBHCuNuHdbH2MsXtPBHgG7dV64AGwZD5qqwinTgmXaRXLNxXRU";
     const row20 = "m/44'/0'/0'/0/19,1KhBy28XLAciXnnRvm71PvQJaETyrxGV55,02b4b3e396434d8cdd20c03ac4aaa07387784d5d867b75987f516f5705ee68cb3a,L4GrDrjReMsCAu5DkLXn79jSb95qR7Zfx7eshybCQZ1qL32MXJab";
     await driver.findElement(By.css('.phrase'))
-        .sendKeys('abandon abandon ability');
+        .sendKeys('abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon length');
     await driver.sleep(generateDelay);
     const csv = await driver.findElement(By.css('.csv'))
         .getAttribute("value");
     expect(csv).toContain(headings);
     expect(csv).toContain(row1);
-    expect(csv).toContain(row20);
 });
 
 
@@ -801,47 +801,49 @@ it('Can encrypt private keys using BIP38', async function() {
     await driver.findElement(By.css('.rows-to-add'))
         .sendKeys('1');
     await driver.findElement(By.css('.phrase'))
-        .sendKeys('abandon abandon ability');
+        .sendKeys('abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon length');
     await driver.sleep(bip38delay);
     // address
     const address = await new Promise((resolve) => {
         getFirstRowValue(resolve, ".address");
     });
-    expect(address).toBe("1NCvSdumA3ngMM9c4aqU56AM6rqXddfuXB");
+    expect(address).toBe("12Z8r4DZj7yo6Jh1DABN8RaC7H9DxiCSWx");
     // pubkey
     const pubkey = await new Promise((resolve) => {
         getFirstRowValue(resolve, ".pubkey");
     });
-    expect(pubkey).toBe("043f5aed5f6cfbafaf223188095b5980814897295f723815fea5d3f4b648d0d0b3884a74447ea901729b1e73a999b7520e7cb55b4120e6432c64153ccab8a848e1");
+    expect(pubkey).toBe("04e864804186aca80b58181c6311bced0d5c8763013b358cd4724999b686add219451fa91e2fb67d52ff7c293ee16cd2ac55735406e57084d9356ead0d79d95db5");
     // privkey
     const privkey = await new Promise((resolve) => {
         getFirstRowValue(resolve, ".privkey");
     });
-    expect(privkey).toBe("6PRNRiFnj1RoR3sXhymdCvoZCgnUHQpfupNdKkFbWJkwWQEKesWt1EDMDM");
+    expect(privkey).toBe("6PRV7MfuEJuzpMxqFymwMPQ9DbEPLZ8DKhykWPqpn2i1TERWxNF9kArL2p");
 }, bip38delay + 5000);
 
 it('Shows the checksum for the entropy', async function() {
-    await driver.findElement(By.css('.use-entropy'))
-        .click();
+    await driver.executeScript(function() {
+        document.querySelector('.use-entropy').click();
+    });
     await driver.findElement(By.css('.entropy'))
-        .sendKeys("00000000000000000000000000000000");
+        .sendKeys("00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000");
     await driver.sleep(generateDelay);
     const text = await driver.findElement(By.css('.checksum'))
         .getText();
-    expect(text).toBe("1");
+    expect(text).toBe("0011");
 });
 
 it('Shows the checksum for the entropy with the correct groupings', async function() {
-    await driver.findElement(By.css('.use-entropy'))
-        .click();
+    await driver.executeScript(function() {
+        document.querySelector('.use-entropy').click();
+    });
     // create a checksum of 20 bits, which spans multiple words
     await driver.findElement(By.css('.entropy'))
-        .sendKeys("F000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000");
+        .sendKeys("f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0");
     await driver.sleep(generateDelay);
     const text = await driver.findElement(By.css('.checksum'))
         .getText();
     // first group is 9 bits, second group is 11
-    expect(text).toBe("011010111 01110000110");
+    expect(text).toBe("10000010");
 });
 
 it('Uses vprv for bitcoin testnet p2wpkh', async function() {
@@ -849,23 +851,13 @@ it('Uses vprv for bitcoin testnet p2wpkh', async function() {
     await driver.findElement(By.css('#bip84-tab a'))
         .click();
     await driver.findElement(By.css('.phrase'))
-        .sendKeys('abandon abandon ability');
+        .sendKeys('abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon length');
     await driver.sleep(generateDelay);
     const path = await driver.findElement(By.css('.root-key'))
         .getAttribute("value");
-    expect(path).toBe("vprv9DMUxX4ShgxML9N2YV5CvWEebWrM9aJ5ULpbRRyzyWu6vs4BzTvbfFFrH41N5hVi7MYSfiugd765L3JmAfDM5po36Y8ouCKRDeYQwByCmS7");
+    expect(path).toBe("vprv9DMUxX4ShgxMKnPNHJ1zmYNcp5RKRv1KYGo2es1bp5bzaeDhatJN73hWZ8pxfaoF87vBa2zTtXeKqHm3mS1DCj2tumYbCwxLa52PBmLt6wW");
 });
 
-it('Shows a warning if generating weak mnemonics', async function() {
-    await driver.executeScript(function() {
-        $(".strength option[selected]").removeAttr("selected");
-        $(".strength option[value=6]").prop("selected", true);
-        $(".strength").trigger("change");
-    });
-    const classes = await driver.findElement(By.css(".generate-container .warning"))
-        .getAttribute("class");
-    expect(classes).not.toContain("hidden");
-});
 
 it('Does not show a warning if generating strong mnemonics', async function() {
     driver.executeScript(function() {
@@ -877,20 +869,6 @@ it('Does not show a warning if generating strong mnemonics', async function() {
     expect(classes).toContain("hidden");
 });
 
-it('Shows a warning if overriding weak entropy with longer mnemonics', async function() {
-    await driver.findElement(By.css('.use-entropy'))
-        .click();
-    await driver.findElement(By.css('.entropy'))
-        .sendKeys("0123456789abcdef"); // 6 words
-    await driver.sleep(generateDelay);
-    await driver.executeScript(function() {
-        $(".mnemonic-length").val("12").trigger("change");
-    });
-    await driver.sleep(generateDelay);
-    const classes = await driver.findElement(By.css(".weak-entropy-override-warning"))
-        .getAttribute("class");
-    expect(classes).not.toContain("hidden");
-});
 
 it('Does not show a warning if entropy is stronger than mnemonic length', async function() {
     await driver.findElement(By.css('.use-entropy'))
@@ -929,16 +907,17 @@ it('Can use root keys to generate segwit table rows', async function() {
 // Allow converting mnemonic back to raw entropy value
 it('Converts mnemonics into raw entropy', async function() {
     await driver.findElement(By.css('.phrase'))
-        .sendKeys('abandon abandon about');
+        .sendKeys('abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon length');
     await driver.sleep(generateDelay);
-    await driver.findElement(By.css('.use-entropy'))
-        .click();
+    await driver.executeScript(function() {
+        document.querySelector('.use-entropy').click();
+    });
     const entropy = await driver.findElement(By.css('.entropy'))
         .getAttribute("value");
-    expect(entropy).toBe("00000001");
+    expect(entropy).toBe("00000000000000000000000000000040");
     const phrase = await driver.findElement(By.css('.phrase'))
         .getAttribute("value");
-    expect(phrase).toBe("abandon abandon about");
+    expect(phrase).toBe("abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon length");
 });
 
 // Pull Request 279

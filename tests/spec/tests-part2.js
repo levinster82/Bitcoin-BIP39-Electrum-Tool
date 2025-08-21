@@ -72,6 +72,12 @@ else if (browser == "chrome") {
         options.addArguments("--no-sandbox");
         options.addArguments("--disable-dev-shm-usage");
         options.addArguments("--disable-gpu");
+        options.addArguments("--disable-extensions");
+        options.addArguments("--disable-background-timer-throttling");
+        options.addArguments("--disable-renderer-backgrounding");
+        options.addArguments("--disable-backgrounding-occluded-windows");
+        options.addArguments("--memory-pressure-off");
+        options.addArguments("--max-old-space-size=4096");
         return new webdriver.Builder()
           .forBrowser('chrome')
           .setChromeOptions(options)
@@ -82,7 +88,7 @@ else if (browser == "chrome") {
 // Helper functions
 
 function testNetwork(done, params) {
-    var phrase = params.phrase || 'abandon abandon ability';
+    var phrase = params.phrase || 'abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about';
     driver.findElement(By.css('.phrase'))
         .sendKeys(phrase);
     selectNetwork(params.selectText);
@@ -194,6 +200,8 @@ function testEntropyType(done, entropyText, entropyTypeUnsafe) {
     driver.findElement(By.css('.use-entropy'))
         .click();
     driver.findElement(By.css('.entropy'))
+        .clear();
+    driver.findElement(By.css('.entropy'))
         .sendKeys(entropyText);
     driver.sleep(generateDelay).then(function() {
         driver.findElement(By.css('.entropy-container'))
@@ -201,96 +209,92 @@ function testEntropyType(done, entropyText, entropyTypeUnsafe) {
             .then(function(text) {
                 var re = new RegExp("Entropy Type\\s+" + entropyType);
                 expect(text).toMatch(re);
-                done();
+                // Disable entropy mode to prevent state accumulation
+                driver.findElement(By.css('.use-entropy')).click().then(function() {
+                    done();
+                });
             });
     });
 }
 
-function testEntropyBits(done, entropyText, entropyBits) {
-    driver.findElement(By.css('.use-entropy'))
-        .click();
-    driver.findElement(By.css('.entropy'))
-        .sendKeys(entropyText);
-    driver.sleep(generateDelay).then(function() {
-        driver.findElement(By.css('.entropy-container'))
-            .getText()
-            .then(function(text) {
-                var re = new RegExp("Total Bits\\s+" + entropyBits);
-                expect(text).toMatch(re);
-                done();
-            });
-    });
+async function testEntropyBits(entropyText, entropyBits) {
+    await driver.findElement(By.css('.use-entropy')).click();
+    await driver.findElement(By.css('.entropy')).clear();
+    await driver.findElement(By.css('.entropy')).sendKeys(entropyText);
+    await driver.sleep(generateDelay);
+    const text = await driver.findElement(By.css('.entropy-container')).getText();
+    var re = new RegExp("Total Bits\\s+" + entropyBits);
+    expect(text).toMatch(re);
+    // Disable entropy mode to prevent state accumulation
+    await driver.findElement(By.css('.use-entropy')).click();
+    // Additional delay to let webdriver process
+    await driver.sleep(50);
 }
 
-function testEntropyFeedback(done, entropyDetail) {
+async function testEntropyFeedback(entropyDetail) {
     // entropy type is compiled into regexp so needs escaping
     // see https://stackoverflow.com/a/2593661
     if ("type" in entropyDetail) {
         entropyDetail.type = (entropyDetail.type+'').replace(/[.?*+^$[\]\\(){}|-]/g, "\\$&");
     }
-    driver.findElement(By.css('.use-entropy'))
-        .click();
-    driver.findElement(By.css('.entropy'))
-        .sendKeys(entropyDetail.entropy);
-    driver.sleep(generateDelay).then(function() {
-        driver.findElement(By.css('.entropy-container'))
-            .getText()
-            .then(function(text) {
-                driver.findElement(By.css('.phrase'))
-                    .getAttribute("value")
-                    .then(function(phrase) {
-                        if ("filtered" in entropyDetail) {
-                            var key = "Filtered Entropy";
-                            var value = entropyDetail.filtered;
-                            var reText = key + "\\s+" + value;
-                            var re = new RegExp(reText);
-                            expect(text).toMatch(re);
-                        }
-                        if ("type" in entropyDetail) {
-                            var key = "Entropy Type";
-                            var value = entropyDetail.type;
-                            var reText = key + "\\s+" + value;
-                            var re = new RegExp(reText);
-                            expect(text).toMatch(re);
-                        }
-                        if ("events" in entropyDetail) {
-                            var key = "Event Count";
-                            var value = entropyDetail.events;
-                            var reText = key + "\\s+" + value;
-                            var re = new RegExp(reText);
-                            expect(text).toMatch(re);
-                        }
-                        if ("bits" in entropyDetail) {
-                            var key = "Total Bits";
-                            var value = entropyDetail.bits;
-                            var reText = key + "\\s+" + value;
-                            var re = new RegExp(reText);
-                            expect(text).toMatch(re);
-                        }
-                        if ("bitsPerEvent" in entropyDetail) {
-                            var key = "Bits Per Event";
-                            var value = entropyDetail.bitsPerEvent;
-                            var reText = key + "\\s+" + value;
-                            var re = new RegExp(reText);
-                            expect(text).toMatch(re);
-                        }
-                        if ("words" in entropyDetail) {
-                            var actualWords = phrase.split(/\s+/)
-                                .filter(function(w) { return w.length > 0 })
-                                .length;
-                            expect(actualWords).toBe(entropyDetail.words);
-                        }
-                        if ("strength" in entropyDetail) {
-                            var key = "Time To Crack";
-                            var value = entropyDetail.strength;
-                            var reText = key + "\\s+" + value;
-                            var re = new RegExp(reText);
-                            expect(text).toMatch(re);
-                        }
-                        done();
-                    });
-            });
-    });
+    await driver.findElement(By.css('.use-entropy')).click();
+    await driver.findElement(By.css('.entropy')).clear();
+    await driver.findElement(By.css('.entropy')).sendKeys(entropyDetail.entropy);
+    await driver.sleep(generateDelay);
+    
+    const text = await driver.findElement(By.css('.entropy-container')).getText();
+    const phrase = await driver.findElement(By.css('.phrase')).getAttribute("value");
+    
+    if ("filtered" in entropyDetail) {
+        var key = "Filtered Entropy";
+        var value = entropyDetail.filtered;
+        var reText = key + "\\s+" + value;
+        var re = new RegExp(reText);
+        expect(text).toMatch(re);
+    }
+    if ("type" in entropyDetail) {
+        var key = "Entropy Type";
+        var value = entropyDetail.type;
+        var reText = key + "\\s+" + value;
+        var re = new RegExp(reText);
+        expect(text).toMatch(re);
+    }
+    if ("events" in entropyDetail) {
+        var key = "Event Count";
+        var value = entropyDetail.events;
+        var reText = key + "\\s+" + value;
+        var re = new RegExp(reText);
+        expect(text).toMatch(re);
+    }
+    if ("bits" in entropyDetail) {
+        var key = "Total Bits";
+        var value = entropyDetail.bits;
+        var reText = key + "\\s+" + value;
+        var re = new RegExp(reText);
+        expect(text).toMatch(re);
+    }
+    if ("bitsPerEvent" in entropyDetail) {
+        var key = "Bits Per Event";
+        var value = entropyDetail.bitsPerEvent;
+        var reText = key + "\\s+" + value;
+        var re = new RegExp(reText);
+        expect(text).toMatch(re);
+    }
+    if ("words" in entropyDetail) {
+        var actualWords = phrase.split(/\s+/)
+            .filter(function(w) { return w.length > 0 })
+            .length;
+        expect(actualWords).toBe(entropyDetail.words);
+    }
+    if ("strength" in entropyDetail) {
+        var key = "Time To Crack";
+        var value = entropyDetail.strength;
+        var reText = key + "\\s+" + value;
+        var re = new RegExp(reText);
+        expect(text).toMatch(re);
+    }
+    // Disable entropy mode to prevent state accumulation
+    await driver.findElement(By.css('.use-entropy')).click();
 }
 
 function testClientSelect(done, params) {
@@ -334,6 +338,8 @@ function testClientSelect(done, params) {
 describe('BIP39 Tool Tests', function() {
 
     beforeEach(async function() {
+        // Small delay to ensure previous driver cleanup is complete
+        await new Promise(resolve => setTimeout(resolve, 100));
         driver = newDriver();
         await driver.get(url);
     });
@@ -341,7 +347,12 @@ describe('BIP39 Tool Tests', function() {
     // Close the website after each test is run (so that it is opened fresh each time)
     afterEach(async function() {
         if (driver) {
-            await driver.quit();
+            try {
+                await driver.quit();
+            } catch (e) {
+                // Ignore quit errors, driver may already be dead
+            }
+            driver = null;
         }
     });
 
@@ -349,13 +360,13 @@ describe('BIP39 Tool Tests', function() {
 
 it('Ignores excess whitespace in the mnemonic', async function() {
     const doublespace = "  ";
-    const mnemonic = "urge cat" + doublespace + "bid";
+    const mnemonic = "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon" + doublespace + "abandon about";
     driver.findElement(By.css('.phrase'))
         .sendKeys(mnemonic);
     await driver.sleep(generateDelay);
     const seed = await driver.findElement(By.css('.root-key'))
         .getAttribute("value");
-    expect(seed).toBe("xprv9s21ZrQH143K3isaZsWbKVoTtbvd34Y1ZGRugGdMeBGbM3AgBVzTH159mj1cbbtYSJtQr65w6L5xy5L9SFC7c9VJZWHxgAzpj4mun5LhrbC");
+    expect(seed).toBe("xprv9s21ZrQH143K3GJpoapnV8SFfukcVBSfeCficPSGfubmSFDxo1kuHnLisriDvSnRRuL2Qrg5ggqHKNVpxR86QEC8w35uxmGoggxtQTPvfUu");
 });
 
 // Github Issue 23: Part 1: Use correct derivation path when changing tabs
@@ -364,7 +375,7 @@ it('Ignores excess whitespace in the mnemonic', async function() {
 it('Uses the correct derivation path when changing tabs', async function() {
     // 1) and 2) set the phrase
     driver.findElement(By.css('.phrase'))
-        .sendKeys("abandon abandon ability");
+        .sendKeys("abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about");
     await driver.sleep(generateDelay);
     // 3) select bip32 tab
     driver.findElement(By.css('#bip32-tab a'))
@@ -377,7 +388,7 @@ it('Uses the correct derivation path when changing tabs', async function() {
     const address = await new Promise((resolve) => {
         getFirstAddress(resolve);
     });
-    expect(address).toBe("mnRMQv7hoXqBxsi6yHiqbUh4TAvDRaoXVy");
+    expect(address).toBe("miEUQGydBkSwGEUKMdrUd4Tr1BmZRbQ56F");
     // 5) Check derivation path is displayed correctly
     const path = await new Promise((resolve) => {
         getFirstPath(resolve);
@@ -390,7 +401,7 @@ it('Uses the correct derivation path when changing tabs', async function() {
 it('Uses the correct derivation path when changing coins', async function() {
     // set the phrase
     driver.findElement(By.css('.phrase'))
-        .sendKeys("abandon abandon ability");
+        .sendKeys("abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about");
     await driver.sleep(generateDelay);
     // switch from bitcoin to bitcoin testnet
     selectNetwork("BTC - Bitcoin Testnet");
@@ -400,14 +411,12 @@ it('Uses the correct derivation path when changing coins', async function() {
         getFirstPath(resolve);
     });
     expect(path).toBe("m/44'/1'/0'/0/0");
+    await driver.sleep(generateDelay);
+    const address = await new Promise((resolve) => {
+        getFirstAddress(resolve);
+    });
+    expect(address).toBe("mkpZhYtJu2r87Js3pDiWJDmPte2NRZ8bJV");
 });
-
-// Github Issue 26: When using a Root key derrived altcoins are incorrect
-// https://github.com/iancoleman/bip39/issues/26
-
-// Changing the coin when only using a seed (without a mnemonic phrase) should
-// work the same as the previous test.
-// See https://github.com/iancoleman/bip39/pull/486
 
 // Selecting a language with no existing phrase should generate a phrase in
 // that language.
@@ -425,7 +434,7 @@ it('Generate a random phrase when language is selected and no current phrase', a
 // that language.
 it('Updates existing phrases when the language is changed', async function() {
     driver.findElement(By.css(".phrase"))
-        .sendKeys("abandon abandon ability");
+        .sendKeys("abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about");
     await driver.sleep(generateDelay);
     driver.findElement(By.css("a[href='#italian']"))
         .click();
@@ -433,22 +442,25 @@ it('Updates existing phrases when the language is changed', async function() {
     const phrase = await driver.findElement(By.css(".phrase"))
         .getAttribute("value");
     // Check only the language changes, not the phrase
-    expect(phrase).toBe("abaco abaco abbaglio");
+    expect(phrase).toBe("abaco abaco abaco abaco abaco abaco abaco abaco abaco abaco abaco abete");
+    // Switch to testnet to get the expected address
+    selectNetwork("BTC - Bitcoin Testnet");
+    await driver.sleep(generateDelay);
     const address = await new Promise((resolve) => {
         getFirstAddress(resolve);
     });
     // Check the address is correct
-    expect(address).toBe("1Dz5TgDhdki9spa6xbPFbBqv5sjMrx3xgV");
+    expect(address).toBe("muLKJLmpvwfbXUWuehmsnfMqbtMHG8FVV8");
 });
 
 // Suggested replacement for erroneous word in non-English language
 it('Shows word suggestion for incorrect word in non-English language', async function() {
-    driver.findElement(By.css('.phrase'))
-        .sendKeys('abaco abaco zbbaglio');
+    await driver.findElement(By.css('.phrase'))
+        .sendKeys('abaco abaco abaco abaco abaco abaco abaco abaco abaco abaco abaco azbete');
     await driver.sleep(feedbackDelay);
     const feedback = await driver.findElement(By.css('.feedback'))
         .getText();
-    const msg = "zbbaglio not in wordlist, did you mean abbaglio?";
+    const msg = "azbete not in wordlist, did you mean abete?";
     expect(feedback).toBe(msg);
 });
 
@@ -477,15 +489,15 @@ it('Allows entropy to be entered', async function() {
     driver.findElement(By.css('.use-entropy'))
         .click();
     driver.findElement(By.css('.entropy'))
-        .sendKeys('00000000 00000000 00000000 00000000');
+        .sendKeys('00000000000 00000000000 00000000000 00000000000 00000000000 00000000000 00000000000 00000000000 00000000000 00000000000 00000000000 0000000');
     await driver.sleep(generateDelay);
     const phrase = await driver.findElement(By.css(".phrase"))
         .getAttribute("value");
-    expect(phrase).toBe("abandon abandon ability");
+    expect(phrase).toBe("abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about");
     const address = await new Promise((resolve) => {
         getFirstAddress(resolve);
     });
-    expect(address).toBe("1Di3Vp7tBWtyQaDABLAjfWtF6V7hYKJtug");
+    expect(address).toBe("1LqBGSKuX5yYUonjxT5qGfpUsXKYYWeabA");
 });
 
 // A warning about entropy is shown to the user, with additional information
@@ -583,136 +595,111 @@ it('Shows dice entropy as base 6', async function() {
 
 // The number of bits of entropy accumulated is shown
 it("Shows the number of bits of entropy for 20 bits of binary", async function() {
-    await new Promise((resolve) => {
-        testEntropyBits(resolve, "0000 0000 0000 0000 0000", "20");
-    });
+    await testEntropyBits("0000 0000 0000 0000 0000", "20");
 });
+
 it("Shows the number of bits of entropy for 1 bit of binary", async function() {
-    await new Promise((resolve) => {
-        testEntropyBits(resolve, "0", "1");
-    });
+    await testEntropyBits("0", "1");
 });
+
 it("Shows the number of bits of entropy for 4 bits of binary", async function() {
-    await new Promise((resolve) => {
-        testEntropyBits(resolve, "0000", "4");
-    });
+    await testEntropyBits("0000", "4");
 });
+
 it("Shows the number of bits of entropy for 1 character of base 6 (dice)", async function() {
     // 6 in card is 0 in base 6, 0 is mapped to 00 by entropy.js
-    await new Promise((resolve) => {
-        testEntropyBits(resolve, "6", "2");
-    });
+    await testEntropyBits("6", "2");
 });
+
 it("Shows the number of bits of entropy for 1 character of base 10 with 3 bits", async function() {
     // 7 in base 10 is 111 in base 2, no leading zeros
-    await new Promise((resolve) => {
-        testEntropyBits(resolve, "7", "3");
-    });
+    await testEntropyBits("7", "3");
 });
+
 it("Shows the number of bits of entropy for 1 character of base 10 with 4 bis", async function() {
     // 8 in base 10 is mapped to 0 by entropy.js
-    await new Promise((resolve) => {
-        testEntropyBits(resolve, "8", "1");
-    });
+    await testEntropyBits("8", "1");
 });
+
 it("Shows the number of bits of entropy for 1 character of hex", async function() {
-    await new Promise((resolve) => {
-        testEntropyBits(resolve, "F", "4");
-    });
+    await testEntropyBits("F", "4");
 });
+
 it("Shows the number of bits of entropy for 2 characters of base 10", async function() {
     // 2 as base 10 is binary 010, 9 is mapped to binary 1 by entropy.js
-    await new Promise((resolve) => {
-        testEntropyBits(resolve, "29", "4");
-    });
+    await testEntropyBits("29", "4");
 });
+
 it("Shows the number of bits of entropy for 2 characters of hex", async function() {
-    await new Promise((resolve) => {
-        testEntropyBits(resolve, "0A", "8");
-    });
+    await testEntropyBits("0A", "8");
 });
+
 it("Shows the number of bits of entropy for 2 characters of hex with 3 leading zeros", async function() {
     // hex is always multiple of 4 bits of entropy
-    await new Promise((resolve) => {
-        testEntropyBits(resolve, "1A", "8");
-    });
+    await testEntropyBits("1A", "8");
 });
+
 it("Shows the number of bits of entropy for 2 characters of hex with 2 leading zeros", async function() {
-    await new Promise((resolve) => {
-        testEntropyBits(resolve, "2A", "8");
-    });
+    await testEntropyBits("2A", "8");
 });
+
 it("Shows the number of bits of entropy for 2 characters of hex with 1 leading zero", async function() {
-    await new Promise((resolve) => {
-        testEntropyBits(resolve, "4A", "8");
-    });
+    await testEntropyBits("4A", "8");
 });
+
 it("Shows the number of bits of entropy for 2 characters of hex with no leading zeros", async function() {
-    await new Promise((resolve) => {
-        testEntropyBits(resolve, "8A", "8");
-    });
+    await testEntropyBits("8A", "8");
 });
+
 it("Shows the number of bits of entropy for 2 characters of hex starting with F", async function() {
-    await new Promise((resolve) => {
-        testEntropyBits(resolve, "FA", "8");
-    });
+    await testEntropyBits("FA", "8");
 });
+
 it("Shows the number of bits of entropy for 4 characters of hex with leading zeros", async function() {
-    await new Promise((resolve) => {
-        testEntropyBits(resolve, "000A", "16");
-    });
+    await testEntropyBits("000A", "16");
 });
+
 it("Shows the number of bits of entropy for 4 characters of base 6", async function() {
     // 5 in base 6 is mapped to binary 1
-    await new Promise((resolve) => {
-        testEntropyBits(resolve, "5555", "4");
-    });
+    await testEntropyBits("5555", "4");
 });
+
 it("Shows the number of bits of entropy for 4 characters of base 6 dice", async function() {
     // uses dice, so entropy is actually 0000 in base 6, which is 4 lots of
     // binary 00
-    await new Promise((resolve) => {
-        testEntropyBits(resolve, "6666", "8");
-    });
-});
-it("Shows the number of bits of entropy for 4 charactes of base 10", async function() {
-    // 2 in base 10 is binary 010 and 7 is binary 111 so is 4 events of 3 bits
-    await new Promise((resolve) => {
-        testEntropyBits(resolve, "2227", "12");
-    });
-});
-it("Shows the number of bits of entropy for 4 characters of hex with 2 leading zeros", async function() {
-    await new Promise((resolve) => {
-        testEntropyBits(resolve, "222F", "16");
-    });
-});
-it("Shows the number of bits of entropy for 4 characters of hex starting with F", async function() {
-    await new Promise((resolve) => {
-        testEntropyBits(resolve, "FFFF", "16");
-    });
-});
-it("Shows the number of bits of entropy for 10 characters of base 10", async function() {
-    // 10 events with 3 bits for each event
-    await new Promise((resolve) => {
-        testEntropyBits(resolve, "0000101017", "30");
-    });
-});
-it("Shows the number of bits of entropy for 10 characters of base 10 account for bias", async function() {
-    // 9 events with 3 bits per event and 1 event with 1 bit per event
-    await new Promise((resolve) => {
-        testEntropyBits(resolve, "0000101018", "28");
-    });
-});
-it("Shows the number of bits of entropy for a full deck of cards", async function() {
-    // removing bias is 32*5 + 16*4 + 4*2
-    await new Promise((resolve) => {
-        testEntropyBits(resolve, "ac2c3c4c5c6c7c8c9ctcjcqckcad2d3d4d5d6d7d8d9dtdjdqdkdah2h3h4h5h6h7h8h9hthjhqhkhas2s3s4s5s6s7s8s9stsjsqsks", "232");
-    });
+    await testEntropyBits("6666", "8");
 });
 
-it("Shows details about the entered entropy", async function() {
-    await new Promise((resolve) => {
-        testEntropyFeedback(resolve, {
+it("Shows the number of bits of entropy for 4 charactes of base 10", async function() {
+    // 2 in base 10 is binary 010 and 7 is binary 111 so is 4 events of 3 bits
+    await testEntropyBits("2227", "12");
+});
+
+it("Shows the number of bits of entropy for 4 characters of hex with 2 leading zeros", async function() {
+    await testEntropyBits("222F", "16");
+});
+
+it("Shows the number of bits of entropy for 4 characters of hex starting with F", async function() {
+    await testEntropyBits("FFFF", "16");
+});
+
+it("Shows the number of bits of entropy for 10 characters of base 10", async function() {
+    // 10 events with 3 bits for each event
+    await testEntropyBits("0000101017", "30");
+});
+
+it("Shows the number of bits of entropy for 10 characters of base 10 account for bias", async function() {
+    // 9 events with 3 bits per event and 1 event with 1 bit per event
+    await testEntropyBits("0000101018", "28");
+});
+
+it("Shows the number of bits of entropy for a full deck of cards", async function() {
+    // removing bias is 32*5 + 16*4 + 4*2
+    await testEntropyBits("ac2c3c4c5c6c7c8c9ctcjcqckcad2d3d4d5d6d7d8d9dtdjdqdkdah2h3h4h5h6h7h8h9hthjhqhkhas2s3s4s5s6s7s8s9stsjsqsks", "232");
+});
+
+it("Shows details about the entered entropy for single character", async function() {
+    await testEntropyFeedback( {
             entropy: "A",
             filtered: "A",
             type: "hexadecimal",
@@ -721,71 +708,61 @@ it("Shows details about the entered entropy", async function() {
             words: 0,
             strength: "less than a second",
         });
-    });
 });
-it("Shows details about the entered entropy", async function() {
-    await new Promise((resolve) => {
-        testEntropyFeedback(resolve,
+it("Shows details about the entered entropy for repeated characters", async function() {
+    await testEntropyFeedback(
             {
                 entropy: "AAAAAAAA",
                 filtered: "AAAAAAAA",
                 type: "hexadecimal",
                 events: "8",
                 bits: "32",
-                words: 3,
+                words: 0,
                 strength: "less than a second - Repeats like \"aaa\" are easy to guess",
             }
-        );
-    });
+    );
 });
-it("Shows details about the entered entropy", async function() {
-    await new Promise((resolve) => {
-        testEntropyFeedback(resolve,
+it("Shows details about the entered entropy with whitespace", async function() {
+    await testEntropyFeedback(
             {
                 entropy: "AAAAAAAA B",
                 filtered: "AAAAAAAAB",
                 type: "hexadecimal",
                 events: "9",
                 bits: "36",
-                words: 3,
+                words: 0,
                 strength: "less than a second - Repeats like \"aaa\" are easy to guess",
             }
-        );
-    });
+    );
 });
-it("Shows details about the entered entropy", async function() {
-    await new Promise((resolve) => {
-        testEntropyFeedback(resolve,
+it("Shows details about the entered entropy for 64 bits", async function() {
+    await testEntropyFeedback(
             {
                 entropy: "AAAAAAAA BBBBBBBB",
                 filtered: "AAAAAAAABBBBBBBB",
                 type: "hexadecimal",
                 events: "16",
                 bits: "64",
-                words: 6,
+                words: 0,
                 strength: "less than a second - Repeats like \"aaa\" are easy to guess",
             }
-        );
-    });
+    );
 });
-it("Shows details about the entered entropy", async function() {
-    await new Promise((resolve) => {
-        testEntropyFeedback(resolve,
+it("Shows details about the entered entropy for 96 bits", async function() {
+    await testEntropyFeedback(
             {
                 entropy: "AAAAAAAA BBBBBBBB CCCCCCCC",
                 filtered: "AAAAAAAABBBBBBBBCCCCCCCC",
                 type: "hexadecimal",
                 events: "24",
                 bits: "96",
-                words: 9,
+                words: 0,
                 strength: "less than a second",
             }
-        );
-    });
+    );
 });
-it("Shows details about the entered entropy", async function() {
-    await new Promise((resolve) => {
-        testEntropyFeedback(resolve,
+it("Shows details about the entered entropy for 128 bits (12 words)", async function() {
+    await testEntropyFeedback(
             {
                 entropy: "AAAAAAAA BBBBBBBB CCCCCCCC DDDDDDDD",
                 filtered: "AAAAAAAABBBBBBBBCCCCCCCCDDDDDDDD",
@@ -795,11 +772,60 @@ it("Shows details about the entered entropy", async function() {
                 words: 12,
                 strength: "2 minutes",
             }
-        );
+    );
+});
+it("Shows details about the entered entropy for 160 bits (15 words)", async function() {
+    await testEntropyFeedback({
+        entropy: "AAAAAAAA BBBBBBBB CCCCCCCC DDDDDDDD EEEEEEEE",
+        filtered: "AAAAAAAABBBBBBBBCCCCCCCCDDDDDDDDEEEEEEEE",
+        type: "hexadecimal",
+        events: "40",
+        bits: "160",
+        words: 15,
+        strength: "12 days",
     });
+});
+it("Shows details about the entered entropy for 192 bits (18 words)", async function() {
+    await testEntropyFeedback(
+            {
+                entropy: "AAAAAAAA BBBBBBBB CCCCCCCC DDDDDDDD EEEEEEEE FFFFFFFF",
+                filtered: "AAAAAAAABBBBBBBBCCCCCCCCDDDDDDDDEEEEEEEEFFFFFFFF",
+                type: "hexadecimal",
+                events: "48",
+                bits: "192",
+                words: 18,
+                strength: "centuries",
+            }
+    );
+});
+it("Shows details about the entered entropy for 224 bits (21 words)", async function() {
+    await testEntropyFeedback(
+            {
+                entropy: "AAAAAAAA BBBBBBBB CCCCCCCC DDDDDDDD EEEEEEEE FFFFFFFF 11111111",
+                filtered: "AAAAAAAABBBBBBBBCCCCCCCCDDDDDDDDEEEEEEEEFFFFFFFF11111111",
+                type: "hexadecimal",
+                events: "56",
+                bits: "224",
+                words: 21,
+                strength: "centuries",
+            }
+    );
+});
+it("Shows details about the entered entropy for 256 bits (24 words)", async function() {
+    await testEntropyFeedback(
+            {
+                entropy: "AAAAAAAA BBBBBBBB CCCCCCCC DDDDDDDD EEEEEEEE FFFFFFFF 11111111 22222222",
+                filtered: "AAAAAAAABBBBBBBBCCCCCCCCDDDDDDDDEEEEEEEEFFFFFFFF1111111122222222",
+                type: "hexadecimal",
+                events: "64",
+                bits: "256",
+                words: 24,
+                strength: "centuries",
+            }
+    );
 });
 it("Shows details about the entered entropy", async function() {
     // Empty test - needs implementation
 });
 
-}); 
+});
