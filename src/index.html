@@ -15,9 +15,9 @@
         <div class="container">
 
             <h1 class="text-center">Mnemonic Code Converter</h1>
-            <p class="version">v1.0.1</p>
+            <div class="text-center version">v1.0.2</div>
             <button class="theme-toggle" onclick="toggleTheme()" id="theme-toggle">
-                🌙 Dark
+                🌙/☀️
             </button>
             <hr>
             <div class="row">
@@ -51,9 +51,6 @@
                                          <span>Generate a random mnemonic</span>:
                                         <button class="btn generate" ><b>GENERATE</b></button>
                                         <select id="strength" class="strength form-control">
-                                            <option value="3">3</option>
-                                            <option value="6">6</option>
-                                            <option value="9">9</option>
                                             <option value="12">12</option>
                                             <option value="15">15</option>
                                             <option value="18">18</option>
@@ -89,6 +86,24 @@
                                         </strong>
                                         </p>
                                     </div>
+                                    <div class="row entropy-hash-warning text-warning hidden">
+                                        <p class="col-sm-12">
+                                        <strong>
+                                        Entropy exceeds BIP39 maximum (256 bits) and has been SHA256 hashed to fit
+                                        </strong>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group entropy-sha256-display hidden">
+                                <label for="entropy-sha256" class="col-sm-2 control-label">SHA256 Hashed</label>
+                                <div class="col-sm-7">
+                                    <textarea id="entropy-sha256" rows="2" class="entropy-sha256 private-data form-control" readonly></textarea>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-2"></div>
+                                <div class="col-sm-7">
                                     <div class="row">
                                         <label class="col-sm-3 control-label"><span class="more-info" title="Based on estimates from zxcvbn using Filtered Entropy">Time To Crack</span></label>
                                         <div class="crack-time col-sm-3 form-control-static"></div>
@@ -535,6 +550,18 @@
                                         <input id="bip44-path" type="text" class="path form-control" value="m/44'/0'/0'/0" readonly="readonly">
                                     </div>
                                 </div>
+                                <div class="form-group">
+                                    <label for="bip32-extended-priv-key-bip44" class="col-sm-2 control-label">BIP32 Extended Private Key</label>
+                                    <div class="col-sm-10">
+                                        <textarea id="bip32-extended-priv-key-bip44" class="extended-priv-key private-data form-control" readonly data-show-qr autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="bip32-extended-pub-key-bip44" class="col-sm-2 control-label">BIP32 Extended Public Key</label>
+                                    <div class="col-sm-10">
+                                        <textarea id="bip32-extended-pub-key-bip44" class="extended-pub-key form-control" readonly data-show-qr autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
+                                    </div>
+                                </div>
                             </form>
                         </div>
                         <div id="bip32" class="tab-pane">
@@ -560,6 +587,18 @@
                                     <label for="bip32-path" class="col-sm-2 control-label">BIP32 Derivation Path</label>
                                     <div class="col-sm-10">
                                         <input id="bip32-path" type="text" class="path form-control" value="m/0">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="bip32-extended-priv-key-bip32" class="col-sm-2 control-label">BIP32 Extended Private Key</label>
+                                    <div class="col-sm-10">
+                                        <textarea id="bip32-extended-priv-key-bip32" class="extended-priv-key private-data form-control" readonly data-show-qr autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="bip32-extended-pub-key-bip32" class="col-sm-2 control-label">BIP32 Extended Public Key</label>
+                                    <div class="col-sm-10">
+                                        <textarea id="bip32-extended-pub-key-bip32" class="extended-pub-key form-control" readonly data-show-qr autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -689,6 +728,18 @@
                                             <input id="bip49-path" type="text" class="path form-control" value="m/49'/0'/0'/0" readonly="readonly">
                                         </div>
                                     </div>
+                                    <div class="form-group">
+                                        <label for="bip32-extended-priv-key-bip49" class="col-sm-2 control-label">BIP32 Extended Private Key</label>
+                                        <div class="col-sm-10">
+                                            <textarea id="bip32-extended-priv-key-bip49" class="extended-priv-key private-data form-control" readonly data-show-qr autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="bip32-extended-pub-key-bip49" class="col-sm-2 control-label">BIP32 Extended Public Key</label>
+                                        <div class="col-sm-10">
+                                            <textarea id="bip32-extended-pub-key-bip49" class="extended-pub-key form-control" readonly data-show-qr autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
+                                        </div>
+                                    </div>
                                 </div>
                             </form>
                         </div>
@@ -726,6 +777,18 @@
                                                 <option value="p2wsh">P2WSH (1-of-1 multisig)</option>
                                                 <option value="p2wsh-p2sh">P2WSH nested in P2SH (1-of-1 multisig)</option>
                                             </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="bip32-extended-priv-key-bip141" class="col-sm-2 control-label">BIP32 Extended Private Key</label>
+                                        <div class="col-sm-10">
+                                            <textarea id="bip32-extended-priv-key-bip141" class="extended-priv-key private-data form-control" readonly data-show-qr autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="bip32-extended-pub-key-bip141" class="col-sm-2 control-label">BIP32 Extended Public Key</label>
+                                        <div class="col-sm-10">
+                                            <textarea id="bip32-extended-pub-key-bip141" class="extended-pub-key form-control" readonly data-show-qr autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -818,6 +881,18 @@
                                             <input id="bip84-path" type="text" class="path form-control" value="m/84'/0'/0'/0" readonly="readonly">
                                         </div>
                                     </div>
+                                    <div class="form-group">
+                                        <label for="bip32-extended-priv-key-bip84" class="col-sm-2 control-label">BIP32 Extended Private Key</label>
+                                        <div class="col-sm-10">
+                                            <textarea id="bip32-extended-priv-key-bip84" class="extended-priv-key private-data form-control" readonly data-show-qr autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="bip32-extended-pub-key-bip84" class="col-sm-2 control-label">BIP32 Extended Public Key</label>
+                                        <div class="col-sm-10">
+                                            <textarea id="bip32-extended-pub-key-bip84" class="extended-pub-key form-control" readonly data-show-qr autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
+                                        </div>
+                                    </div>
                                 </div>
                             </form>
                         </div>
@@ -908,6 +983,18 @@
                                             <input id="bip86-path" type="text" class="path form-control" value="m/86'/0'/0'/0" readonly="readonly">
                                         </div>
                                     </div>
+                                    <div class="form-group">
+                                        <label for="bip32-extended-priv-key-bip86" class="col-sm-2 control-label">BIP32 Extended Private Key</label>
+                                        <div class="col-sm-10">
+                                            <textarea id="bip32-extended-priv-key-bip86" class="extended-priv-key private-data form-control" readonly data-show-qr autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="bip32-extended-pub-key-bip86" class="col-sm-2 control-label">BIP32 Extended Public Key</label>
+                                        <div class="col-sm-10">
+                                            <textarea id="bip32-extended-pub-key-bip86" class="extended-pub-key form-control" readonly data-show-qr autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
+                                        </div>
+                                    </div>
                                 </div>
                             </form>
                         </div>
@@ -941,6 +1028,12 @@
                                     <input type="checkbox" class="electrum-legacy-change">
                                     <span>Show change addresses (m/1/n)</span>
                                 </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="account-xprv-electrum-legacy" class="col-sm-2 control-label">Account Extended Private Key</label>
+                            <div class="col-sm-10">
+                                <textarea id="account-xprv-electrum-legacy" class="account-xprv private-data form-control" readonly data-show-qr autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
                             </div>
                         </div>
                         <div class="form-group">
@@ -986,6 +1079,12 @@
                                     <input type="checkbox" class="electrum-segwit-change">
                                     <span>Show change addresses (m/0'/1/n)</span>
                                 </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="account-xprv-electrum-segwit" class="col-sm-2 control-label">Account Extended Private Key</label>
+                            <div class="col-sm-10">
+                                <textarea id="account-xprv-electrum-segwit" class="account-xprv private-data form-control" readonly data-show-qr autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
                             </div>
                         </div>
                         <div class="form-group">
@@ -1145,6 +1244,16 @@
                     <p>
                         Read more at the
                         <a href="https://github.com/bitcoin/bips/blob/master/bip-0049.mediawiki" target="_blank">official BIP49 spec</a>
+                    </p>
+                    <h3>BIP84 <span class="small">Derivation scheme for P2WPKH based accounts</span></h3>
+                    <p>
+                        Read more at the
+                        <a href="https://github.com/bitcoin/bips/blob/master/bip-0084.mediawiki" target="_blank">official BIP84 spec</a>
+                    </p>
+                    <h3>BIP86 <span class="small">Key Derivation for Single Key P2TR Outputs</span></h3>
+                    <p>
+                        Read more at the
+                        <a href="https://github.com/bitcoin/bips/blob/master/bip-0086.mediawiki" target="_blank">official BIP86 spec</a>
                     </p>
                     <h3>BIP85 <span class="small">Deterministic Entropy From BIP32 Keychains</span></h3>
                     <p>
@@ -1342,23 +1451,9 @@
                 <td class="privkey private-data"><span data-show-qr></span></td>
             </tr>
         </script>
-        <script src="js/jquery-3.2.1.js"></script>
-        <script src="js/bootstrap.js"></script>
-        <script src="js/bip39-libs.js"></script>
+        <script src="js/combined-libs.js"></script>
         <script src="js/networks-bitcoin-only.js"></script>
         <script src="js/segwit-parameters.js"></script>
-        <script src="js/sjcl-bip39.js"></script>
-        <script src="js/wordlist_english.js"></script>
-        <script src="js/wordlist_japanese.js"></script>
-        <script src="js/wordlist_spanish.js"></script>
-        <script src="js/wordlist_chinese_simplified.js"></script>
-        <script src="js/wordlist_chinese_traditional.js"></script>
-        <script src="js/wordlist_french.js"></script>
-        <script src="js/wordlist_italian.js"></script>
-        <script src="js/wordlist_korean.js"></script>
-        <script src="js/wordlist_czech.js"></script>
-        <script src="js/wordlist_portuguese.js"></script>
-        <script src="js/jsbip39.js"></script>
         <script src="js/electrum-mnemonic.js"></script>
         <script src="js/entropy.js"></script>
         <script src="js/index.js"></script>

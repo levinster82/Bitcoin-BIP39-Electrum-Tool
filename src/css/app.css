@@ -30,6 +30,21 @@
     }
 }
 
+[data-theme="light"] {
+    --bg-color: #ffffff;
+    --text-color: #333333;
+    --border-color: #cccccc;
+    --input-bg: #ffffff;
+    --input-border: #cccccc;
+    --feedback-bg: orange;
+    --feedback-text: #444;
+    --qr-bg: #ffffff;
+    --electrum-bg: #f5f5f5;
+    --electrum-text: #666;
+    --link-color: #007bff;
+    --danger-color: #dc3545;
+}
+
 [data-theme="dark"] {
     --bg-color: #121212;
     --text-color: #ffffff;
@@ -69,6 +84,20 @@ body {
 
 [data-theme="dark"] .form-control:focus {
     box-shadow: 0 0 0 0.2rem rgba(102, 179, 255, 0.25);
+}
+
+/* Light mode for CSV textarea */
+[data-theme="light"] .csv {
+    background-color: #ffffff !important;
+    border-color: #cccccc !important;
+    color: #333333 !important;
+}
+
+/* Dark mode for CSV textarea */
+[data-theme="dark"] .csv {
+    background-color: #2d2d2d !important;
+    border-color: #555555 !important;
+    color: #ffffff !important;
 }
 
 /* Dark mode for links */
@@ -167,10 +196,18 @@ a {
     text-decoration: none;
     color: var(--text-color);
 }
+/* Header spacing adjustments */
+h1.text-center {
+    margin-bottom: 5px !important;
+}
+
 .version {
-    position: absolute;
-    top: 5px;
-    right: 5px;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+hr {
+    margin-top: 10px !important;
 }
 .csv {
     margin-top: 20px;
@@ -179,6 +216,9 @@ a {
     overflow-wrap: normal;
     overflow-x: scroll;
     font-family: monospace;
+    background-color: var(--input-bg);
+    border-color: var(--input-border);
+    color: var(--text-color);
 }
 .visual-privacy .private-data {
     display: none;
@@ -200,18 +240,18 @@ a {
 
 /* Dark mode toggle button */
 .theme-toggle {
-    position: fixed;
-    top: 10px;
-    right: 80px;
-    z-index: 1000;
-    background-color: var(--input-bg);
-    border: 1px solid var(--border-color);
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: var(--bg-color);
+    border: none;
     color: var(--text-color);
     padding: 8px 12px;
     border-radius: 4px;
     cursor: pointer;
     font-size: 14px;
     transition: all 0.3s ease;
+    outline: none;
 }
 
 .theme-toggle:hover {
@@ -255,6 +295,13 @@ a {
 [data-theme="dark"] .seed,
 [data-theme="dark"] .root-key,
 [data-theme="dark"] .fingerprint {
+    background-color: var(--input-bg) !important;
+    color: var(--text-color) !important;
+    border-color: var(--input-border) !important;
+}
+
+/* Dark mode for readonly form controls (including mnemonic field when entropy is shown) */
+[data-theme="dark"] .form-control[readonly] {
     background-color: var(--input-bg) !important;
     color: var(--text-color) !important;
     border-color: var(--input-border) !important;

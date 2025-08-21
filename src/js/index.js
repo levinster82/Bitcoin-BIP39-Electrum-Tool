@@ -1,8 +1,7 @@
 (function() {
 
-    // mnemonics is populated as required by getLanguage
-    var mnemonics = { "english": new Mnemonic("english") };
-    var mnemonic = mnemonics["english"];
+    // Use bitcoinjs/bip39 library instead of custom implementation
+    var bip39 = bitcoinjs.bip39;
     var seed = null;
     var bip32RootKey = null;
     var bip32ExtendedKey = null;
@@ -48,6 +47,9 @@
     DOM.pbkdf2InfosDanger = $(".PBKDF2-infos-danger");
     DOM.entropyWeakEntropyOverrideWarning = DOM.entropyContainer.find(".weak-entropy-override-warning");
     DOM.entropyFilterWarning = DOM.entropyContainer.find(".filter-warning");
+    DOM.entropyHashWarning = DOM.entropyContainer.find(".entropy-hash-warning");
+    DOM.entropySha256Display = DOM.entropyContainer.find(".entropy-sha256-display");
+    DOM.entropySha256 = DOM.entropyContainer.find(".entropy-sha256");
     DOM.phrase = $(".phrase");
     DOM.mnemonicType = $(".mnemonic-type");
     DOM.mnemonicLabel = $(".mnemonic-label");
@@ -57,7 +59,9 @@
     DOM.electrumTabPanels = $(".electrum-tab-panel");
     DOM.electrumLegacyTab = $("#electrum-legacy-tab");
     DOM.electrumSegwitTab = $("#electrum-segwit-tab");
+    DOM.electrumLegacyAccountXprv = $("#account-xprv-electrum-legacy");
     DOM.electrumLegacyAccountXpub = $("#account-xpub-electrum-legacy");
+    DOM.electrumSegwitAccountXprv = $("#account-xprv-electrum-segwit");
     DOM.electrumSegwitAccountXpub = $("#account-xpub-electrum-segwit");
     DOM.electrumLegacyPath = $("#electrum-legacy-path");
     DOM.electrumSegwitPath = $("#electrum-segwit-path");
@@ -297,7 +301,16 @@
         }
         phraseChangeTimeoutEvent = setTimeout(function() {
             phraseChanged();
-            var entropy = mnemonic.toRawEntropyHex(DOM.phrase.val());
+            // Try to get entropy from mnemonic (if valid)
+            var phraseValue = DOM.phrase.val();
+            var entropy = null;
+            try {
+                if (bip39.validateMnemonic(phraseValue)) {
+                    entropy = bip39.mnemonicToEntropy(phraseValue);
+                }
+            } catch (e) {
+                // Invalid mnemonic, entropy will remain null
+            }
             if (entropy !== null) {
                 DOM.entropyMnemonicLength.val("raw");
                 DOM.entropy.val(entropy);
@@ -322,6 +335,8 @@
             showValidationError(errorText);
             return;
         }
+        // Normalize whitespace before seed generation
+        phrase = phrase.trim().replace(/\s+/g, ' ');
         // Calculate and display
         var passphrase = DOM.passphrase.val();
         calcBip32RootKeyFromSeed(phrase, passphrase);
@@ -432,7 +447,13 @@
         var newPhrase = DOM.phrase.val();
         if (newPhrase != phrase) {
             if (newPhrase.length == 0) {
-                clearDisplay();
+                clearAddressesList();
+                clearKeys();
+                // Don't hide validation error if it's showing the entropy minimum message
+                var currentFeedback = DOM.feedback.text();
+                if (currentFeedback !== "128 bits minimum entropy required") {
+                    hideValidationError();
+                }
             }
             else {
                 phraseChanged();
@@ -544,9 +565,9 @@
             DOM.seedLabel.text("Electrum Seed");
             DOM.passphraseLabel.text("Passphrase (optional)");
             // Hide BIP tabs and show Electrum tabs
-            $("#bip32-tab, #bip44-tab, #bip49-tab, #bip84-tab, #bip141-tab").addClass("hidden").removeClass("active");
+            $("#bip32-tab, #bip44-tab, #bip49-tab, #bip84-tab, #bip141-tab, #bip86-tab").addClass("hidden").removeClass("active");
             // Hide BIP tab content panels
-            $("#bip32, #bip44, #bip49, #bip84, #bip141").removeClass("active");
+            $("#bip32, #bip44, #bip49, #bip84, #bip141, #bip86").removeClass("active");
             DOM.electrumTabs.removeClass("hidden");
             // Activate first Electrum tab by default
             DOM.electrumLegacyTab.addClass("active");
@@ -575,7 +596,7 @@
             DOM.seedLabel.text("BIP39 Seed");
             DOM.passphraseLabel.text("BIP39 Passphrase (optional)");
             // Show BIP tabs and hide Electrum tabs
-            $("#bip32-tab, #bip44-tab, #bip49-tab, #bip84-tab, #bip141-tab").removeClass("hidden");
+            $("#bip32-tab, #bip44-tab, #bip49-tab, #bip84-tab, #bip141-tab, #bip86-tab").removeClass("hidden");
             DOM.electrumTabs.addClass("hidden");
             DOM.electrumTabPanels.removeClass("active");
             // Hide Electrum form content
@@ -934,7 +955,7 @@
             // create secure entropy
             var data = crypto.getRandomValues(buffer);
             // show the words
-            var words = mnemonic.toMnemonic(data);
+            var words = bip39.entropyToMnemonic(uint8ArrayToHex(data));
             DOM.phrase.val(words);
             // show the entropy
             var entropyHex = uint8ArrayToHex(data);
@@ -968,8 +989,9 @@
                 return;
             }
         } else {
-            // Use BIP39 seed generation (existing logic)
-            seed = mnemonic.toSeed(phrase, passphrase);
+            // Use BIP39 seed generation with official bitcoinjs/bip39 library
+            var seedBuffer = bip39.mnemonicToSeedSync(phrase, passphrase || "");
+            seed = seedBuffer.toString('hex');
         }
         
         // Create BIP32 root key from the seed (same for both types)
@@ -1094,8 +1116,8 @@
             return false;
         } else {
             // Validate BIP39 mnemonic using existing logic
-            // Preprocess the words
-            phrase = mnemonic.normalizeString(phrase);
+            // Preprocess the words (normalize whitespace)
+            phrase = phrase.trim().replace(/\s+/g, ' ');
             var words = phraseToWordArray(phrase);
             // Detect blank phrase
             if (words.length == 0) {
@@ -1105,15 +1127,16 @@
             for (var i=0; i<words.length; i++) {
                 var word = words[i];
                 var language = getLanguage();
-                if (WORDLISTS[language].indexOf(word) == -1) {
+                var wordlist = bip39.wordlists[language];
+                if (wordlist.indexOf(word) == -1) {
                     console.log("Finding closest match to " + word);
                     var nearestWord = findNearestWord(word);
                     return word + " not in wordlist, did you mean " + nearestWord + "?";
                 }
             }
-            // Check the words are valid
+            // Check the words are valid using official bip39 library
             var properPhrase = wordArrayToPhrase(words);
-            var isValid = mnemonic.check(properPhrase);
+            var isValid = bip39.validateMnemonic(properPhrase);
             if (!isValid) {
                 return "Invalid mnemonic";
             }
@@ -1388,8 +1411,10 @@
         // Create root key with Bitcoin mainnet parameters for xpub encoding
         var legacyRootKey = bitcoinjs.bip32.fromSeed(bitcoinjs.buffer.Buffer.from(seed, 'hex'), bitcoinMainnet);
         
-        // For Electrum Legacy, the account extended public key is at ROOT level (m/)
+        // For Electrum Legacy, the account extended keys are at ROOT level (m/)
+        var accountXprv = legacyRootKey.toBase58();
         var accountXpub = legacyRootKey.neutered().toBase58();
+        DOM.electrumLegacyAccountXprv.val(accountXprv);
         DOM.electrumLegacyAccountXpub.val(accountXpub);
     }
     function displayElectrumSegwitInfo() {
@@ -1407,7 +1432,9 @@
         // Create a new root key with SegWit network parameters for zpub encoding
         var segwitRootKey = bitcoinjs.bip32.fromSeed(bitcoinjs.buffer.Buffer.from(seed, 'hex'), segwitNetwork);
         var accountExtendedKey = segwitRootKey.deriveHardened(0); // m/0'
+        var accountXprv = accountExtendedKey.toBase58();
         var accountXpub = accountExtendedKey.neutered().toBase58();
+        DOM.electrumSegwitAccountXprv.val(accountXprv);
         DOM.electrumSegwitAccountXpub.val(accountXpub);
     }
 
@@ -1739,7 +1766,9 @@
         DOM.extendedPubKey.val("");
         DOM.bip44accountXprv.val("");
         DOM.bip44accountXpub.val("");
+        DOM.electrumLegacyAccountXprv.val("");
         DOM.electrumLegacyAccountXpub.val("");
+        DOM.electrumSegwitAccountXprv.val("");
         DOM.electrumSegwitAccountXpub.val("");
     }
 
@@ -1799,7 +1828,7 @@
 
     function findNearestWord(word) {
         var language = getLanguage();
-        var words = WORDLISTS[language];
+        var words = bip39.wordlists[language];
         var minDistance = 99;
         var closestWord = words[0];
         for (var i=0; i<words.length; i++) {
@@ -1869,11 +1898,15 @@
         if (phrase.length > 0) {
             var words = phraseToWordArray(phrase);
             var languageMatches = {};
-            for (l in WORDLISTS) {
+            // BIP39 supported languages
+            var supportedLanguages = ['english', 'japanese', 'chinese_simplified', 'chinese_traditional', 'french', 'italian', 'korean', 'spanish', 'czech', 'portuguese'];
+            for (var j=0; j<supportedLanguages.length; j++) {
+                var l = supportedLanguages[j];
                 // Track how many words match in this language
                 languageMatches[l] = 0;
+                var wordlist = bip39.wordlists[l];
                 for (var i=0; i<words.length; i++) {
-                    var wordInLanguage = WORDLISTS[l].indexOf(words[i]) > -1;
+                    var wordInLanguage = wordlist.indexOf(words[i]) > -1;
                     if (wordInLanguage) {
                         languageMatches[l]++;
                     }
@@ -1907,7 +1940,9 @@
     }
 
     function getLanguageFromUrl() {
-        for (var language in WORDLISTS) {
+        var supportedLanguages = ['english', 'japanese', 'chinese_simplified', 'chinese_traditional', 'french', 'italian', 'korean', 'spanish', 'czech', 'portuguese'];
+        for (var i = 0; i < supportedLanguages.length; i++) {
+            var language = supportedLanguages[i];
             if (window.location.hash.indexOf(language) > -1) {
                 return language;
             }
@@ -1917,11 +1952,10 @@
 
     function setMnemonicLanguage() {
         var language = getLanguage();
-        // Load the bip39 mnemonic generator for this language if required
-        if (!(language in mnemonics)) {
-            mnemonics[language] = new Mnemonic(language);
+        // Set the default wordlist for the bip39 library
+        if (language && bip39.wordlists[language]) {
+            bip39.setDefaultWordlist(language);
         }
-        mnemonic = mnemonics[language];
     }
 
     function convertPhraseToNewLanguage() {
@@ -1932,8 +1966,10 @@
         var newWords = [];
         for (var i=0; i<oldWords.length; i++) {
             var oldWord = oldWords[i];
-            var index = WORDLISTS[oldLanguage].indexOf(oldWord);
-            var newWord = WORDLISTS[newLanguage][index];
+            var oldWordlist = bip39.wordlists[oldLanguage];
+            var newWordlist = bip39.wordlists[newLanguage];
+            var index = oldWordlist.indexOf(oldWord);
+            var newWord = newWordlist[index];
             newWords.push(newWord);
         }
         newPhrase = wordArrayToPhrase(newWords);
@@ -2026,6 +2062,24 @@
         if (entropy.binaryStr.length == 0) {
             return;
         }
+        
+        // Check for minimum entropy requirement early (128 bits for 12 words)
+        var bitsToUse = Math.floor(entropy.binaryStr.length / 32) * 32;
+        if (bitsToUse < 128) {
+            // Still show entropy feedback but don't generate mnemonic
+            showEntropyFeedback(entropy);
+            // Clear phrase and addresses
+            DOM.phrase.val("");
+            writeSplitPhrase("");
+            clearAddressesList();
+            clearKeys();
+            // Show the validation error AFTER all other operations
+            setTimeout(function() {
+                showValidationError("128 bits minimum entropy required");
+            }, 10);
+            return;
+        }
+        
         // Show entropy details
         showEntropyFeedback(entropy);
         // Use entropy hash if not using raw entropy
@@ -2057,6 +2111,28 @@
         }
         // Discard trailing entropy
         var bitsToUse = Math.floor(bits.length / 32) * 32;
+        
+        // If entropy exceeds BIP39 maximum, hash it down to 256 bits
+        if (bits.length > 256) {
+            var hash = sjcl.hash.sha256.hash(entropy.cleanStr);
+            var hex = sjcl.codec.hex.fromBits(hash);
+            bits = bitcoinjs.BigInteger.BigInteger.parse(hex, 16).toString(2);
+            while (bits.length % 256 != 0) {
+                bits = "0" + bits;
+            }
+            bitsToUse = 256; // Use all 256 bits from hash
+            // Show warning that entropy was hashed
+            DOM.entropyHashWarning.removeClass('hidden');
+            // Show the SHA256 hashed entropy field and display the hex value
+            DOM.entropySha256Display.removeClass('hidden');
+            DOM.entropySha256.val(hex);
+        } else {
+            // Hide hash warning and SHA256 field if entropy is within limits
+            DOM.entropyHashWarning.addClass('hidden');
+            DOM.entropySha256Display.addClass('hidden');
+            DOM.entropySha256.val('');
+        }
+        
         var start = bits.length - bitsToUse;
         var binaryStr = bits.substring(start);
         // Convert entropy string to numeric array
@@ -2067,7 +2143,7 @@
             entropyArr.push(entropyByte)
         }
         // Convert entropy array to mnemonic
-        var phrase = mnemonic.toMnemonic(entropyArr);
+        var phrase = bip39.entropyToMnemonic(uint8ArrayToHex(entropyArr));
         // Set the mnemonic in the UI
         DOM.phrase.val(phrase);
         writeSplitPhrase(phrase);
@@ -2086,6 +2162,9 @@
         DOM.entropyBits.text("0");
         DOM.entropyFiltered.html("&nbsp;");
         DOM.entropyBinary.html("&nbsp;");
+        DOM.entropyHashWarning.addClass('hidden');
+        DOM.entropySha256Display.addClass('hidden');
+        DOM.entropySha256.val('');
     }
 
     function showEntropyFeedback(entropy) {
@@ -2352,7 +2431,8 @@
         var language = getLanguage();
         for (var i=0; i<words.length; i++) {
             var word = words[i];
-            var wordIndex = WORDLISTS[language].indexOf(word);
+            var wordlist = bip39.wordlists[language];
+            var wordIndex = wordlist.indexOf(word);
             wordIndexes.push(wordIndex);
         }
         var wordIndexesStr = wordIndexes.join(", ");
@@ -2368,7 +2448,8 @@
         var language = getLanguage();
         for (var i=words.length-1; i>=0; i--) {
             var word = words[i];
-            var wordIndex = WORDLISTS[language].indexOf(word);
+            var wordlist = bip39.wordlists[language];
+            var wordIndex = wordlist.indexOf(word);
             var wordBinary = wordIndex.toString(2);
             while (wordBinary.length < 11) {
                 wordBinary = "0" + wordBinary;
@@ -2483,13 +2564,13 @@ function toggleTheme() {
     if (currentThemeMode === 'auto') {
         // Auto → Light
         currentThemeMode = 'light';
-        html.removeAttribute('data-theme');
-        toggleButton.innerHTML = '🌙 Dark';
+        html.setAttribute('data-theme', 'light');
+        toggleButton.innerHTML = '🌙';
     } else if (currentThemeMode === 'light') {
         // Light → Dark
         currentThemeMode = 'dark';
         html.setAttribute('data-theme', 'dark');
-        toggleButton.innerHTML = '☀️ Light';
+        toggleButton.innerHTML = '☀️';
     } else {
         // Dark → Auto
         currentThemeMode = 'auto';
@@ -2497,9 +2578,9 @@ function toggleTheme() {
         if (systemIsDark) {
             html.setAttribute('data-theme', 'dark');
         } else {
-            html.removeAttribute('data-theme');
+            html.setAttribute('data-theme', 'light');
         }
-        toggleButton.innerHTML = '🌙/☀️ Auto';
+        toggleButton.innerHTML = '🌙/☀️';
     }
 }
 
@@ -2518,7 +2599,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     if (toggleButton) {
-        toggleButton.innerHTML = '🌙/☀️ Auto';
+        toggleButton.innerHTML = '🌙/☀️';
     }
     
     // Listen for system theme changes
@@ -2533,7 +2614,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             // Keep the Auto button text
             if (toggleButton) {
-                toggleButton.innerHTML = '🌙/☀️ Auto';
+                toggleButton.innerHTML = '🌙/☀️';
             }
         }
     });
