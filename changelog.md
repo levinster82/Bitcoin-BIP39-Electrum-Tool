@@ -1,3 +1,11 @@
+# v1.0.2
+
+## 🌟 New Features
+
+- **⚡ BIP-86 Taproot Support** - Complete implementation with `m/86'/0'/account'/change` derivation and P2TR address generation
+- **📏 24-Word Default** - BIP39 mnemonics now default to 24 words to align more with standards
+- **🧪 Enhanced Testing** - Expanded to 190+ tests with dedicated BIP-86 test suite
+
 # 1.0.0
 
 * Fork from iancoleman/bip39 as "Bitcoin BIP39 + Electrum Mnemonic Tool"
