@@ -50,6 +50,9 @@
     DOM.entropyHashWarning = DOM.entropyContainer.find(".entropy-hash-warning");
     DOM.entropySha256Display = DOM.entropyContainer.find(".entropy-sha256-display");
     DOM.entropySha256 = DOM.entropyContainer.find(".entropy-sha256");
+    DOM.entropyQualityRow = DOM.entropyContainer.find(".entropy-quality-row");
+    DOM.entropyQualityScore = DOM.entropyContainer.find(".entropy-quality-score");
+    DOM.entropyChiSquare = DOM.entropyContainer.find(".entropy-chi-square");
     DOM.phrase = $(".phrase");
     DOM.mnemonicType = $(".mnemonic-type");
     DOM.mnemonicLabel = $(".mnemonic-label");
@@ -947,21 +950,64 @@
                 return;
             }
         } else {
-            // Generate BIP39 mnemonic using existing logic
+            // Generate BIP39 mnemonic with entropy quality validation
             // get the amount of entropy to use
             var numWords = parseInt(DOM.generatedStrength.val());
             var strength = numWords / 3 * 32;
             var buffer = new Uint8Array(strength / 8);
-            // create secure entropy
-            var data = crypto.getRandomValues(buffer);
+            
+            // Generate entropy with quality validation
+            var maxAttempts = 10;
+            var attempt = 0;
+            var entropyValid = false;
+            var finalValidation = null;
+            
+            while (!entropyValid && attempt < maxAttempts) {
+                // Generate random data
+                crypto.getRandomValues(buffer);
+                
+                
+                // Validate quality
+                var validation = validateEntropyQualityForSize(buffer);
+                finalValidation = validation;
+                
+                if (validation.valid) {
+                    entropyValid = true;
+                } else {
+                    attempt++;
+                    
+                    // Show warning for multiple failures
+                    if (attempt >= 5) {
+                        showValidationError("Warning: Entropy quality issues detected. Retrying... (" + attempt + "/" + maxAttempts + ")");
+                    }
+                }
+            }
+            
+            if (!entropyValid) {
+                var errorMsg = "Failed to generate high-quality entropy after " + maxAttempts + " attempts. ";
+                if (finalValidation && finalValidation.issues.length > 0) {
+                    errorMsg += "Issues: " + finalValidation.issues.join(", ");
+                }
+                showValidationError(errorMsg);
+                return;
+            }
+            
+            // Clear any previous validation warnings
+            hideValidationError();
+            
             // show the words
-            var words = bip39.entropyToMnemonic(uint8ArrayToHex(data));
+            var words = bip39.entropyToMnemonic(uint8ArrayToHex(buffer));
             DOM.phrase.val(words);
             // show the entropy
-            var entropyHex = uint8ArrayToHex(data);
+            var entropyHex = uint8ArrayToHex(buffer);
             DOM.entropy.val(entropyHex);
             // ensure entropy fields are consistent with what is being displayed
             DOM.entropyMnemonicLength.val("raw");
+            
+            // Show entropy quality in UI
+            showEntropyQuality(finalValidation);
+            
+            
             return words;
         }
     }
@@ -1806,6 +1852,192 @@
         return 'crypto' in window && window['crypto'] !== null;
     }
 
+    // Entropy Quality Validation Functions
+    function calculateShannonEntropy(buffer) {
+        // Count frequency of each byte value (0-255)
+        var frequencies = new Array(256).fill(0);
+        for (var i = 0; i < buffer.length; i++) {
+            frequencies[buffer[i]]++;
+        }
+        
+        // Calculate Shannon entropy
+        var entropy = 0;
+        var length = buffer.length;
+        
+        for (var i = 0; i < 256; i++) {
+            if (frequencies[i] > 0) {
+                var probability = frequencies[i] / length;
+                entropy -= probability * Math.log2(probability);
+            }
+        }
+        
+        return entropy; // Max is 8.0 for perfect random bytes
+    }
+
+    function detectPatterns(buffer) {
+        var issues = [];
+        
+        // Check for repeating bytes
+        var repeatingCount = 0;
+        for (var i = 1; i < buffer.length; i++) {
+            if (buffer[i] === buffer[i-1]) {
+                repeatingCount++;
+            }
+        }
+        if (repeatingCount > buffer.length * 0.1) { // > 10% repeating
+            issues.push("Too many repeating bytes (" + repeatingCount + "/" + buffer.length + ")");
+        }
+        
+        // Check for all zeros or all ones
+        var zeros = 0, ones = 0;
+        for (var i = 0; i < buffer.length; i++) {
+            if (buffer[i] === 0x00) zeros++;
+            if (buffer[i] === 0xFF) ones++;
+        }
+        if (zeros > buffer.length * 0.05) issues.push("Too many zero bytes (" + zeros + ")");
+        if (ones > buffer.length * 0.05) issues.push("Too many 0xFF bytes (" + ones + ")");
+        
+        // Check for obvious patterns (incrementing, etc.)
+        var sequential = 0;
+        for (var i = 1; i < buffer.length; i++) {
+            if (buffer[i] === (buffer[i-1] + 1) % 256) {
+                sequential++;
+            }
+        }
+        if (sequential > buffer.length * 0.1) {
+            issues.push("Sequential pattern detected (" + sequential + " sequences)");
+        }
+        
+        return issues;
+    }
+
+    function calculateChiSquare(buffer) {
+        var frequencies = new Array(256).fill(0);
+        for (var i = 0; i < buffer.length; i++) {
+            frequencies[buffer[i]]++;
+        }
+        
+        var expected = buffer.length / 256; // Expected frequency
+        var chiSquare = 0;
+        
+        for (var i = 0; i < 256; i++) {
+            var diff = frequencies[i] - expected;
+            chiSquare += (diff * diff) / expected;
+        }
+        
+        return chiSquare;
+    }
+
+    function validateEntropyQuality(buffer) {
+        var results = {
+            valid: false,
+            entropy: 0,
+            issues: [],
+            score: 0,
+            chiSquare: 0
+        };
+        
+        // Calculate Shannon entropy
+        results.entropy = calculateShannonEntropy(buffer);
+        
+        // Entropy quality thresholds for 32 bytes (realistic limits)
+        // Maximum theoretical entropy for 32 bytes is 5.0 bits (log₂(32))
+        if (results.entropy < 3.5) {
+            results.issues.push("Very low entropy: " + results.entropy.toFixed(2) + "/5.0");
+        } else if (results.entropy < 4.2) {
+            results.issues.push("Low entropy: " + results.entropy.toFixed(2) + "/5.0");
+        }
+        
+        // Pattern detection
+        var patterns = detectPatterns(buffer);
+        results.issues = results.issues.concat(patterns);
+        
+        // Statistical tests (simplified Chi-square)
+        results.chiSquare = calculateChiSquare(buffer);
+        if (results.chiSquare > 350 || results.chiSquare < 200) { // Thresholds for 32 bytes
+            results.issues.push("Failed chi-square test: " + results.chiSquare.toFixed(2));
+        }
+        
+        // Overall scoring (based on realistic 5.0 bit maximum for 32 bytes)
+        results.score = Math.min(100, (results.entropy / 5.0) * 100);
+        results.valid = results.entropy >= 4.2 && results.issues.length === 0;
+        
+        return results;
+    }
+
+    function validateEntropyQualityForSize(buffer) {
+        var results = {
+            valid: false,
+            entropy: 0,
+            issues: [],
+            score: 0,
+            chiSquare: 0,
+            maxEntropy: 0
+        };
+        
+        // Calculate Shannon entropy
+        results.entropy = calculateShannonEntropy(buffer);
+        
+        // Maximum theoretical entropy for this buffer size: log₂(bufferLength)
+        results.maxEntropy = Math.log2(buffer.length);
+        
+        // Dynamic thresholds based on buffer size
+        var lowThreshold = results.maxEntropy * 0.70;  // 70% of max
+        var goodThreshold = results.maxEntropy * 0.84; // 84% of max
+        
+        if (results.entropy < results.maxEntropy * 0.60) {
+            results.issues.push("Very low entropy: " + results.entropy.toFixed(2) + "/" + results.maxEntropy.toFixed(1));
+        } else if (results.entropy < lowThreshold) {
+            results.issues.push("Low entropy: " + results.entropy.toFixed(2) + "/" + results.maxEntropy.toFixed(1));
+        }
+        
+        // Pattern detection (same for all sizes)
+        var patterns = detectPatterns(buffer);
+        results.issues = results.issues.concat(patterns);
+        
+        // Chi-square test with BIP39-specific thresholds
+        results.chiSquare = calculateChiSquare(buffer);
+        var lowerBound, upperBound;
+        
+        // Thresholds based on standard BIP39 mnemonic sizes
+        switch(buffer.length) {
+            case 16: // 12 words - 128 bits
+                lowerBound = 180;
+                upperBound = 320;
+                break;
+            case 20: // 15 words - 160 bits  
+                lowerBound = 200;
+                upperBound = 350;
+                break;
+            case 24: // 18 words - 192 bits
+                lowerBound = 220;
+                upperBound = 380;
+                break;
+            case 28: // 21 words - 224 bits
+                lowerBound = 240;
+                upperBound = 410;
+                break;
+            case 32: // 24 words - 256 bits
+                lowerBound = 260;
+                upperBound = 440;
+                break;
+            default:
+                // Fallback for non-standard sizes
+                lowerBound = 200;
+                upperBound = 350;
+        }
+        
+        if (results.chiSquare > upperBound || results.chiSquare < lowerBound) {
+            results.issues.push("Failed chi-square test: " + results.chiSquare.toFixed(2));
+        }
+        
+        // Overall scoring based on actual maximum for this size
+        results.score = Math.min(100, (results.entropy / results.maxEntropy) * 100);
+        results.valid = results.entropy >= goodThreshold && results.issues.length === 0;
+        
+        return results;
+    }
+
     function disableForms() {
         $("form").on("submit", function(e) {
             e.preventDefault();
@@ -2142,6 +2374,20 @@
             var entropyByte = parseInt(byteAsBits, 2);
             entropyArr.push(entropyByte)
         }
+        
+        // Validate entropy quality for manual entropy input
+        // BIP39 valid entropy sizes: 16, 20, 24, 28, 32 bytes (128, 160, 192, 224, 256 bits)
+        var validSizes = [16, 20, 24, 28, 32];
+        if (validSizes.includes(entropyArr.length)) {
+            var buffer = new Uint8Array(entropyArr);
+            var validation = validateEntropyQualityForSize(buffer);
+            showEntropyQuality(validation);
+            
+        } else {
+            // Hide quality display for invalid sizes
+            showEntropyQuality(null);
+        }
+        
         // Convert entropy array to mnemonic
         var phrase = bip39.entropyToMnemonic(uint8ArrayToHex(entropyArr));
         // Set the mnemonic in the UI
@@ -2165,6 +2411,41 @@
         DOM.entropyHashWarning.addClass('hidden');
         DOM.entropySha256Display.addClass('hidden');
         DOM.entropySha256.val('');
+        DOM.entropyQualityRow.addClass('hidden');
+        DOM.entropyQualityScore.text('--');
+        DOM.entropyChiSquare.text('--');
+    }
+
+    function showEntropyQuality(validation) {
+        if (!validation) {
+            DOM.entropyQualityRow.addClass('hidden');
+            return;
+        }
+        
+        // Show the quality row
+        DOM.entropyQualityRow.removeClass('hidden');
+        
+        // Display Shannon entropy score with color coding (out of 5.0 for 32 bytes)
+        var entropyText = validation.entropy.toFixed(2) + "/5.0 (" + validation.score.toFixed(1) + "%)";
+        if (validation.entropy >= 4.5) {
+            entropyText = "✓ " + entropyText; // Excellent entropy
+        } else if (validation.entropy >= 4.2) {
+            entropyText = "✓ " + entropyText; // Good entropy  
+        } else if (validation.entropy >= 3.5) {
+            entropyText = "⚠ " + entropyText; // Moderate entropy
+        } else {
+            entropyText = "✗ " + entropyText; // Poor entropy
+        }
+        DOM.entropyQualityScore.text(entropyText);
+        
+        // Display Chi-square with interpretation
+        var chiText = validation.chiSquare.toFixed(1);
+        if (validation.chiSquare >= 200 && validation.chiSquare <= 350) {
+            chiText = "✓ " + chiText + " (good)";
+        } else {
+            chiText = "⚠ " + chiText + " (unusual)";
+        }
+        DOM.entropyChiSquare.text(chiText);
     }
 
     function showEntropyFeedback(entropy) {
