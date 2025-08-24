@@ -591,6 +591,10 @@
             DOM.generatedStrength.find("option[value='24']").removeClass("hidden");
             // Default to 24 words for Electrum (as per user request)
             DOM.generatedStrength.val("24");
+            
+            // Show Electrum description, hide BIP39 description
+            $(".bip39-description, .bip39-spec-link").addClass("hidden");
+            $(".electrum-description, .electrum-spec-link").removeClass("hidden");
         } else {
             DOM.mnemonicLabel.text("BIP39");
             DOM.seedLabel.text("BIP39 Seed");
@@ -615,6 +619,10 @@
             
             // Restore all mnemonic length options for BIP39
             DOM.generatedStrength.find("option").removeClass("hidden");
+            
+            // Show BIP39 description, hide Electrum description
+            $(".electrum-description, .electrum-spec-link").addClass("hidden");
+            $(".bip39-description, .bip39-spec-link").removeClass("hidden");
         }
         
         // Trigger phrase validation/processing if there's existing content
@@ -2618,4 +2626,5 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
     });
+    
 });

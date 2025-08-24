@@ -373,3 +373,41 @@ hr {
     border-color: var(--border-color) !important;
     color: var(--text-color) !important;
 }
+
+/* Header container with logo */
+.header-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.bitcoin-logo {
+    width: 48px;
+    height: 48px;
+    flex-shrink: 0;
+    background-color: transparent;
+    transition: transform 0.2s ease;
+}
+
+.bitcoin-logo:hover {
+    transform: scale(1.1);
+}
+
+.header-content {
+    flex-grow: 1;
+    text-align: center;
+}
+
+.header-content h1 {
+    margin: 0;
+}
+
+.header-content .version {
+    margin: 5px 0 0 0;
+}
+
+.theme-toggle {
+    flex-shrink: 0;
+}

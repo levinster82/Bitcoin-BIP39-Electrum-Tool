@@ -13,12 +13,24 @@
     </head>
     <body>
         <div class="container">
-
-            <h1 class="text-center">Mnemonic Code Converter</h1>
-            <div class="text-center version">v1.0.2</div>
-            <button class="theme-toggle" onclick="toggleTheme()" id="theme-toggle">
-                🌙/☀️
-            </button>
+            <div class="header-container">
+                <svg class="bitcoin-logo" onclick="location.reload()" style="cursor: pointer;" xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="100%" height="100%" version="1.1" shape-rendering="geometricPrecision" text-rendering="geometricPrecision" image-rendering="optimizeQuality" fill-rule="evenodd" clip-rule="evenodd" viewBox="0 0 4091.27 4091.73" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xodm="http://www.corel.com/coreldraw/odm/2003">
+                    <g id="Layer_x0020_1">
+                        <metadata id="CorelCorpID_0Corel-Layer"/>
+                        <g id="_1421344023328">
+                            <path fill="#F7931A" fill-rule="nonzero" d="M4030.06 2540.77c-273.24,1096.01 -1383.32,1763.02 -2479.46,1489.71 -1095.68,-273.24 -1762.69,-1383.39 -1489.33,-2479.31 273.12,-1096.13 1383.2,-1763.19 2479,-1489.95 1096.06,273.24 1763.03,1383.51 1489.76,2479.57l0.02 -0.02z"/>
+                            <path fill="var(--bg-color)" fill-rule="nonzero" d="M2947.77 1754.38c40.72,-272.26 -166.56,-418.61 -450,-516.24l91.95 -368.8 -224.5 -55.94 -89.51 359.09c-59.02,-14.72 -119.63,-28.59 -179.87,-42.34l90.16 -361.46 -224.36 -55.94 -92 368.68c-48.84,-11.12 -96.81,-22.11 -143.35,-33.69l0.26 -1.16 -309.59 -77.31 -59.72 239.78c0,0 166.56,38.18 163.05,40.53 90.91,22.69 107.35,82.87 104.62,130.57l-104.74 420.15c6.26,1.59 14.38,3.89 23.34,7.49 -7.49,-1.86 -15.46,-3.89 -23.73,-5.87l-146.81 588.57c-11.11,27.62 -39.31,69.07 -102.87,53.33 2.25,3.26 -163.17,-40.72 -163.17,-40.72l-111.46 256.98 292.15 72.83c54.35,13.63 107.61,27.89 160.06,41.3l-92.9 373.03 224.24 55.94 92 -369.07c61.26,16.63 120.71,31.97 178.91,46.43l-91.69 367.33 224.51 55.94 92.89 -372.33c382.82,72.45 670.67,43.24 791.83,-303.02 97.63,-278.78 -4.86,-439.58 -206.26,-544.44 146.69,-33.83 257.18,-130.31 286.64,-329.61l-0.07 -0.05zm-512.93 719.26c-69.38,278.78 -538.76,128.08 -690.94,90.29l123.28 -494.2c152.17,37.99 640.17,113.17 567.67,403.91zm69.43 -723.3c-63.29,253.58 -453.96,124.75 -580.69,93.16l111.77 -448.21c126.73,31.59 534.85,90.55 468.94,355.05l-0.02 0z"/>
+                        </g>
+                    </g>
+                </svg>
+                <div class="header-content">
+                    <h1 class="text-center">Bitcoin Mnemonic Code Converter</h1>
+                    <div class="text-center version">v1.0.2</div>
+                </div>
+                <button class="theme-toggle" onclick="toggleTheme()" id="theme-toggle">
+                    🌙/☀️
+                </button>
+            </div>
             <hr>
             <div class="row">
                 <div class="col-md-12">
@@ -27,10 +39,15 @@
                         <div class="form-group">
                             <div class="col-sm-2"></div>
                             <div class="col-sm-10">
-                                <p>You can enter an existing BIP39 mnemonic, or generate a new random one. Typing your own twelve words will probably not work how you expect, since the words require a particular structure (the last word contains a checksum).</p>
-                                <p>
+                                <p class="mnemonic-description bip39-description">You can enter an existing BIP39 mnemonic, or generate a new random one. Typing your own twelve words will probably not work how you expect, since the words require a particular structure (the last word contains a checksum).</p>
+                                <p class="mnemonic-description electrum-description hidden">You can enter an existing Electrum seed phrase, or generate a new random one. Electrum does not follow BIP39 for mnemonic seed generation. Instead, it uses its own system with seeds that are versioned (e.g., 'legacy', 'segwit') and include a checksum. Because of these differences, Electrum mnemonics are not interchangeable with BIP39 mnemonics. At this time only english language is supported.</p>
+                                <p class="mnemonic-spec-link bip39-spec-link">
                                     For more info see the
                                     <a href="https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki" target="_blank">BIP39 spec</a>.
+                                </p>
+                                <p class="mnemonic-spec-link electrum-spec-link hidden">
+                                    For more info see the
+                                    <a href="https://electrum.readthedocs.io/en/latest/seedphrase.html" target="_blank">Electrum seed phrase documentation</a>.
                                 </p>
 
                                 <p>
@@ -1226,14 +1243,15 @@
                         Read more at the
                         <a href="https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki">official BIP39 spec</a>
                     </p>
+                    <h3>Electrum Seed Version System <span class="small">Electrum-specific mnemonic implementation</span></h3>
+                    <p>
+                        Read more at the
+                        <a href="https://electrum.readthedocs.io/en/latest/seedphrase.html" target="_blank">Electrum seed phrase documentation</a>
+                    </p>
                     <h3>BIP32 <span class="small">Hierarchical Deterministic Wallets</span></h3>
                     <p>
                         Read more at the
                         <a href="https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki" target="_blank">official BIP32 spec</a>
-                    </p>
-                    <p>
-                        See the demo at
-                        <a href="http://bip32.org/" target="_blank">bip32.org</a>
                     </p>
                     <h3>BIP44 <span class="small">Multi-Account Hierarchy for Deterministic Wallets</span></h3>
                     <p>
@@ -1360,7 +1378,7 @@
                     <p>
                     <span>Alternatively, download the file from the latest GitHub release</span>
                     -
-                    <a href="https://github.com/iancoleman/bip39/releases/latest/">https://github.com/iancoleman/bip39/releases/latest/</a>
+                    <a href="https://github.com/levinster82/Bitcoin-BIP39-Electrum-Tool/releases/latest">https://github.com/levinster82/Bitcoin-BIP39-Electrum-Tool/releases/latest</a>
                     </p>
 
                 </div>
@@ -1376,8 +1394,8 @@
                     <p>
                         <span>Get the source code from the repository</span>
                         -
-                        <a href="https://github.com/iancoleman/bip39" target="_blank">
-                            https://github.com/iancoleman/bip39
+                        <a href="https://github.com/levinster82/Bitcoin-BIP39-Electrum-Tool" target="_blank">
+                            https://github.com/levinster82/Bitcoin-BIP39-Electrum-Tool
                         </a>
                     </p>
 
@@ -1391,9 +1409,37 @@
                     </p>
 
                     <p>
-                        <span>jsBIP39 - </span>
-                        <a href="https://github.com/iancoleman/jsbip39" target="_blank">
-                            https://github.com/iancoleman/jsbip39
+                        <span>BIP39 - </span>
+                        <a href="https://github.com/bitcoinjs/bip39" target="_blank">
+                            https://github.com/bitcoinjs/bip39
+                        </a>
+                    </p>
+
+                    <p>
+                        <span>BIP32 - </span>
+                        <a href="https://github.com/bitcoinjs/bip32" target="_blank">
+                            https://github.com/bitcoinjs/bip32
+                        </a>
+                    </p>
+
+                    <p>
+                        <span>ECPair - </span>
+                        <a href="https://github.com/bitcoinjs/ecpair" target="_blank">
+                            https://github.com/bitcoinjs/ecpair
+                        </a>
+                    </p>
+
+                    <p>
+                        <span>BIP38 - </span>
+                        <a href="https://github.com/bitcoinjs/bip38" target="_blank">
+                            https://github.com/bitcoinjs/bip38
+                        </a>
+                    </p>
+
+                    <p>
+                        <span>BIP85 - </span>
+                        <a href="https://github.com/AndreasGassmann/bip85" target="_blank">
+                            https://github.com/AndreasGassmann/bip85
                         </a>
                     </p>
 
@@ -1405,9 +1451,37 @@
                     </p>
 
                     <p>
-                        <span>sjcl - </span>
+                        <span>SJCL - </span>
                         <a href="https://github.com/bitwiseshiftleft/sjcl" target="_blank">
                             https://github.com/bitwiseshiftleft/sjcl
+                        </a>
+                    </p>
+
+                    <p>
+                        <span>BigInteger - </span>
+                        <a href="https://github.com/silentmatt/javascript-biginteger" target="_blank">
+                            https://github.com/silentmatt/javascript-biginteger
+                        </a>
+                    </p>
+
+                    <p>
+                        <span>Fast Levenshtein - </span>
+                        <a href="https://github.com/hiddentao/fast-levenshtein" target="_blank">
+                            https://github.com/hiddentao/fast-levenshtein
+                        </a>
+                    </p>
+
+                    <p>
+                        <span>KJUA (QR Code) - </span>
+                        <a href="https://github.com/lrsjng/kjua" target="_blank">
+                            https://github.com/lrsjng/kjua
+                        </a>
+                    </p>
+
+                    <p>
+                        <span>zxcvbn - </span>
+                        <a href="https://github.com/dropbox/zxcvbn" target="_blank">
+                            https://github.com/dropbox/zxcvbn
                         </a>
                     </p>
 
@@ -1419,9 +1493,9 @@
                     </p>
 
                     <p>
-                        <span>Twitter Bootstrap - </span>
-                        <a href="http://getbootstrap.com/" target="_blank">
-                            http://getbootstrap.com/
+                        <span>Bootstrap - </span>
+                        <a href="https://getbootstrap.com/" target="_blank">
+                            https://getbootstrap.com/
                         </a>
                     </p>
 
