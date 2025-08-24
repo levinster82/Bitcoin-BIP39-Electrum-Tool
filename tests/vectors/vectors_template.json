@@ -1,0 +1,67 @@
+{
+  "language_code": [
+    {
+      "entropy_hex_string": "",
+      "mnemonic_phrase_space_separated": "",
+      "seed_hex_512_bits": "",
+      "master_extended_private_key_xprv": "",
+      "master_fingerprint_xfp": "",
+      "derivations": {
+        "bip44": {
+          "account_0": {
+            "account_xprv": "",
+            "account_xpub": "",
+            "address_0": "",
+            "change_address_0": "",
+            "address_58": "",
+            "change_address_58": ""
+          },
+          "account_58": {
+            "account_xprv": "",
+            "account_xpub": "",
+            "address_0": "",
+            "change_address_0": "",
+            "address_58": "",
+            "change_address_58": ""
+          }
+        },
+        "bip84": {
+          "account_0": {
+            "account_zprv": "",
+            "account_zpub": "",
+            "address_0": "",
+            "change_address_0": "",
+            "address_58": "",
+            "change_address_58": ""
+          },
+          "account_58": {
+            "account_zprv": "",
+            "account_zpub": "",
+            "address_0": "",
+            "change_address_0": "",
+            "address_58": "",
+            "change_address_58": ""
+          }
+        },
+        "bip86": {
+          "account_0": {
+            "account_xprv": "",
+            "account_xpub": "",
+            "address_0": "",
+            "change_address_0": "",
+            "address_58": "",
+            "change_address_58": ""
+          },
+          "account_58": {
+            "account_xprv": "",
+            "account_xpub": "",
+            "address_0": "",
+            "change_address_0": "",
+            "address_58": "",
+            "change_address_58": ""
+          }
+        }
+      }
+    }
+  ]
+}
