@@ -45,7 +45,15 @@ Download from releases:
 - Latest Release    `bip39-electrum-standalone.html` - v1.0.2 - Taproot for TOXIC Bitcoin Maxi's
 - https://github.com/levinster82/Bitcoin-BIP39-Electrum-Tool/releases/latest
 
-Build from source: `python compile.py`
+Build from source:
+```
+# Generate libs ./libs/combined ./libs/electrum-mnemonic
+npm install --no-optional
+npm run build
+# copy output combined-libs.js & electrum-mnemonic.js to ./src/js
+### Build
+python compile.py
+```
 
 ## Testing
 
