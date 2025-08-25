@@ -11,7 +11,7 @@ A Bitcoin-focused fork of [iancoleman/bip39](https://github.com/iancoleman/bip39
 - **Native Taproot**: Full BIP-86 implementation with `m/86'/0'/account'/change` derivation
 - **P2TR Addresses**: Generate native Taproot addresses (bc1p...)
 
-### Electrum Wallet Support
+### Electrum Wallet Support (singlesig)
 - **Legacy Wallets**: P2PKH addresses with `m/0/n` and `m/1/n` derivation
 - **SegWit Wallets**: P2WPKH addresses with `m/0'/0/n` and `m/0'/1/n` derivation
 - **Account Extended Keys**: Display xpub/zpub for wallet import
