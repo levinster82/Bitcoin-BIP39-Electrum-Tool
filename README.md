@@ -49,6 +49,8 @@ Build from source: `python compile.py`
 
 ## Testing
 
+tests.js has been split into multiple parts within tests/spec directory.
+
 ```bash
 cd tests && npm install
 npm install --global jasmine
