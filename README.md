@@ -41,7 +41,9 @@ A Bitcoin-focused fork of [iancoleman/bip39](https://github.com/iancoleman/bip39
 ## Standalone Versions
 
 Download from releases:
-- `bip39-electrum-standalone.html` - v1.0.0 - Bitcoin Only Toxic Maxi Edition
+- Original Release  `bip39-electrum-standalone.html` - v1.0.0 - Bitcoin Only Toxic Maxi Edition
+- Latest Release    `bip39-electrum-standalone.html` - v1.0.2 - Taproot for TOXIC Bitcoin Maxi's
+- https://github.com/levinster82/Bitcoin-BIP39-Electrum-Tool/releases/latest
 
 Build from source: `python compile.py`
 
