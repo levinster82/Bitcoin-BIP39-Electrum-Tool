@@ -37,19 +37,8 @@ var generateDelay = 1000;
 var feedbackDelay = 500;
 var entropyFeedbackDelay = 300;
 
-// url uses file:// scheme
-var path = require('path')
-var parentDir = path.resolve(process.cwd(), '..', 'bip39-electrum-standalone.html');
-var url = "file://" + parentDir;
-if (browser == "firefox") {
-    // TODO loading local html in firefox is broken
-    console.log("Loading local html in firefox is broken, see https://stackoverflow.com/q/46367054");
-    console.log("You must run a server in this case, ie do this:");
-    console.log("$ cd /path/to/bip39/src");
-    console.log("$ python -m http.server");
-    console.log("$ BROWSER=firefox jasmine spec/tests-part5.js");
-    url = "http://localhost:8000";
-}
+// Use localhost server for both browsers
+var url = "http://localhost:8000";
 
 // Variables dependent on specific browser selection
 
@@ -64,11 +53,12 @@ if (browser == "chrome") {
     newDriver = function() {
         var chrome = require('selenium-webdriver/chrome');
         var options = new chrome.Options();
-        options.addArguments('--headless');
+        options.addArguments('--headless=new');
         options.addArguments('--no-sandbox');
         options.addArguments('--disable-dev-shm-usage');
         options.addArguments('--disable-gpu');
         options.addArguments('--allow-file-access-from-files');
+        options.addArguments('--window-size=1920,3000');
         return new webdriver.Builder()
             .forBrowser('chrome')
             .setChromeOptions(options)

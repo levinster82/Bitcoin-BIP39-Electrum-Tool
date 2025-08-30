@@ -3,7 +3,7 @@ var browser = process.env.BROWSER;
 
 if (!browser) {
     console.log("Browser can be set via environment variable, eg");
-    console.log("BROWSER=firefox jasmine spec/trezorvectors.js");
+    console.log("BROWSER=firefox jasmine spec/debug-trezorvectors-fast.js");
     console.log("Options for BROWSER are firefox chrome");
     console.log("Using default browser: chrome");
     browser = "chrome";
@@ -46,6 +46,7 @@ async function testSetup() {
         options.addArguments("--headless=new");
         options.addArguments("--no-sandbox");
         options.addArguments("--disable-dev-shm-usage");
+        options.addArguments("--window-size=1920,1080");
         driver = new webdriver.Builder()
             .forBrowser('chrome')
             .setChromeOptions(options)
@@ -82,7 +83,7 @@ async function setMnemonic(mnemonic) {
     // Clear any existing state first
     var phraseField = await driver.findElement(By.css(".phrase"));
     await phraseField.clear();
-    await driver.sleep(10);
+    await driver.sleep(100);
     
     // Set the new mnemonic
     await phraseField.sendKeys(mnemonic);
@@ -90,8 +91,8 @@ async function setMnemonic(mnemonic) {
     // Trigger the phrase change event
     await driver.executeScript("document.querySelector('.phrase').dispatchEvent(new Event('input', { bubbles: true }));");
     
-    // Wait for processing - balanced timing
-    await driver.sleep(400); // 400 optimized
+    // Wait for processing - optimized timing
+    await driver.sleep(500);
 }
 
 async function ensureAddressRows(targetIndex) {
@@ -113,19 +114,19 @@ async function ensureAddressRows(targetIndex) {
         // Scroll more button into view and click
         var moreButton = await driver.findElement(By.css("button.more"));
         await driver.executeScript("arguments[0].scrollIntoView({behavior: 'instant', block: 'nearest'});", moreButton);
-        await driver.sleep(10);
+        await driver.sleep(100);
         await moreButton.click();
         
-        await driver.sleep(75); // Allow time for row gen 75 optimized
+        await driver.sleep(100); // Faster row generation
     }
 }
 
 async function switchToTab(tabSelector) {
     var tab = await driver.findElement(By.css(tabSelector));
     await driver.executeScript("arguments[0].scrollIntoView({behavior: 'instant', block: 'nearest'});", tab);
-    await driver.sleep(10);
+    await driver.sleep(100);
     await tab.click();
-    await driver.sleep(10);
+    await driver.sleep(100);
 }
 
 async function setAccountAndChange(accountField, changeField, changeValue) {
@@ -137,7 +138,7 @@ async function setAccountAndChange(accountField, changeField, changeValue) {
     await changeFieldElement.clear();
     await changeFieldElement.sendKeys(changeValue.toString());
     
-    await driver.sleep(40); // Allow time for field updates and address calculation 25 optimized
+    await driver.sleep(100);
 }
 
 async function getAddressAtIndex(addressIndex) {
@@ -152,7 +153,7 @@ async function getAllAddressesForTab(tabSelector, accountField, changeField) {
     
     // Get receive addresses (change = 0)
     await setAccountAndChange(accountField, changeField, 0);
-    await driver.sleep(25); // Allow time for address generation
+    await driver.sleep(100);
     
     // Ensure we have enough rows for index 58 AFTER setting fields
     await ensureAddressRows(58);
@@ -162,7 +163,7 @@ async function getAllAddressesForTab(tabSelector, accountField, changeField) {
     
     // Get change addresses (change = 1)
     await setAccountAndChange(accountField, changeField, 1);
-    await driver.sleep(40); // Allow time for address regeneration 40 Optimized
+    await driver.sleep(100);
     
     // Ensure rows again after changing to change addresses
     await ensureAddressRows(58);
@@ -178,8 +179,19 @@ async function getAllAddressesForTab(tabSelector, accountField, changeField) {
     };
 }
 
-// Test Suite - Ultra optimized
-describe("Trezor BIP39 Vector Tests (v3 - Ultra Fast)", function() {
+function checkAssertion(description, actual, expected) {
+    var passed = actual === expected;
+    var status = passed ? "✓ PASS" : "✗ FAIL";
+    console.log(`   ${description}: ${status}`);
+    if (!passed) {
+        console.log(`     Expected: ${expected}`);
+        console.log(`     Actual:   ${actual}`);
+    }
+    return passed;
+}
+
+// Test Suite - Debug Version with Detailed Assertions
+describe("Trezor BIP39 Vector Tests (Debug - Fast)", function() {
     jasmine.DEFAULT_TIMEOUT_INTERVAL = 120000;
     
     beforeAll(async function() {
@@ -197,23 +209,14 @@ describe("Trezor BIP39 Vector Tests (v3 - Ultra Fast)", function() {
             testVectors[language].forEach(function(vector, index) {
                 
                 it(`Vector ${index + 1}: All 15 tests for ${vector.mnemonic_phrase_space_separated.substring(0, 30)}...`, async function() {
-                    console.log(`Testing ${language} vector ${index + 1}: ${vector.mnemonic_phrase_space_separated.substring(0, 50)}...`);
+                    console.log(`\nTesting ${language} vector ${index + 1}: ${vector.mnemonic_phrase_space_separated.substring(0, 50)}...`);
                     
-                    // Reset page state to prevent tab click failures between tests
-                    await driver.executeScript("window.scrollTo(0, 0);");
-                    
-                    // Ensure BIP44 tab is properly positioned and active
-                    var bip44Tab = await driver.findElement(By.css('#bip44-tab a'));
-                    await driver.executeScript("arguments[0].scrollIntoView({behavior: 'instant', block: 'nearest'});", bip44Tab);
-                    if (!(await bip44Tab.getAttribute('class')).includes('active')) {
-                        await bip44Tab.click();
-                    }
-                    await driver.sleep(10);
-                    
-                    // Set mnemonic ONCE
+                    // Set mnemonic
                     await setMnemonic(vector.mnemonic_phrase_space_separated);
                     
-                    // Get basic BIP39 data (instant)
+                    console.log("\n1. Testing basic generation...");
+                    
+                    // Get basic BIP39 data
                     var seedField = await driver.findElement(By.css(".seed"));
                     var rootKeyField = await driver.findElement(By.css(".root-key"));
                     var fingerprintField = await driver.findElement(By.css(".fingerprint"));
@@ -223,33 +226,69 @@ describe("Trezor BIP39 Vector Tests (v3 - Ultra Fast)", function() {
                     var actualFingerprint = await fingerprintField.getAttribute("value");
                     
                     // Test BIP39 basics (3 tests)
+                    checkAssertion("Seed", actualSeed.toLowerCase(), vector.seed_hex_512_bits.toLowerCase());
                     expect(actualSeed.toLowerCase()).toBe(vector.seed_hex_512_bits.toLowerCase());
+                    
+                    checkAssertion("Master Key", actualXprv, vector.master_extended_private_key_xprv);
                     expect(actualXprv).toBe(vector.master_extended_private_key_xprv);
+                    
+                    checkAssertion("Fingerprint", actualFingerprint, vector.master_fingerprint_xfp);
                     expect(actualFingerprint).toBe(vector.master_fingerprint_xfp);
                     
-                    // Batch all address generation
-                    var bip44Addresses = await getAllAddressesForTab('#bip44-tab a', "#account-bip44", "#change-bip44");
-                    var bip84Addresses = await getAllAddressesForTab('#bip84-tab a', "#account-bip84", "#change-bip84");
-                    var bip86Addresses = await getAllAddressesForTab('#bip86-tab a', "#account-bip86", "#change-bip86");
+                    console.log("\n2. Testing address generation...");
                     
-                    // Test all addresses (12 tests)
+                    // Test BIP44 addresses
+                    console.log("  Testing BIP44...");
+                    var bip44Addresses = await getAllAddressesForTab('#bip44-tab a', "#account-bip44", "#change-bip44");
                     var account0_bip44 = vector.derivations.bip44.account_0;
+                    
+                    checkAssertion("BIP44 Address 0/0", bip44Addresses.address_0, account0_bip44.address_0);
                     expect(bip44Addresses.address_0).toBe(account0_bip44.address_0);
-                    expect(bip44Addresses.change_address_0).toBe(account0_bip44.change_address_0);
+                    
+                    checkAssertion("BIP44 Address 0/58", bip44Addresses.address_58, account0_bip44.address_58);
                     expect(bip44Addresses.address_58).toBe(account0_bip44.address_58);
+                    
+                    checkAssertion("BIP44 Change Address 1/0", bip44Addresses.change_address_0, account0_bip44.change_address_0);
+                    expect(bip44Addresses.change_address_0).toBe(account0_bip44.change_address_0);
+                    
+                    checkAssertion("BIP44 Change Address 1/58", bip44Addresses.change_address_58, account0_bip44.change_address_58);
                     expect(bip44Addresses.change_address_58).toBe(account0_bip44.change_address_58);
                     
+                    // Test BIP84 addresses
+                    console.log("  Testing BIP84...");
+                    var bip84Addresses = await getAllAddressesForTab('#bip84-tab a', "#account-bip84", "#change-bip84");
                     var account0_bip84 = vector.derivations.bip84.account_0;
+                    
+                    checkAssertion("BIP84 Address 0/0", bip84Addresses.address_0, account0_bip84.address_0);
                     expect(bip84Addresses.address_0).toBe(account0_bip84.address_0);
-                    expect(bip84Addresses.change_address_0).toBe(account0_bip84.change_address_0);
+                    
+                    checkAssertion("BIP84 Address 0/58", bip84Addresses.address_58, account0_bip84.address_58);
                     expect(bip84Addresses.address_58).toBe(account0_bip84.address_58);
+                    
+                    checkAssertion("BIP84 Change Address 1/0", bip84Addresses.change_address_0, account0_bip84.change_address_0);
+                    expect(bip84Addresses.change_address_0).toBe(account0_bip84.change_address_0);
+                    
+                    checkAssertion("BIP84 Change Address 1/58", bip84Addresses.change_address_58, account0_bip84.change_address_58);
                     expect(bip84Addresses.change_address_58).toBe(account0_bip84.change_address_58);
                     
+                    // Test BIP86 addresses
+                    console.log("  Testing BIP86...");
+                    var bip86Addresses = await getAllAddressesForTab('#bip86-tab a', "#account-bip86", "#change-bip86");
                     var account0_bip86 = vector.derivations.bip86.account_0;
+                    
+                    checkAssertion("BIP86 Address 0/0", bip86Addresses.address_0, account0_bip86.address_0);
                     expect(bip86Addresses.address_0).toBe(account0_bip86.address_0);
-                    expect(bip86Addresses.change_address_0).toBe(account0_bip86.change_address_0);
+                    
+                    checkAssertion("BIP86 Address 0/58", bip86Addresses.address_58, account0_bip86.address_58);
                     expect(bip86Addresses.address_58).toBe(account0_bip86.address_58);
+                    
+                    checkAssertion("BIP86 Change Address 1/0", bip86Addresses.change_address_0, account0_bip86.change_address_0);
+                    expect(bip86Addresses.change_address_0).toBe(account0_bip86.change_address_0);
+                    
+                    checkAssertion("BIP86 Change Address 1/58", bip86Addresses.change_address_58, account0_bip86.change_address_58);
                     expect(bip86Addresses.change_address_58).toBe(account0_bip86.change_address_58);
+                    
+                    console.log(`   Vector ${index + 1} Summary: All 15 tests completed`);
                 });
             });
             

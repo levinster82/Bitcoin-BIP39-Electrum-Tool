@@ -36,6 +36,9 @@
     --border-color: #cccccc;
     --input-bg: #ffffff;
     --input-border: #cccccc;
+    --code-bg: #f6f8fa;
+    --code-border: #e1e4e8;
+    --code-text: #24292e;
     --feedback-bg: orange;
     --feedback-text: #444;
     --qr-bg: #ffffff;
@@ -51,6 +54,9 @@
     --border-color: #444444;
     --input-bg: #2d2d2d;
     --input-border: #555555;
+    --code-bg: #161b22;
+    --code-border: #30363d;
+    --code-text: #e6edf3;
     --feedback-bg: #ff8c00;
     --feedback-text: #000000;
     --qr-bg: #2d2d2d;
@@ -71,19 +77,28 @@ body {
 }
 
 /* Dark mode styles for form controls */
-.form-control {
+.form-control, .form-select {
     background-color: var(--input-bg);
     border-color: var(--input-border);
     color: var(--text-color);
 }
 
-.form-control:focus {
+.form-control:focus, .form-select:focus {
     border-color: var(--link-color);
     box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
 }
 
-[data-theme="dark"] .form-control:focus {
+[data-theme="dark"] .form-control:focus,
+[data-theme="dark"] .form-select:focus {
     box-shadow: 0 0 0 0.2rem rgba(102, 179, 255, 0.25);
+}
+
+/* Dark mode for all form controls */
+[data-theme="dark"] .form-control,
+[data-theme="dark"] .form-select {
+    background-color: var(--input-bg) !important;
+    border-color: var(--input-border) !important;
+    color: var(--text-color) !important;
 }
 
 /* Light mode for CSV textarea */
@@ -291,15 +306,6 @@ hr {
     border-color: #707070 !important;
 }
 
-/* Dark mode for specific readonly fields */
-[data-theme="dark"] .seed,
-[data-theme="dark"] .root-key,
-[data-theme="dark"] .fingerprint {
-    background-color: var(--input-bg) !important;
-    color: var(--text-color) !important;
-    border-color: var(--input-border) !important;
-}
-
 /* Dark mode for readonly form controls (including mnemonic field when entropy is shown) */
 [data-theme="dark"] .form-control[readonly] {
     background-color: var(--input-bg) !important;
@@ -314,16 +320,23 @@ hr {
 }
 
 /* Dark mode for navigation tabs */
-[data-theme="dark"] .nav-tabs > li.active > a,
-[data-theme="dark"] .nav-tabs > li.active > a:hover,
-[data-theme="dark"] .nav-tabs > li.active > a:focus {
-    background-color: #404040 !important;
+[data-theme="dark"] .nav-tabs .nav-link.active,
+[data-theme="dark"] .nav-tabs .nav-link.active:hover,
+[data-theme="dark"] .nav-tabs .nav-link.active:focus {
+    background-color: var(--input-bg) !important;
     color: var(--text-color) !important;
     border-color: var(--border-color) !important;
+    border-bottom-color: var(--input-bg) !important;
 }
 
-[data-theme="dark"] .nav-tabs > li > a {
+[data-theme="dark"] .nav-tabs .nav-link {
     color: var(--text-color) !important;
+    border-color: var(--border-color) !important;
+    background-color: transparent !important;
+}
+
+[data-theme="dark"] .nav-tabs .nav-link:hover {
+    background-color: #333333 !important;
     border-color: var(--border-color) !important;
 }
 
@@ -331,46 +344,47 @@ hr {
     border-bottom-color: var(--border-color) !important;
 }
 
-/* Dark mode for derivation path and related fields */
-[data-theme="dark"] .purpose,
-[data-theme="dark"] .coin,
-[data-theme="dark"] .path,
-[data-theme="dark"] .extended-pub-key,
-[data-theme="dark"] .extended-priv-key,
-[data-theme="dark"] .account-xpub,
-[data-theme="dark"] .account-xprv {
-    background-color: var(--input-bg) !important;
-    color: var(--text-color) !important;
-    border-color: var(--input-border) !important;
-}
 
-/* Dark mode for remaining input fields */
-[data-theme="dark"] .bip38-password,
-[data-theme="dark"] .rows-to-add,
-[data-theme="dark"] .more-rows-start-index,
-[data-theme="dark"] .electrum-legacy-path,
-[data-theme="dark"] .electrum-segwit-path {
-    background-color: var(--input-bg) !important;
-    color: var(--text-color) !important;
-    border-color: var(--input-border) !important;
-}
 
 /* Dark mode for tables */
-[data-theme="dark"] .table {
+[data-theme="dark"] .table,
+[data-theme="dark"] .table > :not(caption) > * > * {
+    color: var(--text-color) !important;
+    background-color: transparent;
+}
+
+[data-theme="dark"] .table > thead {
+    background-color: var(--input-bg) !important;
+}
+
+[data-theme="dark"] .table-striped > tbody > tr:nth-of-type(odd) > td,
+[data-theme="dark"] .table-striped > tbody > tr:nth-of-type(odd) > th {
+    background-color: #2a2a2a !important;
     color: var(--text-color) !important;
 }
 
-[data-theme="dark"] .table-striped > tbody > tr:nth-of-type(odd) {
-    background-color: #2a2a2a !important;
-}
-
-[data-theme="dark"] .table-striped > tbody > tr:nth-of-type(even) {
+[data-theme="dark"] .table-striped > tbody > tr:nth-of-type(even) > td,
+[data-theme="dark"] .table-striped > tbody > tr:nth-of-type(even) > th {
     background-color: #1e1e1e !important;
+    color: var(--text-color) !important;
 }
 
 [data-theme="dark"] .table th,
 [data-theme="dark"] .table td {
     border-color: var(--border-color) !important;
+    color: var(--text-color) !important;
+}
+
+[data-theme="dark"] .table thead th {
+    background-color: var(--input-bg) !important;
+    color: var(--text-color) !important;
+    border-color: var(--border-color) !important;
+}
+
+/* Ensure monospace table content is properly themed */
+[data-theme="dark"] .addresses.monospace,
+[data-theme="dark"] .addresses.monospace td {
+    background-color: transparent !important;
     color: var(--text-color) !important;
 }
 
@@ -410,4 +424,119 @@ hr {
 
 .theme-toggle {
     flex-shrink: 0;
+}
+
+/* Bootstrap 5 adjustments for proper alignment and sizing */
+
+/* Form structure fixes */
+.mb-3 {
+    margin-bottom: 15px;
+}
+
+/* Form label alignment */
+.col-sm-2.form-label {
+    text-align: right;
+    padding-top: 7px;
+    margin-bottom: 0;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+/* Form controls sizing */
+.form-control, .form-select {
+    font-size: 14px;
+    padding: 6px 12px;
+    height: 34px;
+}
+
+textarea.form-control {
+    height: auto;
+}
+
+/* Form text styling */
+.form-text {
+    margin-top: 5px;
+    margin-bottom: 10px;
+    color: #737373;
+    font-size: 12px;
+}
+
+/* Checkbox alignment */
+.form-check {
+    margin-bottom: 0;
+}
+
+.form-check-label {
+    font-size: 14px;
+}
+
+
+/* Button styling */
+.btn {
+    font-size: 14px;
+    padding: 6px 12px;
+    border-radius: 4px;
+}
+
+.btn-sm {
+    font-size: 12px;
+    padding: 5px 10px;
+}
+
+/* Tab functionality */
+.tab-content {
+    min-height: 400px;
+}
+
+.tab-pane {
+    display: none;
+}
+
+.tab-pane.active.show {
+    display: block;
+}
+
+/* Table styling */
+.table th, .table td {
+    padding: 8px;
+    font-size: 14px;
+}
+
+/* Move language links right to align with checkbox content */
+.languages {
+    padding-left: 1.5rem;
+}
+
+/* Utility classes */
+.hidden {
+    display: none !important;
+}
+
+/* GitHub-style scrollbars for CSV textarea */
+#csv-textarea::-webkit-scrollbar {
+    height: 16px;
+    width: 12px;
+}
+
+#csv-textarea::-webkit-scrollbar-track {
+    background: var(--code-bg);
+    border-radius: 6px;
+}
+
+#csv-textarea::-webkit-scrollbar-thumb {
+    background: #d1d9e0;
+    border-radius: 6px;
+    border: 2px solid var(--code-bg);
+}
+
+#csv-textarea::-webkit-scrollbar-thumb:hover {
+    background: #c8d1d9;
+}
+
+[data-theme="dark"] #csv-textarea::-webkit-scrollbar-thumb {
+    background: #6e7681;
+}
+
+[data-theme="dark"] #csv-textarea::-webkit-scrollbar-thumb:hover {
+    background: #8b949e;
 }

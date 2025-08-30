@@ -38,18 +38,8 @@ var feedbackDelay = 500;
 var entropyFeedbackDelay = 500;
 var bip38delay = 15000;
 
-// url uses file:// scheme
-var path = require('path')
-var parentDir = path.resolve(process.cwd(), '..', 'src', 'index.html');
-var url = "file://" + parentDir;
-if (browser == "firefox") {
-    // TODO loading local html in firefox is broken
-    console.log("Loading local html in firefox is broken, see https://stackoverflow.com/q/46367054");
-    console.log("You must run a server in this case, ie do this:");
-    console.log("$ cd /path/to/bip39/src");
-    console.log("$ python -m http.server");
-    url = "http://localhost:8000";
-}
+// Use localhost server for all browsers
+var url = "http://localhost:8000";
 
 // Variables dependent on specific browser selection
 
@@ -68,10 +58,12 @@ else if (browser == "chrome") {
     var chrome = require('selenium-webdriver/chrome');
     newDriver = function() {
         var options = new chrome.Options();
-        options.addArguments("--headless");
-        options.addArguments("--no-sandbox");
-        options.addArguments("--disable-dev-shm-usage");
-        options.addArguments("--disable-gpu");
+        options.addArguments('--headless=new');
+        options.addArguments('--no-sandbox');
+        options.addArguments('--disable-dev-shm-usage');
+        options.addArguments('--disable-gpu');
+        options.addArguments('--allow-file-access-from-files');
+        options.addArguments('--window-size=1920,3000');
         return new webdriver.Builder()
           .forBrowser('chrome')
           .setChromeOptions(options)
@@ -413,8 +405,10 @@ it('Clears old root keys from memory when mnemonic is cleared', async function()
         .sendKeys(Key.DELETE);
     await driver.sleep(generateDelay);
     // try to generate more addresses
-    await driver.findElement(By.css('.more'))
-        .click();
+    var moreButton = await driver.findElement(By.css('.more'));
+    await driver.executeScript("arguments[0].scrollIntoView({behavior: 'instant', block: 'nearest'});", moreButton);
+    await driver.sleep(100);
+    await moreButton.click();
     await driver.sleep(generateDelay);
     const els = await driver.findElements(By.css(".addresses tr"));
     // check there are no addresses shown
@@ -487,8 +481,10 @@ it('Can generate more addresses from a custom index', async function() {
     // which means indexes 20-39 will not be in the table.
     await driver.findElement(By.css('.more-rows-start-index'))
         .sendKeys("40");
-    await driver.findElement(By.css('.more'))
-        .click();
+    var moreButton = await driver.findElement(By.css('.more'));
+    await driver.executeScript("arguments[0].scrollIntoView({behavior: 'instant', block: 'nearest'});", moreButton);
+    await driver.sleep(100);
+    await moreButton.click();
     await driver.sleep(generateDelay);
     // Check actual indexes in the table match the expected pattern
     const els = await driver.findElements(By.css(".index"));
@@ -782,7 +778,13 @@ it('Can display the table as csv', async function() {
     await driver.findElement(By.css('.phrase'))
         .sendKeys('abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon length');
     await driver.sleep(generateDelay);
-    const csv = await driver.findElement(By.css('.csv'))
+    // Click CSV tab to activate it and populate CSV field
+    const csvTab = await driver.findElement(By.css('#csv-tab a'));
+    await driver.executeScript("arguments[0].scrollIntoView({behavior: 'instant', block: 'nearest'});", csvTab);
+    await driver.sleep(100);
+    await csvTab.click();
+    await driver.sleep(500);
+    const csv = await driver.findElement(By.css('#csv-textarea'))
         .getAttribute("value");
     expect(csv).toContain(headings);
     expect(csv).toContain(row1);

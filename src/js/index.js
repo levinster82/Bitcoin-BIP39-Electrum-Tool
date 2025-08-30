@@ -55,7 +55,7 @@
     DOM.mnemonicLabel = $(".mnemonic-label");
     DOM.seedLabel = $("label[for='seed']");
     DOM.passphraseLabel = $("label[for='passphrase']");
-    DOM.electrumTabs = $(".electrum-tab");
+    DOM.electrumTabs = $("#electrum-legacy-tab, #electrum-segwit-tab");
     DOM.electrumTabPanels = $(".electrum-tab-panel");
     DOM.electrumLegacyTab = $("#electrum-legacy-tab");
     DOM.electrumSegwitTab = $("#electrum-segwit-tab");
@@ -150,6 +150,7 @@
     DOM.addresses = $(".addresses");
     DOM.csvTab = $("#csv-tab a");
     DOM.csv = $(".csv");
+    DOM.tableTab = $("#table-tab a");
     DOM.rowsToAdd = $(".rows-to-add");
     DOM.more = $(".more");
     DOM.moreRowsStartIndex = $(".more-rows-start-index");
@@ -165,6 +166,184 @@
     DOM.qrImage = DOM.qrContainer.find(".qr-image");
     DOM.qrHint = DOM.qrContainer.find(".qr-hint");
     DOM.showQrEls = $("[data-show-qr]");
+
+    function generateCsvContent() {
+        var tableCsv = "path,address,public key,private key\n";
+        var rows = DOM.addresses.find("tr");
+        for (var i=0; i<rows.length; i++) {
+            var row = $(rows[i]);
+            var cells = row.find("td");
+            for (var j=0; j<cells.length; j++) {
+                var cell = $(cells[j]);
+                var cellText = cell.text();
+                if (!cell.children().hasClass("invisible")) {
+                    tableCsv = tableCsv + cellText;
+                }
+                if (j != cells.length - 1) {
+                    tableCsv = tableCsv + ",";
+                }
+            }
+            tableCsv = tableCsv + "\n";
+        }
+        
+        // Remove any trailing newline that might create an extra empty row
+        return tableCsv.trim();
+    }
+
+    function createCsvContainer(tableCsv) {
+        $('.csv-data-container').remove();
+        $('.addresses-type.tab-content').append(`
+            <div class="csv-data-container" style="
+                background: var(--input-bg);
+                color: var(--text-color);
+                padding: 10px 20px;
+                border: 1px solid var(--input-border);
+                border-radius: 5px;
+                font-family: monospace;
+            ">
+                <div style="
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-bottom: 8px;
+                ">
+                    <h6 style="color: var(--text-color); margin: 0;">CSV Export Data:</h6>
+                    <button onclick="copyCSVData()" style="
+                        background: transparent;
+                        border: 1px solid var(--border-color);
+                        color: var(--text-color);
+                        padding: 4px 8px;
+                        border-radius: 6px;
+                        font-size: 12px;
+                        cursor: pointer;
+                        display: flex;
+                        align-items: center;
+                        gap: 4px;
+                        transition: background-color 0.2s ease;
+                    " onmouseover="this.style.backgroundColor='var(--input-bg)'" onmouseout="this.style.backgroundColor='transparent'">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                            <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z"></path>
+                            <path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path>
+                        </svg>
+                        Copy
+                    </button>
+                </div>
+                <div style="
+                    background: var(--code-bg, #f6f8fa);
+                    border-radius: 6px;
+                    padding: 6px 16px 0 16px;
+                    border: 1px solid var(--code-border, #e1e4e8);
+                    position: relative;
+                ">
+                    <textarea style="
+                        width: 100%;
+                        height: 100%;
+                        min-height: 200px;
+                        font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+                        font-size: 13px;
+                        background: transparent;
+                        color: var(--code-text, #24292e);
+                        border: 0;
+                        outline: none;
+                        resize: none;
+                        white-space: pre;
+                        overflow-x: auto;
+                        overflow-y: auto;
+                        line-height: 1.45;
+                        padding: 0;
+                        box-sizing: border-box;
+                        display: block;
+                        margin: 0;
+                    " readonly id="csv-textarea">${tableCsv}</textarea>
+                </div>
+                <small style="color: var(--text-color); opacity: 0.7; display: block; margin: 5px 0 0 0; font-size: 11px;">
+                    Copy the CSV data above to save to a file or import into spreadsheet software.
+                </small>
+            </div>
+        `);
+        
+        // Auto-expand textarea to fit content
+        setTimeout(function() {
+            var textarea = document.getElementById('csv-textarea');
+            if (textarea) {
+                textarea.style.height = 'auto';
+                var contentHeight = textarea.scrollHeight;
+                var minHeight = 200;
+                var finalHeight = Math.max(minHeight, contentHeight + 10);
+                textarea.style.height = finalHeight + 'px';
+            }
+        }, 100);
+    }
+
+    // Global function for copy button
+    window.copyCSVData = function() {
+        var textarea = document.getElementById('csv-textarea');
+        if (textarea) {
+            try {
+                // Use modern Clipboard API if available (doesn't select text)
+                if (navigator.clipboard && window.isSecureContext) {
+                    navigator.clipboard.writeText(textarea.value);
+                } else {
+                    // Fallback: briefly select and copy, then deselect
+                    textarea.select();
+                    textarea.setSelectionRange(0, 99999);
+                    document.execCommand('copy');
+                    // Clear selection immediately
+                    textarea.setSelectionRange(0, 0);
+                    textarea.blur();
+                }
+                
+                // Show feedback by temporarily changing button text
+                var button = event.target.closest('button');
+                var originalHTML = button.innerHTML;
+                button.innerHTML = `
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                        <path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.75.75 0 0 1 1.06-1.06L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path>
+                    </svg>
+                    Copied!
+                `;
+                
+                setTimeout(function() {
+                    button.innerHTML = originalHTML;
+                }, 2000);
+                
+            } catch (err) {
+                console.error('Failed to copy text: ', err);
+                
+                // Fallback: show instructions
+                var button = event.target.closest('button');
+                var originalHTML = button.innerHTML;
+                button.innerHTML = 'Select All & Copy';
+                setTimeout(function() {
+                    button.innerHTML = originalHTML;
+                }, 2000);
+            }
+        }
+    };
+
+    function updateCsvIfVisible() {
+        // Only update CSV if CSV tab is currently active
+        if (DOM.csvTab.hasClass('active')) {
+            var tableCsv = generateCsvContent();
+            
+            // Check if container already exists, if so just update the content
+            var existingTextarea = document.getElementById('csv-textarea');
+            if (existingTextarea) {
+                existingTextarea.value = tableCsv;
+                
+                // Force immediate refresh and resize
+                setTimeout(function() {
+                    existingTextarea.style.height = 'auto';
+                    var contentHeight = existingTextarea.scrollHeight;
+                    var minHeight = 200;
+                    var finalHeight = Math.max(minHeight, contentHeight + 10);
+                    existingTextarea.style.height = finalHeight + 'px';
+                }, 10);
+            } else {
+                createCsvContainer(tableCsv);
+            }
+        }
+    }
 
     function init() {
         // Events
@@ -204,7 +383,16 @@
         DOM.bip85bytes.on('input', calcBip85);
         DOM.bip141path.on("input", calcForDerivationPath);
         DOM.bip141semantics.on("change", tabChanged);
-        DOM.tab.on("shown.bs.tab", tabChanged);
+        DOM.tab.on("shown.bs.tab", function(e) {
+            // Fix Bootstrap active class management for initially hidden tabs (Electrum)
+            if (e.target.href.includes("electrum-")) {
+                DOM.electrumTabs.removeClass("active");
+                $(e.target).parent().addClass("active");
+            }
+            
+            tabChanged();
+        });
+        // Remove duplicate Electrum tab handlers since they're already handled by DOM.tab
         DOM.hardenedAddresses.on("change", calcForDerivationPath);
         DOM.electrumLegacyChange.on("change", electrumChangeAddressToggled);
         DOM.electrumSegwitChange.on("change", electrumChangeAddressToggled);
@@ -214,12 +402,38 @@
         DOM.addressToggle.on("click", toggleAddresses);
         DOM.publicKeyToggle.on("click", togglePublicKeys);
         DOM.privateKeyToggle.on("click", togglePrivateKeys);
-        DOM.csvTab.on("click", updateCsv);
+
+        DOM.csvTab.on("click", function(e) {
+            // Manually handle tab switching for Bootstrap 5
+            $('.addresses-type .nav-link').removeClass('active');
+            $('.addresses-type .tab-pane').removeClass('active show');
+            $(this).addClass('active');
+            $('#table').removeClass('active show');
+            
+            var tableCsv = generateCsvContent();
+            createCsvContainer(tableCsv);
+        });
+        // Also listen for Bootstrap 5 tab shown event
+        DOM.csvTab.on("shown.bs.tab", function(e) {
+            updateCsv();
+        });
+        
+        // Handle Table tab click
+        DOM.tableTab.on("click", function(e) {
+            $('.addresses-type .nav-link').removeClass('active');
+            $('.addresses-type .tab-pane').removeClass('active show');
+            $(this).addClass('active');
+            $('#table').addClass('active show');
+            $('.csv-data-container').remove();
+        });
         DOM.languages.on("click", languageChanged);
         DOM.bitcoinCashAddressType.on("change", bitcoinCashAddressTypeChange);
         setQrEvents(DOM.showQrEls);
         disableForms();
         hidePending();
+        
+        
+        
         hideValidationError();
         populateNetworkSelect();
         populateClientSelect();
@@ -348,6 +562,7 @@
     }
 
     function tabChanged() {
+        
         showPending();
         adjustNetworkForSegwit();
         // Handle Electrum tab field visibility
@@ -568,7 +783,7 @@
             $("#bip32-tab, #bip44-tab, #bip49-tab, #bip84-tab, #bip141-tab, #bip86-tab").addClass("hidden").removeClass("active");
             // Hide BIP tab content panels
             $("#bip32, #bip44, #bip49, #bip84, #bip141, #bip86").removeClass("active");
-            DOM.electrumTabs.removeClass("hidden");
+            DOM.electrumTabs.removeClass("hidden").show();
             // Activate first Electrum tab by default
             DOM.electrumLegacyTab.addClass("active");
             DOM.electrumLegacyTab.find("a").tab("show");
@@ -577,8 +792,7 @@
             // Set initial derivation path for Electrum Legacy
             DOM.electrumLegacyPath.val("m/");
             $("#electrum-legacy form").removeClass("hidden");
-            // Show spacer for Electrum
-            $(".electrum-spacer").removeClass("hidden");
+            // Spacer removed
             
             // Gray out/disable BIP39-specific fields (but keep passphrase enabled for Electrum)
             $(".entropy-container, .splitMnemonic").addClass("disabled-for-electrum");
@@ -601,15 +815,18 @@
             DOM.passphraseLabel.text("BIP39 Passphrase (optional)");
             // Show BIP tabs and hide Electrum tabs
             $("#bip32-tab, #bip44-tab, #bip49-tab, #bip84-tab, #bip141-tab, #bip86-tab").removeClass("hidden");
-            DOM.electrumTabs.addClass("hidden");
+            DOM.electrumTabs.addClass("hidden").hide();
             DOM.electrumTabPanels.removeClass("active");
+            // Remove active class from Electrum tabs
+            DOM.electrumLegacyTab.removeClass("active");
+            DOM.electrumSegwitTab.removeClass("active");
             // Hide Electrum form content
             $("#electrum-legacy form, #electrum-segwit form").addClass("hidden");
-            // Hide spacer for BIP39
-            $(".electrum-spacer").addClass("hidden");
+            // Spacer removed
             // Reactivate BIP44 tab as default
             $("#bip44-tab").addClass("active");
-            $("#bip44").addClass("active");
+            $("#bip44-tab a").addClass("active");
+            $("#bip44").addClass("active show");
             $("#bip44-tab a").tab("show");
             
             // Re-enable BIP39 fields
@@ -669,21 +886,52 @@
         calcForDerivationPath();
     }
 
-    // Generate Electrum addresses using proper Electrum derivation method
+    // Cache for Electrum seed and master keys to avoid expensive recalculation
+    var electrumCache = {
+        phrase: null,
+        passphrase: null,
+        prefix: null,
+        isSegwit: null,
+        seedBuffer: null,
+        masterKey: null
+    };
+
+    // Generate Electrum addresses using proper Electrum derivation method with caching
     function generateElectrumAddressData(phrase, passphrase, index) {
         var prefix = getElectrumPrefixFromTab();
         var isSegwit = electrumSegwitTabSelected();
         
         try {
-            // Generate seed using Electrum method
-            var seedBuffer = electrumMnemonic.mnemonicToSeedSync(phrase, { 
-                passphrase: passphrase || "",
-                prefix: prefix 
-            });
+            var masterKey;
             
-            // Create master key from Electrum seed - use correct network for each type
-            var keyNetwork = isSegwit ? network : bitcoinjs.bitcoin.networks.bitcoin;
-            var masterKey = bitcoinjs.bip32.fromSeed(seedBuffer, keyNetwork);
+            // Check if we can use cached seed and master key
+            if (electrumCache.phrase === phrase && 
+                electrumCache.passphrase === passphrase && 
+                electrumCache.prefix === prefix && 
+                electrumCache.isSegwit === isSegwit && 
+                electrumCache.seedBuffer && 
+                electrumCache.masterKey) {
+                // Use cached values
+                masterKey = electrumCache.masterKey;
+            } else {
+                // Generate new seed and master key
+                var seedBuffer = electrumMnemonic.mnemonicToSeedSync(phrase, { 
+                    passphrase: passphrase || "",
+                    prefix: prefix 
+                });
+                
+                // Create master key from Electrum seed - use correct network for each type
+                var keyNetwork = isSegwit ? network : bitcoinjs.bitcoin.networks.bitcoin;
+                masterKey = bitcoinjs.bip32.fromSeed(seedBuffer, keyNetwork);
+                
+                // Cache the results
+                electrumCache.phrase = phrase;
+                electrumCache.passphrase = passphrase;
+                electrumCache.prefix = prefix;
+                electrumCache.isSegwit = isSegwit;
+                electrumCache.seedBuffer = seedBuffer;
+                electrumCache.masterKey = masterKey;
+            }
             
             // Use Electrum's actual derivation paths - different for Legacy vs SegWit
             var key;
@@ -718,6 +966,7 @@
                     network: network 
                 }).address;
             }
+            
             
             return {
                 address: address,
@@ -840,6 +1089,11 @@
             displayElectrumSegwitInfo();
         }
         displayBip32Info();
+        
+        // Update CSV if CSV tab is currently visible - delay to ensure table is updated
+        setTimeout(function() {
+            updateCsvIfVisible();
+        }, 500);
     }
 
     function generateClicked() {
@@ -863,6 +1117,11 @@
                 return;
             }
             phraseChanged();
+            
+            // Update CSV if CSV tab is currently visible - additional delay to ensure table is updated
+            setTimeout(function() {
+                updateCsvIfVisible();
+            }, 500);
         }, 50);
     }
 
@@ -1739,6 +1998,11 @@
             }
         }
         displayAddresses(start, rowsToAdd);
+        
+        // Update CSV if CSV tab is currently visible - delay to ensure table rows are added
+        setTimeout(function() {
+            updateCsvIfVisible();
+        }, 500);
     }
 
     function clearDisplay() {
@@ -2316,11 +2580,11 @@
     }
 
     function bip44TabSelected() {
-        return DOM.bip44tab.hasClass("active");
+        return DOM.bip44tab.find(".nav-link").hasClass("active");
     }
 
     function bip32TabSelected() {
-        return DOM.bip32tab.hasClass("active");
+        return DOM.bip32tab.find(".nav-link").hasClass("active");
     }
 
 
@@ -2342,19 +2606,19 @@
     }
 
     function bip49TabSelected() {
-        return DOM.bip49tab.hasClass("active");
+        return DOM.bip49tab.find(".nav-link").hasClass("active");
     }
 
     function bip84TabSelected() {
-        return DOM.bip84tab.hasClass("active");
+        return DOM.bip84tab.find(".nav-link").hasClass("active");
     }
 
     function bip86TabSelected() {
-        return DOM.bip86tab.hasClass("active");
+        return DOM.bip86tab.find(".nav-link").hasClass("active");
     }
 
     function bip141TabSelected() {
-        return DOM.bip141tab.hasClass("active");
+        return DOM.bip141tab.find(".nav-link").hasClass("active");
     }
 
     function setHdCoin(coinValue) {
@@ -2478,23 +2742,7 @@
     }
 
     function updateCsv() {
-        var tableCsv = "path,address,public key,private key\n";
-        var rows = DOM.addresses.find("tr");
-        for (var i=0; i<rows.length; i++) {
-            var row = $(rows[i]);
-            var cells = row.find("td");
-            for (var j=0; j<cells.length; j++) {
-                var cell = $(cells[j]);
-                if (!cell.children().hasClass("invisible")) {
-                    tableCsv = tableCsv + cell.text();
-                }
-                if (j != cells.length - 1) {
-                    tableCsv = tableCsv + ",";
-                }
-            }
-            tableCsv = tableCsv + "\n";
-        }
-        DOM.csv.val(tableCsv);
+        // This function is no longer used - CSV generation is handled in the tab click event
     }
 
     function addSpacesEveryElevenBits(binaryStr) {

@@ -1,42 +1,41 @@
 <!DOCTYPE html>
-<html>
-    <head lang="en">
+<html lang="en">
+    <head>
         <meta charset="utf-8" />
         <title>BIP39 - Mnemonic Code</title>
-        <link rel="stylesheet" href="css/bootstrap.css">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" href="css/app.css">
-        <meta content="Mnemonic code for generating deterministic keys" name="description"/>
+        <meta content="Bitcoin mnemonic converter - Mnemonic code for generating deterministic keys" name="description"/>
         <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-        <meta content="bitcoin mnemonic converter" name="description" />
         <meta content="Ian Coleman" name="author" />
         <link type="image/x-icon" rel="icon" href="data:image/x-icon;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQEAYAAABPYyMiAAAABmJLR0T///////8JWPfcAAAACXBIWXMAAABIAAAASABGyWs+AAAAF0lEQVRIx2NgGAWjYBSMglEwCkbBSAcACBAAAeaR9cIAAAAASUVORK5CYII=" />
     </head>
     <body>
         <div class="container">
-            <div class="header-container">
-                <svg class="bitcoin-logo" onclick="location.reload()" style="cursor: pointer;" xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="100%" height="100%" version="1.1" shape-rendering="geometricPrecision" text-rendering="geometricPrecision" image-rendering="optimizeQuality" fill-rule="evenodd" clip-rule="evenodd" viewBox="0 0 4091.27 4091.73" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xodm="http://www.corel.com/coreldraw/odm/2003">
-                    <g id="Layer_x0020_1">
-                        <metadata id="CorelCorpID_0Corel-Layer"/>
-                        <g id="_1421344023328">
-                            <path fill="#F7931A" fill-rule="nonzero" d="M4030.06 2540.77c-273.24,1096.01 -1383.32,1763.02 -2479.46,1489.71 -1095.68,-273.24 -1762.69,-1383.39 -1489.33,-2479.31 273.12,-1096.13 1383.2,-1763.19 2479,-1489.95 1096.06,273.24 1763.03,1383.51 1489.76,2479.57l0.02 -0.02z"/>
-                            <path fill="var(--bg-color)" fill-rule="nonzero" d="M2947.77 1754.38c40.72,-272.26 -166.56,-418.61 -450,-516.24l91.95 -368.8 -224.5 -55.94 -89.51 359.09c-59.02,-14.72 -119.63,-28.59 -179.87,-42.34l90.16 -361.46 -224.36 -55.94 -92 368.68c-48.84,-11.12 -96.81,-22.11 -143.35,-33.69l0.26 -1.16 -309.59 -77.31 -59.72 239.78c0,0 166.56,38.18 163.05,40.53 90.91,22.69 107.35,82.87 104.62,130.57l-104.74 420.15c6.26,1.59 14.38,3.89 23.34,7.49 -7.49,-1.86 -15.46,-3.89 -23.73,-5.87l-146.81 588.57c-11.11,27.62 -39.31,69.07 -102.87,53.33 2.25,3.26 -163.17,-40.72 -163.17,-40.72l-111.46 256.98 292.15 72.83c54.35,13.63 107.61,27.89 160.06,41.3l-92.9 373.03 224.24 55.94 92 -369.07c61.26,16.63 120.71,31.97 178.91,46.43l-91.69 367.33 224.51 55.94 92.89 -372.33c382.82,72.45 670.67,43.24 791.83,-303.02 97.63,-278.78 -4.86,-439.58 -206.26,-544.44 146.69,-33.83 257.18,-130.31 286.64,-329.61l-0.07 -0.05zm-512.93 719.26c-69.38,278.78 -538.76,128.08 -690.94,90.29l123.28 -494.2c152.17,37.99 640.17,113.17 567.67,403.91zm69.43 -723.3c-63.29,253.58 -453.96,124.75 -580.69,93.16l111.77 -448.21c126.73,31.59 534.85,90.55 468.94,355.05l-0.02 0z"/>
-                        </g>
-                    </g>
-                </svg>
-                <div class="header-content">
-                    <h1 class="text-center">Bitcoin Mnemonic Code Converter</h1>
-                    <div class="text-center version">v1.0.2</div>
-                </div>
-                <button class="theme-toggle" onclick="toggleTheme()" id="theme-toggle">
-                    🌙/☀️
-                </button>
-            </div>
-            <hr>
             <div class="row">
+                <div class="header-container">
+                    <svg class="bitcoin-logo" onclick="location.reload()" style="cursor: pointer;" role="button" tabindex="0" aria-label="Reload page" xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="100%" height="100%" version="1.1" shape-rendering="geometricPrecision" text-rendering="geometricPrecision" image-rendering="optimizeQuality" fill-rule="evenodd" clip-rule="evenodd" viewBox="0 0 4091.27 4091.73" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xodm="http://www.corel.com/coreldraw/odm/2003">
+                        <g id="Layer_x0020_1">
+                            <metadata id="CorelCorpID_0Corel-Layer"/>
+                            <g id="_1421344023328">
+                                <path fill="#F7931A" fill-rule="nonzero" d="M4030.06 2540.77c-273.24,1096.01 -1383.32,1763.02 -2479.46,1489.71 -1095.68,-273.24 -1762.69,-1383.39 -1489.33,-2479.31 273.12,-1096.13 1383.2,-1763.19 2479,-1489.95 1096.06,273.24 1763.03,1383.51 1489.76,2479.57l0.02 -0.02z"/>
+                                <path fill="var(--bg-color)" fill-rule="nonzero" d="M2947.77 1754.38c40.72,-272.26 -166.56,-418.61 -450,-516.24l91.95 -368.8 -224.5 -55.94 -89.51 359.09c-59.02,-14.72 -119.63,-28.59 -179.87,-42.34l90.16 -361.46 -224.36 -55.94 -92 368.68c-48.84,-11.12 -96.81,-22.11 -143.35,-33.69l0.26 -1.16 -309.59 -77.31 -59.72 239.78c0,0 166.56,38.18 163.05,40.53 90.91,22.69 107.35,82.87 104.62,130.57l-104.74 420.15c6.26,1.59 14.38,3.89 23.34,7.49 -7.49,-1.86 -15.46,-3.89 -23.73,-5.87l-146.81 588.57c-11.11,27.62 -39.31,69.07 -102.87,53.33 2.25,3.26 -163.17,-40.72 -163.17,-40.72l-111.46 256.98 292.15 72.83c54.35,13.63 107.61,27.89 160.06,41.3l-92.9 373.03 224.24 55.94 92 -369.07c61.26,16.63 120.71,31.97 178.91,46.43l-91.69 367.33 224.51 55.94 92.89 -372.33c382.82,72.45 670.67,43.24 791.83,-303.02 97.63,-278.78 -4.86,-439.58 -206.26,-544.44 146.69,-33.83 257.18,-130.31 286.64,-329.61l-0.07 -0.05zm-512.93 719.26c-69.38,278.78 -538.76,128.08 -690.94,90.29l123.28 -494.2c152.17,37.99 640.17,113.17 567.67,403.91zm69.43 -723.3c-63.29,253.58 -453.96,124.75 -580.69,93.16l111.77 -448.21c126.73,31.59 534.85,90.55 468.94,355.05l-0.02 0z"/>
+                            </g>
+                        </g>
+                    </svg>
+                    <div class="header-content">
+                        <h1 class="text-center">Bitcoin Mnemonic Code Converter</h1>
+                        <div class="text-center version">v1.0.2</div>
+                    </div>
+                    <button class="theme-toggle" onclick="toggleTheme()" id="theme-toggle" aria-label="Toggle dark/light theme">
+                        <span aria-hidden="true">🌙/☀️</span>
+                    </button>
+                </div>
                 <div class="col-md-12">
+                    <hr>
                     <h2>Mnemonic</h2>
-                    <form class="form-horizontal" role="form">
-                        <div class="form-group">
+                    <form role="form">
+                        <div class="mb-3 row">
                             <div class="col-sm-2"></div>
                             <div class="col-sm-10">
                                 <p class="mnemonic-description bip39-description">You can enter an existing BIP39 mnemonic, or generate a new random one. Typing your own twelve words will probably not work how you expect, since the words require a particular structure (the last word contains a checksum).</p>
@@ -60,40 +59,40 @@
                                 </p>
                             </div>
                         </div>
-                        <div class="form-group generate-container">
-                            <label class="col-sm-2 control-label"></label>
+                        <div class="mb-3 row generate-container">
+                            <div class="col-sm-2">
+                                <label class="form-label"></label>
+                            </div>
                             <div class="col-sm-10">
-                                <div class="form-inline">
-                                    <div class="input-group-inline">
-                                         <span>Generate a random mnemonic</span>:
-                                        <button class="btn generate" ><b>GENERATE</b></button>
-                                        <select id="strength" class="strength form-control">
-                                            <option value="12">12</option>
-                                            <option value="15">15</option>
-                                            <option value="18">18</option>
-                                            <option value="21">21</option>
-                                            <option value="24" selected>24</option>
-                                        </select>
-                                        <span>words, or enter your own below</span>.
-                                        <p class="warning help-block hidden">
+                                <div class="d-flex align-items-center gap-2 flex-wrap">
+                                    <span>Generate a random mnemonic:</span>
+                                    <button class="btn btn-primary generate fw-bold">GENERATE</button>
+                                    <select id="strength" class="strength form-select w-auto">
+                                        <option value="12">12</option>
+                                        <option value="15">15</option>
+                                        <option value="18">18</option>
+                                        <option value="21">21</option>
+                                        <option value="24" selected>24</option>
+                                    </select>
+                                    <span>words, or enter your own below.</span>
+                                        <p class="warning form-text hidden">
                                             <span class="text-danger">
                                                 Mnemonics with less than 12 words have low entropy and may be guessed by an attacker.
                                             </span>
                                         </p>
-                                    </div>
                                 </div>
                             </div>
                         </div>
                         <div class="entropy-container hidden">
-                            <div class="form-group text-danger">
-                                <label class="col-sm-2 control-label">Warning</label>
-                                <div class="col-sm-10 form-control-static">
+                            <div class="mb-3 row text-danger">
+                                <label class="col-sm-2 form-label">Warning</label>
+                                <div class="col-sm-10 form-text">
                                     <span>Entropy is an advanced feature. Your mnemonic may be insecure if this feature is used incorrectly.</span>
                                     <a href="#entropy-notes">Read more</a>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label for="entropy" class="col-sm-2 control-label">Entropy</label>
+                            <div class="mb-3 row">
+                                <label for="entropy" class="col-sm-2 form-label">Entropy</label>
                                 <div class="col-sm-7">
                                     <textarea id="entropy" rows="2" class="entropy private-data form-control" placeholder="Accepts either binary, base 6, 6-sided dice, base 10, hexadecimal or cards" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
                                     <div class="row filter-warning text-danger hidden">
@@ -112,44 +111,44 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-group entropy-sha256-display hidden">
-                                <label for="entropy-sha256" class="col-sm-2 control-label">SHA256 Hashed</label>
+                            <div class="mb-3 row entropy-sha256-display hidden">
+                                <label for="entropy-sha256" class="col-sm-2 form-label">SHA256 Hashed</label>
                                 <div class="col-sm-7">
                                     <textarea id="entropy-sha256" rows="2" class="entropy-sha256 private-data form-control" readonly></textarea>
                                 </div>
                             </div>
-                            <div class="form-group">
+                            <div class="mb-3 row">
                                 <div class="col-sm-2"></div>
                                 <div class="col-sm-7">
                                     <div class="row">
-                                        <label class="col-sm-3 control-label"><span class="more-info" title="Based on estimates from zxcvbn using Filtered Entropy">Time To Crack</span></label>
-                                        <div class="crack-time col-sm-3 form-control-static"></div>
-                                        <label class="col-sm-3 control-label">Event Count</label>
-                                        <div class="event-count col-sm-3 form-control-static"></div>
+                                        <label class="col-sm-3 form-label"><span class="more-info" title="Based on estimates from zxcvbn using Filtered Entropy">Time To Crack</span></label>
+                                        <div class="crack-time col-sm-3 form-text"></div>
+                                        <label class="col-sm-3 form-label">Event Count</label>
+                                        <div class="event-count col-sm-3 form-text"></div>
                                     </div>
                                     <div class="row">
-                                        <label class="col-sm-3 control-label">Entropy Type</label>
-                                        <div class="type col-sm-3 form-control-static"></div>
-                                        <label class="col-sm-3 control-label">Avg Bits Per Event</label>
-                                        <div class="bits-per-event col-sm-3 form-control-static"></div>
+                                        <label class="col-sm-3 form-label">Entropy Type</label>
+                                        <div class="type col-sm-3 form-text"></div>
+                                        <label class="col-sm-3 form-label">Avg Bits Per Event</label>
+                                        <div class="bits-per-event col-sm-3 form-text"></div>
                                     </div>
                                     <div class="row">
-                                        <label class="col-sm-3 control-label">Raw Entropy Words</label>
-                                        <div class="word-count col-sm-3 form-control-static"></div>
-                                        <label class="col-sm-3 control-label"><span class="more-info" title="Total bits of entropy may be less than indicated if any entropy event uses a weak source.">Total Bits</span></label>
-                                        <div class="bits col-sm-3 form-control-static"></div>
+                                        <label class="col-sm-3 form-label">Raw Entropy Words</label>
+                                        <div class="word-count col-sm-3 form-text"></div>
+                                        <label class="col-sm-3 form-label"><span class="more-info" title="Total bits of entropy may be less than indicated if any entropy event uses a weak source.">Total Bits</span></label>
+                                        <div class="bits col-sm-3 form-text"></div>
                                     </div>
-                                    <label class="col-sm-3 control-label">Filtered Entropy</label>
-                                    <div class="filtered private-data col-sm-9 form-control-static"></div>
-                                    <label class="col-sm-3 control-label">Raw Binary</label>
-                                    <div class="binary private-data col-sm-9 form-control-static"></div>
-                                    <label class="col-sm-3 control-label">Binary Checksum</label>
-                                    <div class="checksum private-data col-sm-9 form-control-static">&nbsp;</div>
-                                    <label class="col-sm-3 control-label">Word Indexes</label>
-                                    <div class="word-indexes private-data col-sm-9 form-control-static">&nbsp;</div>
-                                    <label class="col-sm-3 control-label">Mnemonic Length</label>
+                                    <label class="col-sm-3 form-label">Filtered Entropy</label>
+                                    <div class="filtered private-data col-sm-9 form-text"></div>
+                                    <label class="col-sm-3 form-label">Raw Binary</label>
+                                    <div class="binary private-data col-sm-9 form-text"></div>
+                                    <label class="col-sm-3 form-label">Binary Checksum</label>
+                                    <div class="checksum private-data col-sm-9 form-text">&nbsp;</div>
+                                    <label class="col-sm-3 form-label">Word Indexes</label>
+                                    <div class="word-indexes private-data col-sm-9 form-text">&nbsp;</div>
+                                    <label class="col-sm-3 form-label">Mnemonic Length</label>
                                     <div class="col-sm-9">
-                                        <select class="mnemonic-length form-control">
+                                        <select class="mnemonic-length form-select">
                                             <option value="raw" selected>Use Raw Entropy (3 words per 32 bits)</option>
                                             <option value="12">12 <span>Words</span></option>
                                             <option value="15">15 <span>Words</span></option>
@@ -163,9 +162,9 @@
                                             </span>
                                         </p>
                                     </div>
-                                    <label class="col-sm-3 control-label">PBKDF2 rounds</label>
+                                    <label class="col-sm-3 form-label">PBKDF2 rounds</label>
                                     <div class="col-sm-9">
-                                        <select class="pbkdf2-rounds form-control" style="width: 60%;float: left;">
+                                        <select class="pbkdf2-rounds form-select" style="width: 60%;">
                                             <option value="2048" selected>2048 <span>(compatibility)</span></option>
                                             <option value="4096">4096 <span>iterations</span></option>
                                             <option value="8192">8192 <span>iterations</span></option>
@@ -173,7 +172,7 @@
                                             <option value="32768">32768 <span>iterations</span></option>
                                             <option value="custom">Custom <span>iterations</span></option>
                                         </select>
-                                        <input type="number" class="form-control hidden" id="pbkdf2-custom-input" value="1" min="1" pattern="[0-9]" style="float: right;width: 40%;">
+                                        <input type="number" class="form-control hidden" id="pbkdf2-custom-input" value="1" min="1" style="float: right;width: 40%;">
                                     </div>
                                 </div>
                                 <div class="col-sm-3">
@@ -219,37 +218,37 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group">
+                        <div class="mb-3 row">
                             <div class="col-sm-2"></div>
-                            <div class="col-sm-10 checkbox">
-                                <label>
-                                    <input type="checkbox" class="use-entropy">
-                                    <span>Show entropy details</span>
-                                </label>
+                            <div class="col-sm-10">
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input use-entropy" id="use-entropy">
+                                    <label class="form-check-label" for="use-entropy">Show entropy details</label>
+                                </div>
                             </div>
                         </div>
-                        <div class="form-group">
+                        <div class="mb-3 row">
                             <div class="col-sm-2"></div>
-                            <div class="col-sm-10 checkbox">
-                                <label>
-                                    <input type="checkbox" class="privacy-screen-toggle">
-                                    <span>Hide all private info</span>
-                                </label>
+                            <div class="col-sm-10">
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input privacy-screen-toggle" id="privacy-screen-toggle">
+                                    <label class="form-check-label" for="privacy-screen-toggle">Hide all private info</label>
+                                </div>
                             </div>
                         </div>
-                        <div class="form-group">
+                        <div class="mb-3 row">
                             <div class="col-sm-2"></div>
-                            <div class="col-sm-10 checkbox">
-                                <label>
-                                    <input type="checkbox" class="autoCompute" checked>
-                                    <span>Auto compute</span>
-                                </label>
+                            <div class="col-sm-10">
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input autoCompute" id="autoCompute" checked>
+                                    <label class="form-check-label" for="autoCompute">Auto compute</label>
+                                </div>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">Mnemonic Language</label>
+                        <div class="mb-3 row">
+                            <label class="col-sm-2 form-label">Mnemonic Language</label>
                             <div class="col-sm-10 languages">
-                                <div class="form-control no-border">
+                                <div class="border-0">
                                     <a href="#english">English</a>
                                     <a href="#japanese" title="Japanese">日本語</a>
                                     <a href="#spanish"  title="Spanish">Español</a>
@@ -263,99 +262,98 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group text-danger PBKDF2-infos-danger hidden">
-                            <label class="col-sm-2 control-label">Warning</label>
-                            <div class="col-sm-10 form-control-static">
+                        <div class="mb-3 row text-danger PBKDF2-infos-danger hidden">
+                            <label class="col-sm-2 form-label">Warning</label>
+                            <div class="col-sm-10 form-text">
                                 <span>You are using a custom number of PBKDF2 iterations. Your BIP39 seed may not show same addresses on a different software.</span>
                                 <a href="#PBKDF2-notes">Read more</a>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label for="mnemonic-type" class="col-sm-2 control-label">Mnemonic Type</label>
+                        <div class="mb-3 row">
+                            <label for="mnemonic-type" class="col-sm-2 form-label">Mnemonic Type</label>
                             <div class="col-sm-10">
-                                <select id="mnemonic-type" class="mnemonic-type form-control">
+                                <select id="mnemonic-type" class="mnemonic-type form-select">
                                     <option value="bip39" selected>BIP39</option>
                                     <option value="electrum">Electrum</option>
                                 </select>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label for="phrase" class="col-sm-2 control-label"><span class="mnemonic-label">BIP39</span> Mnemonic</label>
+                        <div class="mb-3 row">
+                            <label for="phrase" class="col-sm-2 form-label"><span class="mnemonic-label">BIP39</span> Mnemonic</label>
                             <div class="col-sm-10">
                                 <textarea id="phrase" class="phrase private-data form-control" data-show-qr autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <div  class="splitMnemonic hidden">
-                                <label for="phrase" class="col-sm-2 control-label">BIP39 Split Mnemonic</label>
+                        <div class="mb-3 row">
+                            <div class="splitMnemonic hidden row">
+                                <label for="phrase" class="col-sm-2 form-label">BIP39 Split Mnemonic</label>
                                 <div class="col-sm-10">
                                     <textarea id="phraseSplit" class="phraseSplit private-data form-control" title="Only 2 of 3 cards needed to recover." rows="3"></textarea>
-                                    <p class="help-block">
+                                    <p class="form-text">
                                         <span id="phraseSplitWarn" class="phraseSplitWarn"></span>
                                     </p>
                                 </div>
                             </div>
-                            <div class="col-sm-2">
-                            </div>
+                            <div class="col-sm-2"></div>
                             <div class="col-sm-10">
-                                <label class="control-label text-weight-normal">
-                                    <input type="checkbox" class="showSplitMnemonic">
-                                    Show split mnemonic cards
-                                </label>
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input showSplitMnemonic" id="showSplitMnemonic">
+                                    <label class="form-check-label" for="showSplitMnemonic">Show split mnemonic cards</label>
+                                </div>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label for="passphrase" class="col-sm-2 control-label">BIP39 Passphrase (optional)</label>
+                        <div class="mb-3 row">
+                            <label for="passphrase" class="col-sm-2 form-label">BIP39 Passphrase (optional)</label>
                             <div class="col-sm-10">
                                 <textarea id="passphrase" class="passphrase private-data form-control" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label for="seed" class="col-sm-2 control-label">BIP39 Seed</label>
+                        <div class="mb-3 row">
+                            <label for="seed" class="col-sm-2 form-label">BIP39 Seed</label>
                             <div class="col-sm-10">
                                 <textarea id="seed" class="seed private-data form-control" data-show-qr autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label for="network-phrase" class="col-sm-2 control-label">Coin</label>
+                        <div class="mb-3 row">
+                            <label for="network-phrase" class="col-sm-2 form-label">Coin</label>
                             <div class="col-sm-10">
-                                <select id="network-phrase" class="network form-control">
+                                <select id="network-phrase" class="network form-select">
                                     <!-- populated by javascript -->
                                 </select>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label for="root-key" class="col-sm-2 control-label">BIP32 Root Key</label>
+                        <div class="mb-3 row">
+                            <label for="root-key" class="col-sm-2 form-label">BIP32 Root Key</label>
                             <div class="col-sm-10">
                                 <textarea id="root-key" class="root-key private-data form-control" data-show-qr autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
                             </div>
                         </div>
 
-                        <div class="form-group">
-                            <label for="fingerprint" class="col-sm-2 control-label">Fingerprint</label>
+                        <div class="mb-3 row">
+                            <label for="fingerprint" class="col-sm-2 form-label">Fingerprint</label>
                             <div class="col-sm-10">
-                                <input id="fingerprint" class="fingerprint form-control" readonly="readonly" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+                                <input id="fingerprint" class="fingerprint form-control" readonly autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
                             </div>
                         </div>
 
-                        <div class="form-group">
+                        <div class="mb-3 row">
                             <div class="col-sm-2"></div>
                             <div class="col-sm-10">
-                                <label class="control-label text-weight-normal">
-                                    <input type="checkbox" class="showBip85" />
-                                    Show BIP85
-                                </label>
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input showBip85" id="showBip85">
+                                    <label class="form-check-label" for="showBip85">Show BIP85</label>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="form-group bip85 hidden">
-                            <div class="form-group text-danger">
-                                <label class="col-sm-2 control-label">Warning</label>
-                                <div class="col-sm-10 form-control-static">
+                        <div class="bip85 hidden">
+                            <div class="mb-3 row text-danger row">
+                                <label class="col-sm-2 form-label">Warning</label>
+                                <div class="col-sm-10 form-text">
                                     This is an advanced feature and should only be used if you understand what it does.
                                 </div>
                             </div>
-                            <div class="form-group">
+                            <div class="mb-3 row">
                                 <label class="col-sm-2"></label>
                                 <div class="col-sm-10">
                                     <p>
@@ -375,9 +373,11 @@
                                     </p>
                                 </div>
                             </div>
-                            <label for="bip85-application" class="col-sm-2 control-label">BIP85 Application</label>
+                        </div>
+                        <div class="mb-3 row bip85 hidden">
+                            <label for="bip85-application" class="col-sm-2 form-label">BIP85 Application</label>
                             <div class="col-sm-10">
-                                <select id="bip85-application" class="form-control">
+                                <select id="bip85-application" class="form-select">
                                     <option value="bip39" selected>BIP39</option>
                                     <option value="wif">WIF</option>
                                     <option value="xprv">Xprv</option>
@@ -386,10 +386,10 @@
                             </div>
                         </div>
 
-                        <div class="form-group bip85 bip85-mnemonic-language-input hidden">
-                            <label for="bip85-mnemonic-language" class="col-sm-2 control-label">BIP85 Mnemonic Language</label>
-                            <div class="col-sm-10 languages">
-                                <select id="bip85-mnemonic-language" class="strength form-control">
+                        <div class="mb-3 row bip85 bip85-mnemonic-language-input hidden">
+                            <label for="bip85-mnemonic-language" class="col-sm-2 form-label">BIP85 Mnemonic Language</label>
+                            <div class="col-sm-10">
+                                <select id="bip85-mnemonic-language" class="strength form-select">
                                     <option value="0" selected>English</option>
                                     <!--<option value="1">日本語</option>
                                     <option value="2">한국어</option>
@@ -404,10 +404,10 @@
                             </div>
                         </div>
 
-                        <div class="form-group bip85 bip85-mnemonic-length-input hidden">
-                            <label for="bip85-mnemonic-length" class="col-sm-2 control-label">BIP85 Mnemonic Length</label>
+                        <div class="mb-3 row bip85 bip85-mnemonic-length-input hidden">
+                            <label for="bip85-mnemonic-length" class="col-sm-2 form-label">BIP85 Mnemonic Length</label>
                             <div class="col-sm-10">
-                                <select id="bip85-mnemonic-length" class="strength form-control">
+                                <select id="bip85-mnemonic-length" class="strength form-select">
                                     <option value="12" selected>12</option>
                                     <option value="18">18</option>
                                     <option value="24">24</option>
@@ -415,24 +415,24 @@
                             </div>
                         </div>
 
-                        <div class="form-group bip85 hidden">
+                        <div class="mb-3 row bip85 hidden">
                             <span class="bip85-bytes-input">
-                                <label for="bip85-bytes" class="col-sm-2 control-label">BIP85 Bytes</label>
+                                <label for="bip85-bytes" class="col-sm-2 form-label">BIP85 Bytes</label>
                                 <div class="col-sm-10">
                                     <input id="bip85-bytes" type="text" class="change form-control" value="64" />
                                 </div>
                             </span>
                         </div>
 
-                        <div class="form-group bip85 bip85-index-input hidden">
-                            <label for="bip85-index" class="col-sm-2 control-label">BIP85 Index</label>
+                        <div class="mb-3 row bip85 bip85-index-input hidden">
+                            <label for="bip85-index" class="col-sm-2 form-label">BIP85 Index</label>
                             <div class="col-sm-10">
                                 <input id="bip85-index" type="text" class="change form-control" value="0" />
                             </div>
                         </div>
 
-                        <div class="form-group bip85 hidden">
-                            <label for="phrase" class="col-sm-2 control-label">BIP85 Child Key</label>
+                        <div class="mb-3 row bip85 hidden">
+                            <label for="bip85Field" class="col-sm-2 form-label">BIP85 Child Key</label>
                             <div class="col-sm-10">
                                 <textarea
                                     id="bip85Field"
@@ -444,137 +444,131 @@
                             </div>
                         </div>
 
-                        <div class="form-group litecoin-ltub-container hidden">
-                            <label for="litecoin-use-ltub" class="col-sm-2 control-label">Prefixes</label>
-                            <div class="col-sm-10 checkbox">
-                                <label>
-                                    <input type="checkbox" id="litecoin-use-ltub" class="litecoin-use-ltub" checked="checked">
-                                    Use <code>Ltpv / Ltub</code> instead of <code>xprv / xpub</code>
-                                </label>
-                            </div>
-                        </div>
                     </form>
                 </div>
             </div>
 
             <hr>
 
+            <!-- Merged into single container for consistent alignment -->
             <div class="row">
                 <div class="col-md-12">
                     <h2>Derivation Path</h2>
                     <ul class="derivation-type nav nav-tabs" role="tablist">
-                        <li id="bip32-tab">
-                            <a href="#bip32" role="tab" data-toggle="tab">BIP32</a>
+                        <li class="nav-item" id="bip32-tab">
+                            <a class="nav-link" href="#bip32" role="tab" data-bs-toggle="tab">BIP32</a>
                         </li>
-                        <li id="bip44-tab" class="active">
-                            <a href="#bip44" role="tab" data-toggle="tab">BIP44</a>
+                        <li class="nav-item" id="bip44-tab">
+                            <a class="nav-link active" href="#bip44" role="tab" data-bs-toggle="tab">BIP44</a>
                         </li>
-                        <li id="bip49-tab">
-                            <a href="#bip49" role="tab" data-toggle="tab">BIP49</a>
+                        <li class="nav-item" id="bip49-tab">
+                            <a class="nav-link" href="#bip49" role="tab" data-bs-toggle="tab">BIP49</a>
                         </li>
-                        <li id="bip84-tab">
-                            <a href="#bip84" role="tab" data-toggle="tab">BIP84</a>
+                        <li class="nav-item" id="bip84-tab">
+                            <a class="nav-link" href="#bip84" role="tab" data-bs-toggle="tab">BIP84</a>
                         </li>
-                        <li id="bip141-tab">
-                            <a href="#bip141" role="tab" data-toggle="tab">BIP141</a>
+                        <li class="nav-item" id="bip141-tab">
+                            <a class="nav-link" href="#bip141" role="tab" data-bs-toggle="tab">BIP141</a>
                         </li>
-                        <li id="bip86-tab">
-                            <a href="#bip86" role="tab" data-toggle="tab">BIP86</a>
+                        <li class="nav-item" id="bip86-tab">
+                            <a class="nav-link" href="#bip86" role="tab" data-bs-toggle="tab">BIP86</a>
                         </li>
-                        <li id="electrum-legacy-tab" class="electrum-tab hidden">
-                            <a href="#electrum-legacy" role="tab" data-toggle="tab">Electrum Legacy</a>
+                        <li class="nav-item" id="electrum-legacy-tab" style="display: none;">
+                            <a class="nav-link" href="#electrum-legacy" role="tab" data-bs-toggle="tab">Electrum Legacy</a>
                         </li>
-                        <li id="electrum-segwit-tab" class="electrum-tab hidden">
-                            <a href="#electrum-segwit" role="tab" data-toggle="tab">Electrum SegWit</a>
+                        <li class="nav-item" id="electrum-segwit-tab" style="display: none;">
+                            <a class="nav-link" href="#electrum-segwit" role="tab" data-bs-toggle="tab">Electrum SegWit</a>
                         </li>
                     </ul>
                     <div class="derivation-type tab-content">
                         <div id="bip44" class="tab-pane active">
-                            <form class="form-horizontal" role="form">
-                                <br>
-                                <div class="col-sm-2"></div>
-                                <div class="col-sm-10">
+                            <form role="form">
+                                <div class="row mt-3">
+                                    <div class="col-sm-2"></div>
+                                    <div class="col-sm-10">
                                     <p>
                                         For more info see the
                                         <a href="https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki" target="_blank">BIP44 spec</a>.
                                     </p>
+                                    </div>
                                 </div>
-                                <div class="form-group">
-                                    <label for="purpose-bip44" class="col-sm-2 control-label">
+                                <div class="mb-3 row">
+                                    <label for="purpose-bip44" class="col-sm-2 form-label">
                                         <a href="https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki#purpose" target="_blank">Purpose</a>
                                     </label>
                                     <div class="col-sm-10">
                                         <input id="purpose-bip44" type="text" class="purpose form-control" value="44" readonly>
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <label for="coin-bip44" class="col-sm-2 control-label">
+                                <div class="mb-3 row">
+                                    <label for="coin-bip44" class="col-sm-2 form-label">
                                         <a href="https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki#registered-coin-types" target="_blank">Coin</a>
                                     </label>
                                     <div class="col-sm-10">
                                         <input id="coin-bip44" type="text" class="coin form-control" value="0" readonly>
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <label for="account-bip44" class="col-sm-2 control-label">
+                                <div class="mb-3 row">
+                                    <label for="account-bip44" class="col-sm-2 form-label">
                                         <a href="https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki#account" target="_blank">Account</a>
                                     </label>
                                     <div class="col-sm-10">
                                         <input id="account-bip44" type="text" class="account form-control" value="0">
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <label for="change-bip44" class="col-sm-2 control-label">
+                                <div class="mb-3 row">
+                                    <label for="change-bip44" class="col-sm-2 form-label">
                                         <a href="https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki#change" target="_blank">External / Internal</a>
                                     </label>
                                     <div class="col-sm-10">
                                       <input id="change-bip44" type="text" class="change form-control" value="0">
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <label class="col-sm-2 control-label">
+                                <div class="mt-4 mb-2 row">
+                                    <label class="col-sm-2 form-label">
                                     </label>
                                     <div class="col-sm-10">
-                                        <p>The account extended keys can be used for importing to most BIP44 compatible wallets, such as mycelium or electrum.</p>
+                                        <p>The account extended keys can be used for importing to compatible wallets, such as sparrow or electrum. Import the account extended public key for a watch only wallet.</p>
+                                        <p class="text-danger"><strong>Never import the account extended private key (or any private key) to an internet connected device, unless you fully understand and accept the risks.</strong></p>
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <label for="account-xprv" class="col-sm-2 control-label">
+                                <div class="mt-1 mb-3 row">
+                                    <label for="account-xprv" class="col-sm-2 form-label">
                                         <span>Account Extended Private Key</span>
                                     </label>
                                     <div class="col-sm-10">
-                                        <textarea id="account-xprv-bip44" type="text" class="account-xprv private-data form-control" readonly data-show-qr autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
+                                        <textarea id="account-xprv-bip44" class="account-xprv private-data form-control" readonly data-show-qr autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <label for="account-xpub" class="col-sm-2 control-label">
+                                <div class="mb-3 row">
+                                    <label for="account-xpub" class="col-sm-2 form-label">
                                         <span>Account Extended Public Key</span>
                                     </label>
                                     <div class="col-sm-10">
-                                        <textarea id="account-xpub-bip44" type="text" class="account-xpub form-control" readonly data-show-qr autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
+                                        <textarea id="account-xpub-bip44" class="account-xpub form-control" readonly data-show-qr autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <label class="col-sm-2 control-label">
+                                <div class="mb-3 row">
+                                    <label class="col-sm-2 form-label">
                                     </label>
                                     <div class="col-sm-10">
                                         <p>The BIP32 derivation path and extended keys are the basis for the derived addresses.</p>
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <label for="bip44-path" class="col-sm-2 control-label">BIP32 Derivation Path</label>
+                                <div class="mb-3 row">
+                                    <label for="bip44-path" class="col-sm-2 form-label">BIP32 Derivation Path</label>
                                     <div class="col-sm-10">
-                                        <input id="bip44-path" type="text" class="path form-control" value="m/44'/0'/0'/0" readonly="readonly">
+                                        <input id="bip44-path" type="text" class="path form-control" value="m/44'/0'/0'/0" readonly>
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <label for="bip32-extended-priv-key-bip44" class="col-sm-2 control-label">BIP32 Extended Private Key</label>
+                                <div class="mb-3 row">
+                                    <label for="bip32-extended-priv-key-bip44" class="col-sm-2 form-label">BIP32 Extended Private Key</label>
                                     <div class="col-sm-10">
                                         <textarea id="bip32-extended-priv-key-bip44" class="extended-priv-key private-data form-control" readonly data-show-qr autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <label for="bip32-extended-pub-key-bip44" class="col-sm-2 control-label">BIP32 Extended Public Key</label>
+                                <div class="mb-3 row">
+                                    <label for="bip32-extended-pub-key-bip44" class="col-sm-2 form-label">BIP32 Extended Public Key</label>
                                     <div class="col-sm-10">
                                         <textarea id="bip32-extended-pub-key-bip44" class="extended-pub-key form-control" readonly data-show-qr autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
                                     </div>
@@ -582,75 +576,76 @@
                             </form>
                         </div>
                         <div id="bip32" class="tab-pane">
-                            <form class="form-horizontal" role="form">
-                                <br>
-                                <div class="col-sm-2"></div>
-                                <div class="col-sm-10">
+                            <form role="form">
+                                <div class="row mt-3">
+                                    <div class="col-sm-2"></div>
+                                    <div class="col-sm-10">
                                     <p>
                                         For more info see the
                                         <a href="https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki" target="_blank">BIP32 spec</a>
                                     </p>
+                                    </div>
                                 </div>
-                                <div class="form-group">
-                                    <label for="bip32-client" class="col-sm-2 control-label">Client</label>
+                                <div class="mb-3 row">
+                                    <label for="bip32-client" class="col-sm-2 form-label">Client</label>
                                     <div class="col-sm-10">
-                                        <select id="bip32-client" class="client form-control">
+                                        <select id="bip32-client" class="client form-select">
                                             <option value="custom">Custom derivation path</option>
                                             <!-- populated by javascript -->
                                         </select>
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <label for="bip32-path" class="col-sm-2 control-label">BIP32 Derivation Path</label>
+                                <div class="mb-3 row">
+                                    <label for="bip32-path" class="col-sm-2 form-label">BIP32 Derivation Path</label>
                                     <div class="col-sm-10">
                                         <input id="bip32-path" type="text" class="path form-control" value="m/0">
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <label for="bip32-extended-priv-key-bip32" class="col-sm-2 control-label">BIP32 Extended Private Key</label>
+                                <div class="mb-3 row">
+                                    <label for="bip32-extended-priv-key-bip32" class="col-sm-2 form-label">BIP32 Extended Private Key</label>
                                     <div class="col-sm-10">
                                         <textarea id="bip32-extended-priv-key-bip32" class="extended-priv-key private-data form-control" readonly data-show-qr autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <label for="bip32-extended-pub-key-bip32" class="col-sm-2 control-label">BIP32 Extended Public Key</label>
+                                <div class="mb-3 row">
+                                    <label for="bip32-extended-pub-key-bip32" class="col-sm-2 form-label">BIP32 Extended Public Key</label>
                                     <div class="col-sm-10">
                                         <textarea id="bip32-extended-pub-key-bip32" class="extended-pub-key form-control" readonly data-show-qr autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <label for="core-path" class="col-sm-2 control-label">Bitcoin Core</label>
+                                <div class="mb-3 row">
+                                    <label for="core-path" class="col-sm-2 form-label">Bitcoin Core</label>
                                     <div class="col-sm-10">
-                                        <p class="form-control no-border">
+                                        <p class="border-0">
                                         Use path <code>m/0'/0'</code> with hardened addresses.
                                         </p>
-                                        <p class="form-control no-border">
+                                        <p class="border-0">
                                             For more info see the
                                             <a href="https://github.com/bitcoin/bitcoin/pull/8035" target="_blank">Bitcoin Core BIP32 implementation</a>
                                         </p>
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <label for="core-path" class="col-sm-2 control-label">Multibit</label>
+                                <div class="mb-3 row">
+                                    <label for="core-path" class="col-sm-2 form-label">Multibit</label>
                                     <div class="col-sm-10">
-                                        <p class="form-control no-border">
+                                        <p class="border-0">
                                             <span>Use path <code>m/0'/0</code>.</span>
                                             <span>For change addresses use path <code>m/0'/1</code>.</span>
                                         </p>
-                                        <p class="form-control no-border">
+                                        <p class="border-0">
                                             <span>For more info see</span>
                                             <a href="https://multibit.org/" target="_blank">MultiBit HD</a>
                                         </p>
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <label class="col-sm-2 control-label">Block Explorers</label>
+                                <div class="mb-3 row">
+                                    <label class="col-sm-2 form-label">Block Explorers</label>
                                     <div class="col-sm-10">
-                                        <p class="form-control no-border">
+                                        <p class="border-0">
                                             <span>Use path <code>m/44'/0'/0'</code>.</span>
                                             <span>Only enter the <code>xpub</code> extended key into block explorer search fields, never the <code>xprv</code> key.</span>
                                         </p>
-                                        <p class="form-control no-border">
+                                        <p class="border-0">
                                             <span>Can be used with</span>:
                                             <a href="https://blockchain.info/" target="_blank">blockchain.info</a>
                                         </p>
@@ -659,10 +654,9 @@
                             </form>
                         </div>
                         <div id="bip49" class="tab-pane">
-                            <form class="form-horizontal" role="form">
-                                <br>
+                            <form role="form">
                                 <div class="unavailable hidden">
-                                    <div class="form-group">
+                                    <div class="mb-3 row">
                                         <div class="col-sm-2"></div>
                                         <div class="col-sm-10">
                                             <p>BIP49 is unavailable for this coin.</p>
@@ -670,89 +664,92 @@
                                     </div>
                                 </div>
                                 <div class="available">
-                                    <div class="col-sm-2"></div>
-                                    <div class="col-sm-10">
-                                        <p>
-                                            For more info see the
-                                            <a href="https://github.com/bitcoin/bips/blob/master/bip-0049.mediawiki" target="_blank">BIP49 spec</a>.
-                                        </p>
+                                    <div class="row mt-3">
+                                        <div class="col-sm-2"></div>
+                                        <div class="col-sm-10">
+                                            <p>
+                                                For more info see the
+                                                <a href="https://github.com/bitcoin/bips/blob/master/bip-0049.mediawiki" target="_blank">BIP49 spec</a>.
+                                            </p>
+                                        </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label for="purpose-bip49" class="col-sm-2 control-label">
+                                    <div class="mb-3 row">
+                                        <label for="purpose-bip49" class="col-sm-2 form-label">
                                             <a href="https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki#purpose" target="_blank">Purpose</a>
                                         </label>
                                         <div class="col-sm-10">
                                             <input id="purpose-bip49" type="text" class="purpose form-control" value="49" readonly>
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label for="coin-bip49" class="col-sm-2 control-label">
+                                    <div class="mb-3 row">
+                                        <label for="coin-bip49" class="col-sm-2 form-label">
                                             <a href="https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki#registered-coin-types" target="_blank">Coin</a>
                                         </label>
                                         <div class="col-sm-10">
                                             <input id="coin-bip49" type="text" class="coin form-control" value="0" readonly>
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label for="account-bip49" class="col-sm-2 control-label">
+                                    <div class="mb-3 row">
+                                        <label for="account-bip49" class="col-sm-2 form-label">
                                             <a href="https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki#account" target="_blank">Account</a>
                                         </label>
                                         <div class="col-sm-10">
                                             <input id="account-bip49" type="text" class="account form-control" value="0">
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label for="change-bip49" class="col-sm-2 control-label">
+                                    <div class="mb-3 row">
+                                        <label for="change-bip49" class="col-sm-2 form-label">
                                             <a href="https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki#change" target="_blank">External / Internal</a>
                                         </label>
                                         <div class="col-sm-10">
                                             <input id="change-bip49" type="text" class="change form-control" value="0">
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label class="col-sm-2 control-label">
+                                    <div class="mt-4 mb-2 row">
+                                        <label class="col-sm-2 form-label">
                                         </label>
                                         <div class="col-sm-10">
-                                            <p>The account extended keys can be used for importing to most BIP49 compatible wallets.</p>
+                                            <p>The account extended keys can be used for importing to compatible wallets, such as sparrow or electrum. Import the account extended public key for a watch only wallet.</p>
+                                            <p class="text-danger"><strong>Never import the account extended private key (or any private key) to an internet connected device, unless you fully understand and accept the risks.</strong></p>
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label for="account-xprv" class="col-sm-2 control-label">
+                                    <div class="mt-1 mb-3 row">
+                                        <label for="account-xprv" class="col-sm-2 form-label">
                                             <span>Account Extended Private Key</span>
                                         </label>
                                         <div class="col-sm-10">
-                                            <textarea id="account-xprv-bip49" type="text" class="account-xprv private-data form-control" readonly data-show-qr autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
+                                            <textarea id="account-xprv-bip49" class="account-xprv private-data form-control" readonly data-show-qr autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label for="account-xpub" class="col-sm-2 control-label">
+                                    <div class="mb-3 row">
+                                        <label for="account-xpub" class="col-sm-2 form-label">
                                             <span>Account Extended Public Key</span>
                                         </label>
                                         <div class="col-sm-10">
-                                            <textarea id="account-xpub-bip49" type="text" class="account-xpub form-control" readonly data-show-qr autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
+                                            <textarea id="account-xpub-bip49" class="account-xpub form-control" readonly data-show-qr autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label class="col-sm-2 control-label">
+                                    <div class="mb-3 row">
+                                        <label class="col-sm-2 form-label">
                                         </label>
                                         <div class="col-sm-10">
                                             <p>The BIP32 derivation path and extended keys are the basis for the derived addresses.</p>
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label for="bip49-path" class="col-sm-2 control-label">BIP32 Derivation Path</label>
+                                    <div class="mb-3 row">
+                                        <label for="bip49-path" class="col-sm-2 form-label">BIP32 Derivation Path</label>
                                         <div class="col-sm-10">
-                                            <input id="bip49-path" type="text" class="path form-control" value="m/49'/0'/0'/0" readonly="readonly">
+                                            <input id="bip49-path" type="text" class="path form-control" value="m/49'/0'/0'/0" readonly>
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label for="bip32-extended-priv-key-bip49" class="col-sm-2 control-label">BIP32 Extended Private Key</label>
+                                    <div class="mb-3 row">
+                                        <label for="bip32-extended-priv-key-bip49" class="col-sm-2 form-label">BIP32 Extended Private Key</label>
                                         <div class="col-sm-10">
                                             <textarea id="bip32-extended-priv-key-bip49" class="extended-priv-key private-data form-control" readonly data-show-qr autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label for="bip32-extended-pub-key-bip49" class="col-sm-2 control-label">BIP32 Extended Public Key</label>
+                                    <div class="mb-3 row">
+                                        <label for="bip32-extended-pub-key-bip49" class="col-sm-2 form-label">BIP32 Extended Public Key</label>
                                         <div class="col-sm-10">
                                             <textarea id="bip32-extended-pub-key-bip49" class="extended-pub-key form-control" readonly data-show-qr autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
                                         </div>
@@ -761,10 +758,9 @@
                             </form>
                         </div>
                         <div id="bip141" class="tab-pane">
-                            <form class="form-horizontal" role="form">
-                                <br>
+                            <form role="form">
                                 <div class="unavailable hidden">
-                                    <div class="form-group">
+                                    <div class="mb-3 row">
                                         <div class="col-sm-2"></div>
                                         <div class="col-sm-10">
                                             <p>BIP141 is unavailable for this coin.</p>
@@ -772,23 +768,25 @@
                                     </div>
                                 </div>
                                 <div class="available">
-                                    <div class="col-sm-2"></div>
-                                    <div class="col-sm-10">
-                                        <p>
-                                            For more info see the
-                                            <a href="https://github.com/bitcoin/bips/blob/master/bip-0141.mediawiki" target="_blank">BIP141 spec</a>
-                                        </p>
+                                    <div class="row mt-3">
+                                        <div class="col-sm-2"></div>
+                                        <div class="col-sm-10">
+                                            <p>
+                                                For more info see the
+                                                <a href="https://github.com/bitcoin/bips/blob/master/bip-0141.mediawiki" target="_blank">BIP141 spec</a>
+                                            </p>
+                                        </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label for="bip141-path" class="col-sm-2 control-label">BIP32 Derivation Path</label>
+                                    <div class="mb-3 row">
+                                        <label for="bip141-path" class="col-sm-2 form-label">BIP32 Derivation Path</label>
                                         <div class="col-sm-10">
                                             <input id="bip141-path" type="text" class="bip141-path form-control" value="m/0">
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label class="col-sm-2 control-label">Script Semantics</label>
+                                    <div class="mb-3 row">
+                                        <label class="col-sm-2 form-label">Script Semantics</label>
                                         <div class="col-sm-10">
-                                            <select class="form-control bip141-semantics">
+                                            <select class="form-select bip141-semantics">
                                                 <option value="p2wpkh">P2WPKH</option>
                                                 <option value="p2wpkh-p2sh" selected>P2WPKH nested in P2SH</option>
                                                 <option value="p2wsh">P2WSH (1-of-1 multisig)</option>
@@ -796,14 +794,14 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label for="bip32-extended-priv-key-bip141" class="col-sm-2 control-label">BIP32 Extended Private Key</label>
+                                    <div class="mb-3 row">
+                                        <label for="bip32-extended-priv-key-bip141" class="col-sm-2 form-label">BIP32 Extended Private Key</label>
                                         <div class="col-sm-10">
                                             <textarea id="bip32-extended-priv-key-bip141" class="extended-priv-key private-data form-control" readonly data-show-qr autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label for="bip32-extended-pub-key-bip141" class="col-sm-2 control-label">BIP32 Extended Public Key</label>
+                                    <div class="mb-3 row">
+                                        <label for="bip32-extended-pub-key-bip141" class="col-sm-2 form-label">BIP32 Extended Public Key</label>
                                         <div class="col-sm-10">
                                             <textarea id="bip32-extended-pub-key-bip141" class="extended-pub-key form-control" readonly data-show-qr autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
                                         </div>
@@ -812,10 +810,9 @@
                             </form>
                         </div>
                         <div id="bip84" class="tab-pane">
-                            <form class="form-horizontal" role="form">
-                                <br>
+                            <form role="form">
                                 <div class="unavailable hidden">
-                                    <div class="form-group">
+                                    <div class="mb-3 row">
                                         <div class="col-sm-2"></div>
                                         <div class="col-sm-10">
                                             <p>BIP84 is unavailable for this coin.</p>
@@ -823,89 +820,92 @@
                                     </div>
                                 </div>
                                 <div class="available">
-                                    <div class="col-sm-2"></div>
-                                    <div class="col-sm-10">
-                                        <p>
-                                            For more info see the
-                                            <a href="https://github.com/bitcoin/bips/blob/master/bip-0084.mediawiki" target="_blank">BIP84 spec</a>.
-                                        </p>
+                                    <div class="row mt-3">
+                                        <div class="col-sm-2"></div>
+                                        <div class="col-sm-10">
+                                            <p>
+                                                For more info see the
+                                                <a href="https://github.com/bitcoin/bips/blob/master/bip-0084.mediawiki" target="_blank">BIP84 spec</a>.
+                                            </p>
+                                        </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label for="purpose-bip84" class="col-sm-2 control-label">
-                                            Purpose
+                                    <div class="mb-3 row">
+                                        <label for="purpose-bip84" class="col-sm-2 form-label">
+                                            <a href="https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki#purpose" target="_blank">Purpose</a>
                                         </label>
                                         <div class="col-sm-10">
                                             <input id="purpose-bip84" type="text" class="purpose form-control" value="84" readonly>
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label for="coin-bip84" class="col-sm-2 control-label">
-                                            Coin
+                                    <div class="mb-3 row">
+                                        <label for="coin-bip84" class="col-sm-2 form-label">
+                                            <a href="https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki#registered-coin-types" target="_blank">Coin</a>
                                         </label>
                                         <div class="col-sm-10">
                                             <input id="coin-bip84" type="text" class="coin form-control" value="0" readonly>
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label for="account-bip84" class="col-sm-2 control-label">
-                                            Account
+                                    <div class="mb-3 row">
+                                        <label for="account-bip84" class="col-sm-2 form-label">
+                                            <a href="https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki#account" target="_blank">Account</a>
                                         </label>
                                         <div class="col-sm-10">
                                             <input id="account-bip84" type="text" class="account form-control" value="0">
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label for="change-bip84" class="col-sm-2 control-label">
-                                            External / Internal
+                                    <div class="mb-3 row">
+                                        <label for="change-bip84" class="col-sm-2 form-label">
+                                            <a href="https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki#change" target="_blank">External / Internal</a>
                                         </label>
                                         <div class="col-sm-10">
                                             <input id="change-bip84" type="text" class="change form-control" value="0">
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label class="col-sm-2 control-label">
+                                    <div class="mt-4 mb-2 row">
+                                        <label class="col-sm-2 form-label">
                                         </label>
                                         <div class="col-sm-10">
-                                            <p>The account extended keys can be used for importing to most BIP84 compatible wallets.</p>
+                                            <p>The account extended keys can be used for importing to compatible wallets, such as sparrow or electrum. Import the account extended public key for a watch only wallet.</p>
+                                            <p class="text-danger"><strong>Never import the account extended private key (or any private key) to an internet connected device, unless you fully understand and accept the risks.</strong></p>
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label for="account-xprv" class="col-sm-2 control-label">
+                                    <div class="mt-1 mb-3 row">
+                                        <label for="account-xprv" class="col-sm-2 form-label">
                                             <span>Account Extended Private Key</span>
                                         </label>
                                         <div class="col-sm-10">
-                                            <textarea id="account-xprv-bip84" type="text" class="account-xprv private-data form-control" readonly data-show-qr autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
+                                            <textarea id="account-xprv-bip84" class="account-xprv private-data form-control" readonly data-show-qr autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label for="account-xpub" class="col-sm-2 control-label">
+                                    <div class="mb-3 row">
+                                        <label for="account-xpub" class="col-sm-2 form-label">
                                             <span>Account Extended Public Key</span>
                                         </label>
                                         <div class="col-sm-10">
-                                            <textarea id="account-xpub-bip84" type="text" class="account-xpub form-control" readonly data-show-qr autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
+                                            <textarea id="account-xpub-bip84" class="account-xpub form-control" readonly data-show-qr autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label class="col-sm-2 control-label">
+                                    <div class="mb-3 row">
+                                        <label class="col-sm-2 form-label">
                                         </label>
                                         <div class="col-sm-10">
                                             <p>The BIP32 derivation path and extended keys are the basis for the derived addresses.</p>
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label for="bip84-path" class="col-sm-2 control-label">BIP32 Derivation Path</label>
+                                    <div class="mb-3 row">
+                                        <label for="bip84-path" class="col-sm-2 form-label">BIP32 Derivation Path</label>
                                         <div class="col-sm-10">
-                                            <input id="bip84-path" type="text" class="path form-control" value="m/84'/0'/0'/0" readonly="readonly">
+                                            <input id="bip84-path" type="text" class="path form-control" value="m/84'/0'/0'/0" readonly>
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label for="bip32-extended-priv-key-bip84" class="col-sm-2 control-label">BIP32 Extended Private Key</label>
+                                    <div class="mb-3 row">
+                                        <label for="bip32-extended-priv-key-bip84" class="col-sm-2 form-label">BIP32 Extended Private Key</label>
                                         <div class="col-sm-10">
                                             <textarea id="bip32-extended-priv-key-bip84" class="extended-priv-key private-data form-control" readonly data-show-qr autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label for="bip32-extended-pub-key-bip84" class="col-sm-2 control-label">BIP32 Extended Public Key</label>
+                                    <div class="mb-3 row">
+                                        <label for="bip32-extended-pub-key-bip84" class="col-sm-2 form-label">BIP32 Extended Public Key</label>
                                         <div class="col-sm-10">
                                             <textarea id="bip32-extended-pub-key-bip84" class="extended-pub-key form-control" readonly data-show-qr autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
                                         </div>
@@ -914,10 +914,9 @@
                             </form>
                         </div>
                         <div id="bip86" class="tab-pane">
-                            <form class="form-horizontal" role="form">
-                                <br>
+                            <form role="form">
                                 <div class="unavailable hidden">
-                                    <div class="form-group">
+                                    <div class="mb-3 row">
                                         <div class="col-sm-2"></div>
                                         <div class="col-sm-10">
                                             <p>BIP86 is unavailable for this coin.</p>
@@ -925,89 +924,92 @@
                                     </div>
                                 </div>
                                 <div class="available">
-                                    <div class="col-sm-2"></div>
-                                    <div class="col-sm-10">
-                                        <p>
-                                            For more info see the
-                                            <a href="https://github.com/bitcoin/bips/blob/master/bip-0086.mediawiki" target="_blank">BIP86 spec</a>.
-                                        </p>
+                                    <div class="row mt-3">
+                                        <div class="col-sm-2"></div>
+                                        <div class="col-sm-10">
+                                            <p>
+                                                For more info see the
+                                                <a href="https://github.com/bitcoin/bips/blob/master/bip-0086.mediawiki" target="_blank">BIP86 spec</a>.
+                                            </p>
+                                        </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label for="purpose-bip86" class="col-sm-2 control-label">
-                                            Purpose
+                                    <div class="mb-3 row">
+                                        <label for="purpose-bip86" class="col-sm-2 form-label">
+                                            <a href="https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki#purpose" target="_blank">Purpose</a>
                                         </label>
                                         <div class="col-sm-10">
                                             <input id="purpose-bip86" type="text" class="purpose form-control" value="86" readonly>
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label for="coin-bip86" class="col-sm-2 control-label">
-                                            Coin
+                                    <div class="mb-3 row">
+                                        <label for="coin-bip86" class="col-sm-2 form-label">
+                                            <a href="https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki#registered-coin-types" target="_blank">Coin</a>
                                         </label>
                                         <div class="col-sm-10">
                                             <input id="coin-bip86" type="text" class="coin form-control" value="0" readonly>
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label for="account-bip86" class="col-sm-2 control-label">
-                                            Account
+                                    <div class="mb-3 row">
+                                        <label for="account-bip86" class="col-sm-2 form-label">
+                                            <a href="https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki#account" target="_blank">Account</a>
                                         </label>
                                         <div class="col-sm-10">
                                             <input id="account-bip86" type="text" class="account form-control" value="0">
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label for="change-bip86" class="col-sm-2 control-label">
-                                            External / Internal
+                                    <div class="mb-3 row">
+                                        <label for="change-bip86" class="col-sm-2 form-label">
+                                            <a href="https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki#change" target="_blank">External / Internal</a>
                                         </label>
                                         <div class="col-sm-10">
                                             <input id="change-bip86" type="text" class="change form-control" value="0">
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label class="col-sm-2 control-label">
+                                    <div class="mt-4 mb-2 row">
+                                        <label class="col-sm-2 form-label">
                                         </label>
                                         <div class="col-sm-10">
-                                            <p>The account extended keys can be used for importing to most BIP86 compatible wallets.</p>
+                                            <p>The account extended keys can be used for importing to compatible wallets, such as sparrow or electrum. Import the account extended public key for a watch only wallet.</p>
+                                            <p class="text-danger"><strong>Never import the account extended private key (or any private key) to an internet connected device, unless you fully understand and accept the risks.</strong></p>
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label for="account-xprv" class="col-sm-2 control-label">
+                                    <div class="mt-1 mb-3 row">
+                                        <label for="account-xprv" class="col-sm-2 form-label">
                                             <span>Account Extended Private Key</span>
                                         </label>
                                         <div class="col-sm-10">
-                                            <textarea id="account-xprv-bip86" type="text" class="account-xprv private-data form-control" readonly data-show-qr autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
+                                            <textarea id="account-xprv-bip86" class="account-xprv private-data form-control" readonly data-show-qr autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label for="account-xpub" class="col-sm-2 control-label">
+                                    <div class="mb-3 row">
+                                        <label for="account-xpub" class="col-sm-2 form-label">
                                             <span>Account Extended Public Key</span>
                                         </label>
                                         <div class="col-sm-10">
-                                            <textarea id="account-xpub-bip86" type="text" class="account-xpub form-control" readonly data-show-qr autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
+                                            <textarea id="account-xpub-bip86" class="account-xpub form-control" readonly data-show-qr autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label class="col-sm-2 control-label">
+                                    <div class="mb-3 row">
+                                        <label class="col-sm-2 form-label">
                                         </label>
                                         <div class="col-sm-10">
                                             <p>The BIP32 derivation path and extended keys are the basis for the derived addresses.</p>
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label for="bip86-path" class="col-sm-2 control-label">BIP32 Derivation Path</label>
+                                    <div class="mb-3 row">
+                                        <label for="bip86-path" class="col-sm-2 form-label">BIP32 Derivation Path</label>
                                         <div class="col-sm-10">
-                                            <input id="bip86-path" type="text" class="path form-control" value="m/86'/0'/0'/0" readonly="readonly">
+                                            <input id="bip86-path" type="text" class="path form-control" value="m/86'/0'/0'/0" readonly>
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label for="bip32-extended-priv-key-bip86" class="col-sm-2 control-label">BIP32 Extended Private Key</label>
+                                    <div class="mb-3 row">
+                                        <label for="bip32-extended-priv-key-bip86" class="col-sm-2 form-label">BIP32 Extended Private Key</label>
                                         <div class="col-sm-10">
                                             <textarea id="bip32-extended-priv-key-bip86" class="extended-priv-key private-data form-control" readonly data-show-qr autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label for="bip32-extended-pub-key-bip86" class="col-sm-2 control-label">BIP32 Extended Public Key</label>
+                                    <div class="mb-3 row">
+                                        <label for="bip32-extended-pub-key-bip86" class="col-sm-2 form-label">BIP32 Extended Public Key</label>
                                         <div class="col-sm-10">
                                             <textarea id="bip32-extended-pub-key-bip86" class="extended-pub-key form-control" readonly data-show-qr autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
                                         </div>
@@ -1015,114 +1017,127 @@
                                 </div>
                             </form>
                         </div>
-                    </div>
-                    <div class="electrum-spacer hidden">
-                        <br>
-                    </div>
-                    <form class="form-horizontal" role="form">
-                    </form>
-                </div>
-                <div id="electrum-legacy" class="tab-pane electrum-tab-panel">
-                    <form class="form-horizontal" role="form">
-                        <br>
-                        <div class="col-sm-2"></div>
-                        <div class="col-sm-10">
-                            <p>
-                                Electrum Legacy uses <strong>m/0/n</strong> derivation path for receiving addresses and <strong>m/1/n</strong> for change addresses.
-                                This generates legacy P2PKH addresses (starting with 1).
-                            </p>
+                        <div id="electrum-legacy" class="tab-pane electrum-tab-panel">
+                    <form role="form">
+                        <div class="row mt-3">
+                            <div class="col-sm-2"></div>
+                            <div class="col-sm-10">
+                                <p>
+                                    Electrum Legacy uses <strong>m/0/n</strong> derivation path for receiving addresses and <strong>m/1/n</strong> for change addresses.
+                                    This generates legacy P2PKH addresses (starting with 1).
+                                </p>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label for="electrum-legacy-path" class="col-sm-2 control-label">Electrum Derivation Path</label>
+                        <div class="mb-3 row">
+                            <label for="electrum-legacy-path" class="col-sm-2 form-label">Electrum Derivation Path</label>
                             <div class="col-sm-10">
                                 <input id="electrum-legacy-path" type="text" class="electrum-legacy-path form-control" value="m/" readonly>
                             </div>
                         </div>
-                        <div class="form-group">
+                        <div class="mb-3 row">
                             <div class="col-sm-2"></div>
-                            <div class="col-sm-10 checkbox">
-                                <label>
-                                    <input type="checkbox" class="electrum-legacy-change">
-                                    <span>Show change addresses (m/1/n)</span>
-                                </label>
+                            <div class="col-sm-10">
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input electrum-legacy-change" id="electrum-legacy-change">
+                                    <label class="form-check-label" for="electrum-legacy-change">Show change addresses (m/1/n)</label>
+                                </div>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label for="account-xprv-electrum-legacy" class="col-sm-2 control-label">Account Extended Private Key</label>
+                        <div class="mt-4 mb-2 row">
+                            <label class="col-sm-2 form-label">
+                            </label>
+                            <div class="col-sm-10">
+                                <p>The account extended keys can be used for importing to compatible wallets, such as sparrow or electrum. Import the account extended public key for a watch only wallet.</p>
+                                <p class="text-danger"><strong>Never import the account extended private key (or any private key) to an internet connected device, unless you fully understand and accept the risks.</strong></p>
+                            </div>
+                        </div>
+                        <div class="mt-1 mb-3 row">
+                            <label for="account-xprv-electrum-legacy" class="col-sm-2 form-label">Account Extended Private Key</label>
                             <div class="col-sm-10">
                                 <textarea id="account-xprv-electrum-legacy" class="account-xprv private-data form-control" readonly data-show-qr autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label for="account-xpub-electrum-legacy" class="col-sm-2 control-label">Account Extended Public Key</label>
+                        <div class="mb-3 row">
+                            <label for="account-xpub-electrum-legacy" class="col-sm-2 form-label">Account Extended Public Key</label>
                             <div class="col-sm-10">
                                 <textarea id="account-xpub-electrum-legacy" class="account-xpub form-control" readonly data-show-qr autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label for="extended-priv-key" class="col-sm-2 control-label">BIP32 Extended Private Key</label>
+                        <div class="mb-3 row">
+                            <label for="extended-priv-key" class="col-sm-2 form-label">BIP32 Extended Private Key</label>
                             <div class="col-sm-10">
-                                <textarea id="extended-priv-key" class="extended-priv-key private-data form-control" readonly="readonly" data-show-qr autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
+                                <textarea id="extended-priv-key" class="extended-priv-key private-data form-control" readonly data-show-qr autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label for="extended-pub-key" class="col-sm-2 control-label">BIP32 Extended Public Key</label>
+                        <div class="mb-3 row">
+                            <label for="extended-pub-key" class="col-sm-2 form-label">BIP32 Extended Public Key</label>
                             <div class="col-sm-10">
-                                <textarea id="extended-pub-key" class="extended-pub-key form-control" readonly="readonly" data-show-qr autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
+                                <textarea id="extended-pub-key" class="extended-pub-key form-control" readonly data-show-qr autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
                             </div>
                         </div>
                     </form>
                 </div>
-                <div id="electrum-segwit" class="tab-pane electrum-tab-panel">
-                    <form class="form-horizontal" role="form">
-                        <br>
-                        <div class="col-sm-2"></div>
-                        <div class="col-sm-10">
-                            <p>
-                                Electrum SegWit uses <strong>m/0'/0/n</strong> derivation path for receiving addresses and <strong>m/0'/1/n</strong> for change addresses.
-                                This generates native SegWit P2WPKH bech32 addresses (starting with bc1q).
-                            </p>
+                        <div id="electrum-segwit" class="tab-pane electrum-tab-panel">
+                    <form role="form">
+                        <div class="row mt-3">
+                            <div class="col-sm-2"></div>
+                            <div class="col-sm-10">
+                                <p>
+                                    Electrum SegWit uses <strong>m/0'/0/n</strong> derivation path for receiving addresses and <strong>m/0'/1/n</strong> for change addresses.
+                                    This generates native SegWit P2WPKH bech32 addresses (starting with bc1q).
+                                </p>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label for="electrum-segwit-path" class="col-sm-2 control-label">Electrum Derivation Path</label>
+                        <div class="mb-3 row">
+                            <label for="electrum-segwit-path" class="col-sm-2 form-label">Electrum Derivation Path</label>
                             <div class="col-sm-10">
                                 <input id="electrum-segwit-path" type="text" class="electrum-segwit-path form-control" value="m/0'" readonly>
                             </div>
                         </div>
-                        <div class="form-group">
+                        <div class="mb-3 row">
                             <div class="col-sm-2"></div>
-                            <div class="col-sm-10 checkbox">
-                                <label>
-                                    <input type="checkbox" class="electrum-segwit-change">
-                                    <span>Show change addresses (m/0'/1/n)</span>
-                                </label>
+                            <div class="col-sm-10">
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input electrum-segwit-change" id="electrum-segwit-change">
+                                    <label class="form-check-label" for="electrum-segwit-change">Show change addresses (m/0'/1/n)</label>
+                                </div>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label for="account-xprv-electrum-segwit" class="col-sm-2 control-label">Account Extended Private Key</label>
+                        <div class="mt-4 mb-2 row">
+                            <label class="col-sm-2 form-label">
+                            </label>
+                            <div class="col-sm-10">
+                                <p>The account extended keys can be used for importing to compatible wallets, such as sparrow or electrum. Import the account extended public key for a watch only wallet.</p>
+                                <p class="text-danger"><strong>Never import the account extended private key (or any private key) to an internet connected device, unless you fully understand and accept the risks.</strong></p>
+                            </div>
+                        </div>
+                        <div class="mt-1 mb-3 row">
+                            <label for="account-xprv-electrum-segwit" class="col-sm-2 form-label">Account Extended Private Key</label>
                             <div class="col-sm-10">
                                 <textarea id="account-xprv-electrum-segwit" class="account-xprv private-data form-control" readonly data-show-qr autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label for="account-xpub-electrum-segwit" class="col-sm-2 control-label">Account Extended Public Key</label>
+                        <div class="mb-3 row">
+                            <label for="account-xpub-electrum-segwit" class="col-sm-2 form-label">Account Extended Public Key</label>
                             <div class="col-sm-10">
                                 <textarea id="account-xpub-electrum-segwit" class="account-xpub form-control" readonly data-show-qr autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label for="extended-priv-key" class="col-sm-2 control-label">BIP32 Extended Private Key</label>
+                        <div class="mb-3 row">
+                            <label for="extended-priv-key" class="col-sm-2 form-label">BIP32 Extended Private Key</label>
                             <div class="col-sm-10">
-                                <textarea id="extended-priv-key" class="extended-priv-key private-data form-control" readonly="readonly" data-show-qr autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
+                                <textarea id="extended-priv-key" class="extended-priv-key private-data form-control" readonly data-show-qr autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label for="extended-pub-key" class="col-sm-2 control-label">BIP32 Extended Public Key</label>
+                        <div class="mb-3 row">
+                            <label for="extended-pub-key" class="col-sm-2 form-label">BIP32 Extended Public Key</label>
                             <div class="col-sm-10">
-                                <textarea id="extended-pub-key" class="extended-pub-key form-control" readonly="readonly" data-show-qr autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
+                                <textarea id="extended-pub-key" class="extended-pub-key form-control" readonly data-show-qr autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
                             </div>
                         </div>
                     </form>
+                </div>
+                    </div>
                 </div>
             </div>
 
@@ -1133,106 +1148,123 @@
                     <h2>Derived Addresses</h2>
                     <p>Note these addresses are derived from the BIP32 Extended Key</p>
                 </div>
+            </div>
+            <div class="row">
                 <div class="col-md-12 bch-addr-type-container hidden">
-                    <div class="radio">
-                        <label>
-                            <input type="radio" value="cashaddr" name="bch-addr-type" class="use-bch-cashaddr-addresses" checked="checked">
-                            <span>Use CashAddr addresses for Bitcoin Cash (ie starting with 'q' instead of '1')</span>
+                    <div class="form-check">
+                        <input type="radio" value="cashaddr" name="bch-addr-type" class="form-check-input use-bch-cashaddr-addresses" id="bch-cashaddr" checked="checked">
+                        <label class="form-check-label" for="bch-cashaddr">
+                            Use CashAddr addresses for Bitcoin Cash (ie starting with 'q' instead of '1')
                         </label>
                     </div>
-                    <div class="radio">
-                        <label>
-                            <input type="radio" value="bitpay" name="bch-addr-type" class="use-bch-bitpay-addresses">
-                            <span>Use BitPay-style addresses for Bitcoin Cash (ie starting with 'C' instead of '1')</span>
+                    <div class="form-check">
+                        <input type="radio" value="bitpay" name="bch-addr-type" class="form-check-input use-bch-bitpay-addresses" id="bch-bitpay">
+                        <label class="form-check-label" for="bch-bitpay">
+                            Use BitPay-style addresses for Bitcoin Cash (ie starting with 'C' instead of '1')
                         </label>
                     </div>
-                    <div class="radio">
-                        <label>
-                            <input type="radio" value="legacy" name="bch-addr-type" class="use-bch-legacy-addresses">
-                            <span>Use legacy addresses for Bitcoin Cash (ie starting with '1')</span>
+                    <div class="form-check">
+                        <input type="radio" value="legacy" name="bch-addr-type" class="form-check-input use-bch-legacy-addresses" id="bch-legacy">
+                        <label class="form-check-label" for="bch-legacy">
+                            Use legacy addresses for Bitcoin Cash (ie starting with '1')
                         </label>
                     </div>
                 </div>
+            </div>
+            <div class="row">
                 <div class="col-md-12">
-                    <div class="checkbox">
-                        <label>
-                            <input type="checkbox" class="use-bip38">
-                            <span>Encrypt private keys using BIP38 and this password:</span>
-                        </label>
-                        <input class="bip38-password private-data" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
-                        <span>Enabling BIP38 means each key will take several minutes to generate.</span>
-                    </div>
-                </div>
-                <div class="col-md-12">
-                    <div class="checkbox">
-                        <label>
-                            <input class="hardened-addresses" type="checkbox">
-                            <span>Use hardened addresses</span>
-                        </label>
-                    </div>
-                </div>
-                <ul class="addresses-type nav nav-tabs" role="tablist">
-                    <li id="table-tab" class="active">
-                        <a href="#table" role="tab" data-toggle="tab">Table</a>
-                    </li>
-                    <li id="csv-tab">
-                        <a href="#csv" role="tab" data-toggle="tab">CSV</a>
-                    </li>
-                </ul>
-                <div class="addresses-type tab-content">
-                    <div id="table" class="tab-pane active">
-                        <div class="col-md-12">
-                            <table class="table table-striped">
-                                <thead>
-                                    <th>
-                                        <div class="input-group">
-                                            <span>Path</span>&nbsp;&nbsp;
-                                            <button class="index-toggle">Toggle</button>
-                                        </div>
-                                    </th>
-                                    <th>
-                                        <div class="input-group">
-                                            <span>Address</span>&nbsp;&nbsp;
-                                            <button class="address-toggle">Toggle</button>
-                                        </div>
-                                    </th>
-                                    <th>
-                                        <div class="input-group">
-                                            <span>Public Key</span>&nbsp;&nbsp;
-                                            <button class="public-key-toggle">Toggle</button>
-                                        </div>
-                                    </th>
-                                    <th>
-                                        <div class="input-group">
-                                            <span>Private Key</span>&nbsp;&nbsp;
-                                            <button class="private-key-toggle">Toggle</button>
-                                        </div>
-                                    </th>
-                                </thead>
-                                <tbody class="addresses monospace">
-                                    <tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
-                                    <tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
-                                    <tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
-                                    <tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
-                                    <tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                    <div id="csv" class="tab-pane">
-                        <div class="col-md-12">
-                            <textarea class="csv form-control" rows="25" readonly autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
+                    <div class="form-check">
+                        <div class="d-flex align-items-center gap-2 flex-wrap">
+                            <input type="checkbox" class="form-check-input use-bip38" id="use-bip38">
+                            <label class="form-check-label" for="use-bip38">
+                                Encrypt private keys using BIP38 and this password:
+                            </label>
+                            <input class="bip38-password private-data form-control" style="width: 200px;" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" aria-label="BIP38 password">
+                            <span class="form-text">Enabling BIP38 means each key will take several minutes to generate.</span>
                         </div>
                     </div>
                 </div>
             </div>
-            <span>Show</span>
-            <input type="number" class="rows-to-add" value="20">
-            <button class="more">more rows</button>
-            <span>starting from index</span>
-            <input type="number" class="more-rows-start-index">
-            <span>(leave blank to generate from next index)</span>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-check">
+                        <input class="form-check-input hardened-addresses" type="checkbox" id="hardened-addresses">
+                        <label class="form-check-label" for="hardened-addresses">Use hardened addresses</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <ul class="addresses-type nav nav-tabs" role="tablist">
+                        <li class="nav-item" id="table-tab">
+                            <a class="nav-link active" href="#table" role="tab" data-bs-toggle="tab">Table</a>
+                        </li>
+                        <li class="nav-item" id="csv-tab">
+                            <a class="nav-link" href="#csv" role="tab" data-bs-toggle="tab">CSV</a>
+                        </li>
+                    </ul>
+                    <div class="addresses-type tab-content">
+                        <div id="table" class="tab-pane active show">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <span>Path</span>
+                                                <button class="btn btn-sm btn-outline-secondary index-toggle">Toggle</button>
+                                            </div>
+                                        </th>
+                                        <th>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <span>Address</span>
+                                                <button class="btn btn-sm btn-outline-secondary address-toggle">Toggle</button>
+                                            </div>
+                                        </th>
+                                        <th>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <span>Public Key</span>
+                                                <button class="btn btn-sm btn-outline-secondary public-key-toggle">Toggle</button>
+                                            </div>
+                                        </th>
+                                        <th>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <span>Private Key</span>
+                                                <button class="btn btn-sm btn-outline-secondary private-key-toggle">Toggle</button>
+                                            </div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody class="addresses monospace">
+                                    <!-- Table rows will be dynamically generated by JavaScript -->
+                                </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div id="csv" class="tab-pane">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <textarea class="csv form-control" rows="25" readonly autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
+                            </div>
+                        </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <span>Show</span>
+                    <input type="number" class="rows-to-add form-control w-auto d-inline-block" value="20" aria-label="Number of rows to add">
+                    <button class="btn btn-secondary more">more rows</button>
+                    <span>starting from index</span>
+                    <input type="number" class="form-control more-rows-start-index w-auto d-inline-block" aria-label="Starting index for additional rows">
+                    <span>(leave blank to generate from next index)</span>
+                </div>
+            </div>
 
+            <div style="margin-top: 30px;"></div>
             <hr>
 
             <div class="row">
@@ -1278,6 +1310,10 @@
                         Read more at the
                         <a href="https://github.com/bitcoin/bips/blob/master/bip-0085.mediawiki" target="_blank">official BIP85 spec</a>
                     </p>
+
+                    <div style="margin-top: 30px;"></div>
+                    <hr>
+
                     <h3 id="entropy-notes">Entropy</h3>
                     <p>
                         <span>Entropy values should not include the BIP39 checksum. This is automatically added by the tool.</span>
@@ -1327,12 +1363,20 @@
                             </a>
                         </span>
                     </p>
+
+                    <div style="margin-top: 30px;"></div>
+                    <hr>
+
                     <h3 id="PBKDF2-notes">PBKDF2</h3>
                     <p><a href="https://learnmeabitcoin.com/technical/mnemonic#pbkdf2---password-based-key-derivation-function-2   " target="_blank">What is PBKDF2 (Password Based Key Derivation Function 2) ?</a></p>
                     <p><span>Please refer to this <a href="https://en.wikipedia.org/wiki/PBKDF2" target="_blank">wikipedia article</a> for more detail.
                     <span>Mail about PBKDF2 security <a href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2016-July/012902.html" target="_blank">here</a>.</p>
                     <p>Wallet software that implement BIP39 only use 2048 iterations as a norm. Increasing this parameter will increase security against brute force attack, but you will need to store this new parameter. However, as long as you back up your BIP39 seed there will not be risk to lost your fund. To access them with custom PBKDF2 iterations, use this file (or <a href="https://stuff.birkenstab.de/pbkdf2/" target="_blank">other</a>) to compute your targeted BIP39 seed.</p>
                     <p>Using less than 2048 PBKDF2 iterations is insecure without strong optional BIP39 Passphrase.</p>
+
+                    <div style="margin-top: 30px;"></div>
+                    <hr>
+                    
                     <h3>License</h3>
                     <p>
                     <span>Please refer to <a href="https://github.com/iancoleman/bip39/blob/master/LICENSE" target="_blank">the software license</a> for more detail.
@@ -1397,6 +1441,8 @@
                         <a href="https://github.com/levinster82/Bitcoin-BIP39-Electrum-Tool" target="_blank">
                             https://github.com/levinster82/Bitcoin-BIP39-Electrum-Tool
                         </a>
+                        <br>
+                        <span>(forked from <a href="https://github.com/iancoleman/bip39" target="_blank">https://github.com/iancoleman/bip39</a>)</span>
                     </p>
 
                     <h3>Libraries</h3>
@@ -1501,7 +1547,6 @@
 
                 </div>
             </div>
-
         </div>
 
         <div class="qr-container hidden">
@@ -1526,6 +1571,18 @@
             </tr>
         </script>
         <script src="js/combined-libs.js"></script>
+        <script>
+            // Make libs.bitcoinjs available as global bitcoinjs for backward compatibility
+            if (typeof window.libs !== 'undefined' && window.libs.bitcoinjs) {
+                window.bitcoinjs = window.libs.bitcoinjs;
+            }
+            
+            // Initialize Bootstrap 5 tabs using bundled version
+            if (typeof window.libs !== 'undefined' && window.libs.bootstrap) {
+                // Bootstrap 5 is already loaded from the libs bundle
+            } else {
+            }
+        </script>
         <script src="js/networks-bitcoin-only.js"></script>
         <script src="js/segwit-parameters.js"></script>
         <script src="js/electrum-mnemonic.js"></script>

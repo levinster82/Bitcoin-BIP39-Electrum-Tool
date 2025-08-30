@@ -38,18 +38,8 @@ var feedbackDelay = 500;
 var entropyFeedbackDelay = 500;
 var bip38delay = 15000;
 
-// url uses file:// scheme
-var path = require('path')
-var parentDir = path.resolve(process.cwd(), '..', 'src', 'index.html');
-var url = "file://" + parentDir;
-if (browser == "firefox") {
-    // TODO loading local html in firefox is broken
-    console.log("Loading local html in firefox is broken, see https://stackoverflow.com/q/46367054");
-    console.log("You must run a server in this case, ie do this:");
-    console.log("$ cd /path/to/bip39/src");
-    console.log("$ python -m http.server");
-    url = "http://localhost:8000";
-}
+// Use localhost server for all browsers
+var url = "http://localhost:8000";
 
 // Variables dependent on specific browser selection
 
@@ -68,15 +58,12 @@ else if (browser == "chrome") {
     var chrome = require('selenium-webdriver/chrome');
     newDriver = function() {
         var options = new chrome.Options();
-        options.addArguments("--headless");
-        options.addArguments("--no-sandbox");
-        options.addArguments("--disable-dev-shm-usage");
-        options.addArguments("--disable-gpu");
-        options.addArguments("--disable-extensions");
-        options.addArguments("--disable-background-timer-throttling");
-        options.addArguments("--disable-renderer-backgrounding");
-        options.addArguments("--disable-backgrounding-occluded-windows");
-        options.addArguments("--memory-pressure-off");
+        options.addArguments('--headless=new');
+        options.addArguments('--no-sandbox');
+        options.addArguments('--disable-dev-shm-usage');
+        options.addArguments('--disable-gpu');
+        options.addArguments('--allow-file-access-from-files');
+        options.addArguments('--window-size=1920,3000');
         options.addArguments("--max-old-space-size=4096");
         return new webdriver.Builder()
           .forBrowser('chrome')

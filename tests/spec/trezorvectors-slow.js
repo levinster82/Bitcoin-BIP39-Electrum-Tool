@@ -117,8 +117,10 @@ async function getAddressAtPath(derivationPath, addressType = "p2pkh") {
     // Switch to appropriate tab and set the account/change values
     switch (addressType) {
         case "p2pkh":
-            // Explicitly switch to BIP44 tab
+            // Explicitly switch to BIP44 tab with scroll-into-view
             var bip44Tab = await driver.findElement(By.css('#bip44-tab a'));
+            await driver.executeScript("arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", bip44Tab);
+            await driver.sleep(500);
             await bip44Tab.click();
             await driver.sleep(500);
             
@@ -131,8 +133,10 @@ async function getAddressAtPath(derivationPath, addressType = "p2pkh") {
             await changeField.sendKeys(change);
             break;
         case "p2wpkh":
-            // Switch to BIP84 tab first
+            // Switch to BIP84 tab first with scroll-into-view
             var bip84Tab = await driver.findElement(By.css('#bip84-tab a'));
+            await driver.executeScript("arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", bip84Tab);
+            await driver.sleep(500);
             await bip84Tab.click();
             await driver.sleep(500);
             
@@ -145,8 +149,10 @@ async function getAddressAtPath(derivationPath, addressType = "p2pkh") {
             await bip84ChangeField.sendKeys(change);
             break;
         case "p2tr":
-            // Switch to BIP86 tab first  
+            // Switch to BIP86 tab first with scroll-into-view
             var bip86Tab = await driver.findElement(By.css('#bip86-tab a'));
+            await driver.executeScript("arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", bip86Tab);
+            await driver.sleep(500);
             await bip86Tab.click();
             await driver.sleep(500);
             
@@ -184,8 +190,30 @@ async function getAddressAtPath(derivationPath, addressType = "p2pkh") {
         await rowsToAddField.clear();
         await rowsToAddField.sendKeys(rowsNeeded.toString());
         
-        // Click the more button to generate additional rows
+        // Scroll more button into view and click with enhanced reliability
         var moreButton = await driver.findElement(By.css("button.more"));
+        
+        // Double-check the button is scrolled properly into view
+        await driver.executeScript("arguments[0].scrollIntoView({behavior: 'auto', block: 'start'});", moreButton);
+        await driver.sleep(500);
+        
+        // Verify button is now in viewport before clicking
+        var inViewport = await driver.executeScript(`
+            var elem = arguments[0];
+            var rect = elem.getBoundingClientRect();
+            return rect.top >= 0 && rect.top < window.innerHeight - 50; // 50px buffer
+        `, moreButton);
+        
+        if (!inViewport) {
+            // If still not properly positioned, try alternative scroll
+            await driver.executeScript(`
+                var elem = arguments[0];
+                var rect = elem.getBoundingClientRect();
+                window.scrollTo(0, window.scrollY + rect.top - 100);
+            `, moreButton);
+            await driver.sleep(500);
+        }
+        
         await moreButton.click();
         
         // Wait for the new rows to be generated
