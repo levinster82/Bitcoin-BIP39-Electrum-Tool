@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build": "browserify index.js -o electrum-mnemonic.js && cp electrum-mnemonic.js ../../src/js/",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
