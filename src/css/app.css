@@ -415,7 +415,7 @@ hr {
 }
 
 .header-content h1 {
-    margin: 0;
+    margin: 15px 0 0 0;
 }
 
 .header-content .version {
