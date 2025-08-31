@@ -101,6 +101,12 @@ body {
     color: var(--text-color) !important;
 }
 
+/* Fix Bootstrap 5 form-select dropdown arrow interference */
+.form-select {
+    padding-right: 2.5rem !important; /* Add more right padding to prevent text overlap */
+    background-position: right 0.75rem center !important;
+}
+
 /* Light mode for CSV textarea */
 [data-theme="light"] .csv {
     background-color: #ffffff !important;
