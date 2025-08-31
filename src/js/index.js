@@ -124,6 +124,23 @@
     DOM.bip86accountXprv = $("#bip86 .account-xprv");
     DOM.bip86accountXpub = $("#bip86 .account-xpub");
     DOM.bip86change = $("#bip86 .change");
+    DOM.nip06tab = $("#nip06-tab");
+    DOM.nip06panel = $("#nip06");
+    DOM.nip06path = $("#bip32-path-nip06");
+    DOM.nip06purpose = $("#purpose-nip06");
+    DOM.nip06coin = $("#coin-nip06");
+    DOM.nip06account = $("#account-nip06");
+    DOM.nip06change = $("#change-nip06");
+    DOM.nip06addressIndex = $("#address-index-nip06");
+    DOM.nostrPrivateKey = $("#nostr-private-key");
+    DOM.nostrPublicKey = $("#nostr-public-key");
+    DOM.nostrPrivateKeyLabel = $("label[for='nostr-private-key']");
+    DOM.nostrPublicKeyLabel = $("label[for='nostr-public-key']");
+    DOM.nostrNpub = $("#nostr-npub");
+    DOM.nostrNsec = $("#nostr-nsec");
+    DOM.nostrNpubLabel = $("label[for='nostr-npub']");
+    DOM.nostrNsecLabel = $("label[for='nostr-nsec']");
+    DOM.showNostrInTable = $("#showNostrInTable");
     DOM.bip85 = $('.bip85');
     DOM.showBip85 = $('.showBip85');
     DOM.bip85Field = $('.bip85Field');
@@ -367,6 +384,7 @@
         DOM.seed.on("input", delayedSeedChanged);
         DOM.rootKey.on("input", delayedRootKeyChanged);
         DOM.showBip85.on('change', toggleBip85);
+        DOM.showNostrInTable.on('change', calcForDerivationPath);
         DOM.bip32path.on("input", calcForDerivationPath);
         DOM.bip44account.on("input", calcForDerivationPath);
         DOM.bip44change.on("input", calcForDerivationPath);
@@ -376,6 +394,8 @@
         DOM.bip84change.on("input", calcForDerivationPath);
         DOM.bip86account.on("input", calcForDerivationPath);
         DOM.bip86change.on("input", calcForDerivationPath);
+        DOM.nip06account.on("input", calcForDerivationPath);
+        DOM.nip06addressIndex.on("input", calcForDerivationPath);
         DOM.bip85application.on('input', calcBip85);
         DOM.bip85mnemonicLanguage.on('change', calcBip85);
         DOM.bip85mnemonicLength.on('change', calcBip85);
@@ -1088,6 +1108,9 @@
         else if (electrumSegwitTabSelected()) {
             displayElectrumSegwitInfo();
         }
+        else if (nip06TabSelected()) {
+            displayNip06Info();
+        }
         displayBip32Info();
         
         // Update CSV if CSV tab is currently visible - delay to ensure table is updated
@@ -1542,6 +1565,22 @@
             var derivationPath = DOM.bip141path.val();
             return derivationPath;
         }
+        else if (nip06TabSelected()) {
+            var purpose = parseIntNoNaN(DOM.nip06purpose.val(), 44);
+            var coin = parseIntNoNaN(DOM.nip06coin.val(), 1237);
+            var account = parseIntNoNaN(DOM.nip06account.val(), 0);
+            var change = parseIntNoNaN(DOM.nip06change.val(), 0);
+            var addressIndex = parseIntNoNaN(DOM.nip06addressIndex.val(), 0);
+            
+            var derivationPath = "m/";
+            derivationPath += purpose + "'/";
+            derivationPath += coin + "'/";
+            derivationPath += account + "'/";
+            derivationPath += change + "/";
+            derivationPath += addressIndex;
+            DOM.nip06path.val(derivationPath);
+            return derivationPath;
+        }
         else {
         }
     }
@@ -1705,6 +1744,51 @@
         DOM.electrumSegwitAccountXpub.val(accountXpub);
     }
 
+    function displayNip06Info() {
+        // Get the derivation path for NIP-06
+        var purpose = parseIntNoNaN(DOM.nip06purpose.val(), 44);
+        var coin = parseIntNoNaN(DOM.nip06coin.val(), 1237);
+        var account = parseIntNoNaN(DOM.nip06account.val(), 0);
+        var change = parseIntNoNaN(DOM.nip06change.val(), 0);
+        var addressIndex = parseIntNoNaN(DOM.nip06addressIndex.val(), 0);
+        
+        // Build the full NIP-06 derivation path: m/44'/1237'/account'/0/addressIndex
+        var path = "m/";
+        path += purpose + "'/";
+        path += coin + "'/";
+        path += account + "'/";
+        path += change + "/";
+        path += addressIndex;
+        
+        // Calculate the key at the full derivation path
+        var nostrKey = calcBip32ExtendedKey(path);
+        
+        // Get the raw private and public keys (32 bytes each)
+        var privateKeyHex = nostrKey.privateKey.toString('hex');
+        var publicKeyHex = nostrKey.publicKey.slice(1).toString('hex'); // Remove the 0x02/0x03 prefix for Nostr
+        
+        // Display the hex keys
+        DOM.nostrPrivateKey.val(privateKeyHex);
+        DOM.nostrPublicKey.val(publicKeyHex);
+        
+        // Update labels with current account number
+        DOM.nostrPrivateKeyLabel.text("Account " + account + " Nostr Private Key (hex)");
+        DOM.nostrPublicKeyLabel.text("Account " + account + " Nostr Public Key (hex)");
+        DOM.nostrNpubLabel.text("Account " + account + " npub (Bech32)");
+        DOM.nostrNsecLabel.text("Account " + account + " nsec (Bech32)");
+        
+        // Generate npub and nsec using bech32 encoding
+        try {
+            var npub = bech32EncodeNostr('npub', publicKeyHex);
+            var nsec = bech32EncodeNostr('nsec', privateKeyHex);
+            DOM.nostrNpub.val(npub);
+            DOM.nostrNsec.val(nsec);
+        } catch(e) {
+            DOM.nostrNpub.val("Error: " + e.message);
+            DOM.nostrNsec.val("Error: " + e.message);
+        }
+    }
+
     function displayBip32Info() {
         // Display the key
         DOM.seed.val(seed);
@@ -1848,7 +1932,11 @@
 
                 // Standard BIP39 derivation for non-Electrum mode
                 var key = "NA";
-                if (useHardenedAddresses) {
+                if (nip06TabSelected()) {
+                    // For NIP06, derive the full path with account number from table index
+                    var nip06Path = "m/44'/1237'/" + index + "'/0/" + parseIntNoNaN(DOM.nip06addressIndex.val(), 0);
+                    key = calcBip32ExtendedKey(nip06Path);
+                } else if (useHardenedAddresses) {
                     key = bip32ExtendedKey.deriveHardened(index);
                 }
                 else {
@@ -1896,9 +1984,13 @@
                 }
                 // get pubkey (uncompressed if BIP38, compressed otherwise)
                 var pubkey = bitcoinjs.buffer.Buffer.from(publicKeyForAddress).toString('hex');
-                var indexText = getDerivationPath() + "/" + index;
-                if (useHardenedAddresses) {
-                    indexText = indexText + "'";
+                if (nip06TabSelected()) {
+                    var indexText = "m/44'/1237'/" + index + "'/0/" + parseIntNoNaN(DOM.nip06addressIndex.val(), 0);
+                } else {
+                    var indexText = getDerivationPath() + "/" + index;
+                    if (useHardenedAddresses) {
+                        indexText = indexText + "'";
+                    }
                 }
 
                 // Segwit addresses use modern payments API
@@ -1961,8 +2053,33 @@
                     }
                 }
 
-
-
+                // Convert to Nostr format if checkbox is checked and we're on NIP06 tab
+                if (nip06TabSelected() && DOM.showNostrInTable.prop('checked')) {
+                    try {
+                        // For NIP06, convert hex pubkey to npub and WIF privkey to nsec
+                        if (pubkey && pubkey.length >= 66) {
+                            // Remove 02/03 prefix and get raw 32-byte public key
+                            var rawPubkey = pubkey.substring(2);
+                            // Ensure exactly 64 characters (32 bytes)
+                            if (rawPubkey.length === 64) {
+                                pubkey = bech32EncodeNostr("npub", rawPubkey);
+                            }
+                        }
+                        if (privkey && privkey !== "NA" && hasPrivkey) {
+                            // Decode WIF to get raw private key
+                            var keyPair = bitcoinjs.ECPair.fromWIF(privkey, network);
+                            var rawPrivkey = bitcoinjs.buffer.Buffer.from(keyPair.privateKey).toString('hex');
+                            // Ensure exactly 64 characters (32 bytes)
+                            if (rawPrivkey.length === 64) {
+                                privkey = bech32EncodeNostr("nsec", rawPrivkey);
+                            }
+                        }
+                    } catch (e) {
+                        console.error("Error converting to Nostr format:", e);
+                        console.error("pubkey length:", pubkey ? pubkey.length : "undefined");
+                        console.error("privkey:", privkey);
+                    }
+                }
 
                 addAddressToList(indexText, address, pubkey, privkey);
                 if (isLast) {
@@ -2090,6 +2207,27 @@
             return defaultVal;
         }
         return v;
+    }
+
+    // Encode Nostr keys using bech32 (npub/nsec format)
+    function bech32EncodeNostr(hrp, hexKey) {
+        // Convert hex string to bytes array
+        var keyBytes = [];
+        for (var i = 0; i < hexKey.length; i += 2) {
+            keyBytes.push(parseInt(hexKey.substr(i, 2), 16));
+        }
+        
+        // Use the bech32 library from libs global
+        if (typeof libs !== 'undefined' && libs.bech32) {
+            try {
+                var words = libs.bech32.toWords(keyBytes);
+                return libs.bech32.encode(hrp, words);
+            } catch (e) {
+                throw new Error("Bech32 encoding failed: " + e.message);
+            }
+        } else {
+            throw new Error("bech32 library not available");
+        }
     }
 
     function showPending() {
@@ -2619,6 +2757,10 @@
 
     function bip141TabSelected() {
         return DOM.bip141tab.find(".nav-link").hasClass("active");
+    }
+
+    function nip06TabSelected() {
+        return DOM.nip06tab.find(".nav-link").hasClass("active");
     }
 
     function setHdCoin(coinValue) {

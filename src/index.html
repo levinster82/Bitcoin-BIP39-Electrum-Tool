@@ -479,6 +479,9 @@
                         <li class="nav-item" id="electrum-segwit-tab" style="display: none;">
                             <a class="nav-link" href="#electrum-segwit" role="tab" data-bs-toggle="tab">Electrum SegWit</a>
                         </li>
+                        <li class="nav-item" id="nip06-tab">
+                            <a class="nav-link" href="#nip06" role="tab" data-bs-toggle="tab">NIP06</a>
+                        </li>
                     </ul>
                     <div class="derivation-type tab-content">
                         <div id="bip44" class="tab-pane active">
@@ -1137,6 +1140,106 @@
                         </div>
                     </form>
                 </div>
+                        <div id="nip06" class="tab-pane">
+                            <form role="form">
+                                <div class="row mt-3">
+                                    <div class="col-sm-2"></div>
+                                    <div class="col-sm-10">
+                                    <p>
+                                        For more info see the
+                                        <a href="https://github.com/nostr-protocol/nips/blob/master/06.md" target="_blank">NIP-06 spec</a>.
+                                    </p>
+                                    </div>
+                                </div>
+                                <div class="mb-3 row">
+                                    <label for="purpose-nip06" class="col-sm-2 form-label">
+                                        <a href="https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki#purpose" target="_blank">Purpose</a>
+                                    </label>
+                                    <div class="col-sm-10">
+                                        <input id="purpose-nip06" type="text" class="purpose form-control" value="44" readonly>
+                                    </div>
+                                </div>
+                                <div class="mb-3 row">
+                                    <label for="coin-nip06" class="col-sm-2 form-label">
+                                        <a href="https://github.com/nostr-protocol/nips/blob/master/06.md" target="_blank">Coin</a>
+                                    </label>
+                                    <div class="col-sm-10">
+                                        <input id="coin-nip06" type="text" class="coin form-control" value="1237" readonly>
+                                    </div>
+                                </div>
+                                <div class="mb-3 row">
+                                    <label for="account-nip06" class="col-sm-2 form-label">
+                                        <a href="https://github.com/nostr-protocol/nips/blob/master/06.md" target="_blank">Account</a>
+                                    </label>
+                                    <div class="col-sm-10">
+                                        <input id="account-nip06" type="text" class="account form-control" value="0">
+                                    </div>
+                                </div>
+                                <div class="mb-3 row">
+                                    <label for="change-nip06" class="col-sm-2 form-label">
+                                        <a href="https://github.com/nostr-protocol/nips/blob/master/06.md" target="_blank">Change</a>
+                                    </label>
+                                    <div class="col-sm-10">
+                                      <input id="change-nip06" type="text" class="change form-control" value="0" readonly>
+                                    </div>
+                                </div>
+                                <div class="mb-3 row">
+                                    <label for="address-index-nip06" class="col-sm-2 form-label">
+                                        <a href="https://github.com/nostr-protocol/nips/blob/master/06.md" target="_blank">Address Index</a>
+                                    </label>
+                                    <div class="col-sm-10">
+                                      <input id="address-index-nip06" type="text" class="address-index form-control" value="0" readonly>
+                                    </div>
+                                </div>
+                                <div class="mt-4 mb-2 row">
+                                    <label class="col-sm-2 form-label">
+                                    </label>
+                                    <div class="col-sm-10">
+                                        <p>NIP-06 defines how to derive Nostr keys from BIP39 seed phrases using the derivation path <code>m/44'/1237'/account'/0/0</code>.</p>
+                                        <p class="text-danger"><strong>Never share your private key (nsec) with anyone. Store it securely offline.</strong></p>
+                                    </div>
+                                </div>
+                                <div class="mb-3 row">
+                                    <label for="bip32-path-nip06" class="col-sm-2 form-label">BIP32 Derivation Path</label>
+                                    <div class="col-sm-10">
+                                        <input id="bip32-path-nip06" type="text" class="path form-control" value="m/44'/1237'/0'/0/0" readonly>
+                                    </div>
+                                </div>
+                                <div class="mb-3 row">
+                                    <label for="nostr-private-key" class="col-sm-2 form-label">Nostr Private Key (hex)</label>
+                                    <div class="col-sm-10">
+                                        <textarea id="nostr-private-key" class="private-key private-data form-control" readonly data-show-qr autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
+                                    </div>
+                                </div>
+                                <div class="mb-3 row">
+                                    <label for="nostr-public-key" class="col-sm-2 form-label">Nostr Public Key (hex)</label>
+                                    <div class="col-sm-10">
+                                        <textarea id="nostr-public-key" class="public-key form-control" readonly data-show-qr autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
+                                    </div>
+                                </div>
+                                <div class="mb-3 row">
+                                    <label for="nostr-npub" class="col-sm-2 form-label">npub (Bech32)</label>
+                                    <div class="col-sm-10">
+                                        <textarea id="nostr-npub" class="npub form-control" readonly data-show-qr autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
+                                    </div>
+                                </div>
+                                <div class="mb-3 row">
+                                    <label for="nostr-nsec" class="col-sm-2 form-label">nsec (Bech32)</label>
+                                    <div class="col-sm-10">
+                                        <textarea id="nostr-nsec" class="nsec private-data form-control" readonly data-show-qr autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
+                                    </div>
+                                </div>
+                                <div class="mb-3 row">
+                                    <div class="col-sm-2"></div>
+                                    <div class="col-sm-10">
+                                        <div class="form-check">
+                                            <input type="checkbox" class="form-check-input" id="showNostrInTable">
+                                            <label class="form-check-label" for="showNostrInTable">Display npub / nsec in table</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1279,6 +1382,11 @@
                     <p>
                         Read more at the
                         <a href="https://electrum.readthedocs.io/en/latest/seedphrase.html" target="_blank">Electrum seed phrase documentation</a>
+                    </p>
+                    <h3>NIP-06 <span class="small">Basic key derivation from mnemonic seed phrase for Nostr</span></h3>
+                    <p>
+                        Read more at the
+                        <a href="https://github.com/nostr-protocol/nips/blob/master/06.md" target="_blank">official NIP-06 spec</a>
                     </p>
                     <h3>BIP32 <span class="small">Hierarchical Deterministic Wallets</span></h3>
                     <p>
