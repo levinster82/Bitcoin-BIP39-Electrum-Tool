@@ -228,7 +228,7 @@ h1.text-center {
 }
 
 hr {
-    margin-top: 10px !important;
+    margin-top: 8px !important;
 }
 .csv {
     margin-top: 20px;
@@ -400,7 +400,7 @@ hr {
     align-items: center;
     justify-content: space-between;
     position: relative;
-    margin-bottom: 20px;
+    margin-bottom: 5px;
 }
 
 .bitcoin-logo {
