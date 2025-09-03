@@ -621,6 +621,78 @@ describe('NIP-06 Nostr Key Derivation Tests', function() {
             .then(done);
     });
 
+    it('Should generate correct NIP-06 keys for Vector 1 Account 5', function(done) {
+        testNostrKeys(done, {
+            phrase: "what bleak badge arrange retreat wolf trade produce cricket blur garlic valid proud rude strong choose busy staff weather area salt hollow arm fade",
+            account: 5
+        }, {
+            privateKeyHex: "6e97b8318eaa298e246c7f596cc721e4d10d2f1c82ac49dda4ceacb1328a91ff",
+            publicKeyHex: "a3ea32cba4c9fa581bdadcf2bb963c90aade93b8dadf22f591fa6c0d4f3bb138",
+            npub: "npub1504r9jaye8a9sx76mneth93ujz4dayacmt0j9av3lfkq6nemkyuqlpzq0t",
+            nsec: "nsec1d6tmsvvw4g5cufrv0avke3epungs6tcus2kynhdye6ktzv52j8lshfgh6n"
+        });
+    });
+
+    it('Should generate correct NIP-06 keys for Vector 1 Account 10', function(done) {
+        testNostrKeys(done, {
+            phrase: "what bleak badge arrange retreat wolf trade produce cricket blur garlic valid proud rude strong choose busy staff weather area salt hollow arm fade",
+            account: 10
+        }, {
+            privateKeyHex: "3dfe3230e1a516a55da9e6f416c24086ff4c114e8bbec9d649b82c7013799b96",
+            publicKeyHex: "9826feefaff485f9ef22fd7e2e37f878c82843331f2c1b894a22695dbfd64e92",
+            npub: "npub1nqn0ama07jzlnmezl4lzudlc0ryzssenrukphz22yf54m07kf6fqpwdznt",
+            nsec: "nsec18hlryv8p55t22hdfum6pdsjqsml5cy2w3wlvn4jfhqk8qymenwtqjll2v7"
+        });
+    });
+
+    it('Should generate correct NIP-06 keys for Vector 1 Account 25', function(done) {
+        testNostrKeys(done, {
+            phrase: "what bleak badge arrange retreat wolf trade produce cricket blur garlic valid proud rude strong choose busy staff weather area salt hollow arm fade",
+            account: 25
+        }, {
+            privateKeyHex: "fa87254eef1fb06304a7ee0d9e8ddabf7c4a73a9e926eebb0b89f50a22a86b3b",
+            publicKeyHex: "a62851a6c681ce6d07b8cd89784fb088c6a783fa21a56be8f42289f3d3a753f2",
+            npub: "npub15c59rfkxs88x6pacekyhsnas3rr20ql6yxjkh685y2yl85a820eqazjzfp",
+            nsec: "nsec1l2rj2nh0r7cxxp98acxearw6ha7y5uafaynwawct386s5g4gdvasxentdd"
+        });
+    });
+
+    it('Should generate correct NIP-06 keys for Vector 2 Account 5', function(done) {
+        testNostrKeys(done, {
+            phrase: "leader monkey parrot ring guide accident before fence cannon height naive bean",
+            account: 5
+        }, {
+            privateKeyHex: "71ac6050f6974298caaccd411e39c43ce684d2b3dfb842cbccdf545c1cbad64e",
+            publicKeyHex: "0a53cd729ab4f98af9f4c28a258932a2da85498d7b35416848fc48bb02a6b2cc",
+            npub: "npub1pffu6u56knuc4705c29ztzfj5tdg2jvd0v65z6zgl3ytkq4xktxqhfrcyk",
+            nsec: "nsec1wxkxq58kjapf3j4ve4q3uwwy8nngf54nm7uy9j7vma29c8966e8q84w62w"
+        });
+    });
+
+    it('Should generate correct NIP-06 keys for Vector 2 Account 10', function(done) {
+        testNostrKeys(done, {
+            phrase: "leader monkey parrot ring guide accident before fence cannon height naive bean",
+            account: 10
+        }, {
+            privateKeyHex: "d73b7311304033aa3c03df2d866a15ba7e51df7d9892d08121dbee5b004ae46d",
+            publicKeyHex: "a2a0b0eeb2f6e714d7b4d085daf1eb95b1857b48041689e812ab409b3afd6661",
+            npub: "npub152stpm4j7mn3f4a56zza4u0tjkcc276gqstgn6qj4dqfkwhavessfyuu7j",
+            nsec: "nsec16uahxyfsgqe650qrmukcv6s4hfl9rhmanzfdpqfpm0h9kqz2u3ks4vgcxk"
+        });
+    });
+
+    it('Should generate correct NIP-06 keys for Vector 2 Account 25', function(done) {
+        testNostrKeys(done, {
+            phrase: "leader monkey parrot ring guide accident before fence cannon height naive bean",
+            account: 25
+        }, {
+            privateKeyHex: "c309ba6dd483f81a3477c0009c23666ef2e3a9d7704d38335946955da195b26f",
+            publicKeyHex: "a72efca429f637fbaf3b015c81ce7e4a13f0087eceb506aac07049f9b6b92723",
+            npub: "npub15uh0efpf7cmlhtemq9wgrnn7fgflqzr7e66sd2kqwpylnd4eyu3s0cqcqj",
+            nsec: "nsec1cvym5mw5s0up5drhcqqfcgmxdmew82whwpxnsv6eg624mgv4kfhs9qfep4"
+        });
+    });
+
     it('Should handle NIP-06 parameters correctly with different accounts', function(done) {
         // Test that different account numbers generate different keys
         driver.findElement(By.css('.phrase'))
