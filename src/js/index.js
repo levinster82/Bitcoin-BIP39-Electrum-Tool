@@ -2978,7 +2978,7 @@ function toggleTheme() {
         } else {
             html.setAttribute('data-theme', 'light');
         }
-        toggleButton.innerHTML = '🌙/☀️';
+        toggleButton.innerHTML = '🌗';
     }
 }
 
@@ -2997,7 +2997,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     if (toggleButton) {
-        toggleButton.innerHTML = '🌙/☀️';
+        toggleButton.innerHTML = '🌗';
     }
     
     // Listen for system theme changes
@@ -3012,7 +3012,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             // Keep the Auto button text
             if (toggleButton) {
-                toggleButton.innerHTML = '🌙/☀️';
+                toggleButton.innerHTML = '🌗';
             }
         }
     });
