@@ -25,7 +25,9 @@
                     </svg>
                     <div class="header-content">
                         <h1 class="text-center">Bitcoin Mnemonic Code Converter</h1>
-                        <div class="text-center version">v1.0.4</div>
+                        <div class="text-center version">
+                            <a href="https://github.com/levinster82/Bitcoin-BIP39-Electrum-Tool/releases/latest" target="_blank" style="color: inherit; text-decoration: none;">v1.0.5</a>
+                        </div>
                     </div>
                     <button class="theme-toggle" onclick="toggleTheme()" id="theme-toggle" aria-label="Toggle dark/light theme">
                         <span aria-hidden="true">🌗</span>
@@ -38,8 +40,8 @@
                         <div class="mb-3 row">
                             <div class="col-sm-2"></div>
                             <div class="col-sm-10">
-                                <p class="mnemonic-description bip39-description">You can enter an existing BIP39 mnemonic, or generate a new random one. Typing your own twelve words will probably not work how you expect, since the words require a particular structure (the last word contains a checksum).</p>
-                                <p class="mnemonic-description electrum-description hidden">You can enter an existing Electrum seed phrase, or generate a new random one. Electrum does not follow BIP39 for mnemonic seed generation. Instead, it uses its own system with seeds that are versioned (e.g., 'legacy', 'segwit') and include a checksum. Because of these differences, Electrum mnemonics are not interchangeable with BIP39 mnemonics. At this time only english language is supported.</p>
+                                <p class="mnemonic-description bip39-description"><a href="#offline-usage" style="color: inherit; text-decoration: underline;">Don't Trust.. Verify! Always! Use this tool offline.</a> You can enter an existing BIP39 mnemonic, or generate a new random one. Typing your own twelve words will probably not work how you expect, since the words require a particular structure (the last word contains a checksum).</p>
+                                <p class="mnemonic-description electrum-description hidden"><a href="#offline-usage" style="color: inherit; text-decoration: underline;">Don't Trust.. Verify! Always! Use this tool offline.</a> You can enter an existing Electrum seed phrase, or generate a new random one. Electrum does not follow BIP39 for mnemonic seed generation. Instead, it uses its own system with seeds that are versioned (e.g., 'legacy', 'segwit') and include a checksum. Because of these differences, Electrum mnemonics are not interchangeable with BIP39 mnemonics. At this time only english language is supported.</p>
                                 <p class="mnemonic-spec-link bip39-spec-link">
                                     For more info see the
                                     <a href="https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki" target="_blank">BIP39 spec</a>.
@@ -243,6 +245,12 @@
                                     <input type="checkbox" class="form-check-input autoCompute" id="autoCompute" checked>
                                     <label class="form-check-label" for="autoCompute">Auto compute</label>
                                 </div>
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <div class="col-sm-2"></div>
+                            <div class="col-sm-10">
+                                <button class="btn btn-danger fw-bold clearAll" id="clearAll">Clear All</button>
                             </div>
                         </div>
                         <div class="mb-3 row">
@@ -1514,24 +1522,63 @@
             <div class="row">
                 <div class="col-md-12">
 
-                    <h2>Offline Usage</h2>
+                    <h2 id="offline-usage">Offline Usage</h2>
+                    <h3>Don't Trust.. Verify!</h3>
+                    
+                    <div class="alert alert-warning" role="alert">
+                        <strong>⚠️ Security Notice:</strong> Always use this tool on an offline computer to protect your private keys.
+                    </div>
 
-                    <p>
-                    You can use this tool without having to be online.
-                    </p>
-                    <p>
-                    In your browser, select file save-as, and save this page
-                    as a file.
-                    </p>
-                    <p>
-                    Double-click that file to open it in a browser
-                    on any offline computer.
-                    </p>
-                    <p>
-                    <span>Alternatively, download the file from the latest GitHub release</span>
-                    -
-                    <a href="https://github.com/levinster82/Bitcoin-BIP39-Electrum-Tool/releases/latest">https://github.com/levinster82/Bitcoin-BIP39-Electrum-Tool/releases/latest</a>
-                    </p>
+                    <h4>Quick Start</h4>
+                    <ol>
+                        <li>Download <code>bip39-electrum-standalone.html</code> from <a href="https://github.com/levinster82/Bitcoin-BIP39-Electrum-Tool/releases/latest">GitHub releases</a></li>
+                        <li>Transfer to offline computer</li>
+                        <li>Open in browser</li>
+                    </ol>
+
+                    <h4>Full Verification (Recommended)</h4>
+                    
+                    <h5>Step 1: Download Files</h5>
+                    <p>Download these 3 files from <a href="https://github.com/levinster82/Bitcoin-BIP39-Electrum-Tool/releases/latest">GitHub releases</a>:</p>
+                    <ul>
+                        <li><code>bip39-electrum-standalone.html</code> - The tool</li>
+                        <li><code>bip39-electrum-standalone.html.sha256sum</code> - Checksum file</li>
+                        <li><code>bip39-electrum-standalone.html.sha256sum.asc</code> - GPG signature</li>
+                    </ul>
+
+                    <h5>Step 2: Verify File Integrity</h5>
+                    <p>Ensure the file hasn't been tampered with:</p>
+                    <pre><code>sha256sum -c bip39-electrum-standalone.html.sha256sum</code></pre>
+                    <p><strong>Expected result:</strong> <code>bip39-electrum-standalone.html: OK</code></p>
+
+                    <h5>Step 3: Verify GPG Signature</h5>
+                    <p>Confirm the files are authentic:</p>
+                    <pre><code>gpg --verify bip39-electrum-standalone.html.sha256sum.asc bip39-electrum-standalone.html.sha256sum</code></pre>
+
+                    <details>
+                        <summary><strong>First time? Set up GPG key verification</strong></summary>
+                        <div style="margin-top: 15px;">
+                            <h5>Option A: Download from GitHub</h5>
+                            <pre><code>wget https://raw.githubusercontent.com/levinster82/Bitcoin-BIP39-Electrum-Tool/refs/heads/master/levinster82.asc
+gpg --import levinster82.asc</code></pre>
+
+                            <h5>Option B: Download from keyserver</h5>
+                            <pre><code>gpg --keyserver hkps://keyserver.ubuntu.com --recv-keys E3BCAA9688A7BF6A</code></pre>
+
+                            <h5>Verify the correct key was imported</h5>
+                            <pre><code>gpg --fingerprint E3BCAA9688A7BF6A</code></pre>
+                            
+                            <p><strong>Expected fingerprint:</strong></p>
+                            <pre><code>pub   brainpoolP512r1 2025-08-16 [SC] [expires: 2050-08-10]
+      AA9B 693E AC84 DC76 6E68  C4FF E3BC AA96 88A7 BF6A
+uid           [ unknown] levinster82 (General use.) &lt;levinster82@protonmail.com&gt;
+sub   brainpoolP512r1 2025-08-16 [E] [expires: 2050-08-10]</code></pre>
+                        </div>
+                    </details>
+
+                    <div class="alert alert-success" role="alert" style="margin-top: 20px;">
+                        <strong>✅ Verification Complete!</strong> You can now safely open <code>bip39-electrum-standalone.html</code> in your offline browser.
+                    </div>
 
                 </div>
             </div>
@@ -1552,6 +1599,8 @@
                         <br>
                         <span>(forked from <a href="https://github.com/iancoleman/bip39" target="_blank">https://github.com/iancoleman/bip39</a>)</span>
                     </p>
+
+                    <hr>
 
                     <h3>Libraries</h3>
 

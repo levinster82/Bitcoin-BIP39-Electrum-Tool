@@ -75,6 +75,7 @@
     DOM.passphrase = $(".passphrase");
     DOM.generateContainer = $(".generate-container");
     DOM.generate = $(".generate");
+    DOM.clearAll = $("#clearAll");
     DOM.seed = $(".seed");
     DOM.rootKey = $(".root-key");
     DOM.fingerprint = $(".fingerprint");
@@ -380,6 +381,7 @@
         DOM.showSplitMnemonic.on("change", toggleSplitMnemonic);
         DOM.passphrase.on("input", delayedPhraseChanged);
         DOM.generate.on("click", generateClicked);
+        DOM.clearAll.on("click", clearAllClicked);
         DOM.more.on("click", showMore);
         DOM.seed.on("input", delayedSeedChanged);
         DOM.rootKey.on("input", delayedRootKeyChanged);
@@ -799,10 +801,12 @@
             DOM.mnemonicLabel.text("Electrum");
             DOM.seedLabel.text("Electrum Seed");
             DOM.passphraseLabel.text("Passphrase (optional)");
-            // Hide BIP tabs and show Electrum tabs
-            $("#bip32-tab, #bip44-tab, #bip49-tab, #bip84-tab, #bip141-tab, #bip86-tab").addClass("hidden").removeClass("active");
+            // Hide BIP tabs (including NIP06) and show Electrum tabs
+            $("#bip32-tab, #bip44-tab, #bip49-tab, #bip84-tab, #bip141-tab, #bip86-tab, #nip06-tab").addClass("hidden").removeClass("active");
+            // Remove active class from BIP tab links
+            $("#bip32-tab a, #bip44-tab a, #bip49-tab a, #bip84-tab a, #bip141-tab a, #bip86-tab a, #nip06-tab a").removeClass("active");
             // Hide BIP tab content panels
-            $("#bip32, #bip44, #bip49, #bip84, #bip141, #bip86").removeClass("active");
+            $("#bip32, #bip44, #bip49, #bip84, #bip141, #bip86, #nip06").removeClass("active");
             DOM.electrumTabs.removeClass("hidden").show();
             // Activate first Electrum tab by default
             DOM.electrumLegacyTab.addClass("active");
@@ -833,13 +837,15 @@
             DOM.mnemonicLabel.text("BIP39");
             DOM.seedLabel.text("BIP39 Seed");
             DOM.passphraseLabel.text("BIP39 Passphrase (optional)");
-            // Show BIP tabs and hide Electrum tabs
-            $("#bip32-tab, #bip44-tab, #bip49-tab, #bip84-tab, #bip141-tab, #bip86-tab").removeClass("hidden");
+            // Show BIP tabs (including NIP06) and hide Electrum tabs
+            $("#bip32-tab, #bip44-tab, #bip49-tab, #bip84-tab, #bip141-tab, #bip86-tab, #nip06-tab").removeClass("hidden");
             DOM.electrumTabs.addClass("hidden").hide();
             DOM.electrumTabPanels.removeClass("active");
             // Remove active class from Electrum tabs
             DOM.electrumLegacyTab.removeClass("active");
             DOM.electrumSegwitTab.removeClass("active");
+            // Remove active class from Electrum tab links
+            $("#electrum-legacy-tab a, #electrum-segwit-tab a").removeClass("active");
             // Hide Electrum form content
             $("#electrum-legacy form, #electrum-segwit form").addClass("hidden");
             // Spacer removed
@@ -1146,6 +1152,143 @@
                 updateCsvIfVisible();
             }, 500);
         }, 50);
+    }
+
+    function clearAllClicked() {
+        // First, disable auto-computation to prevent interference
+        DOM.autoCompute.prop("checked", false);
+        
+        // Clear all computed output fields FIRST to prevent seed validation errors
+        DOM.seed.val("");
+        seed = null;  // Set global seed variable to null
+        clearKeys();  // Use existing function instead of manual clearing
+        DOM.fingerprint.val("");
+        
+        // Clear the mnemonic phrase
+        DOM.phrase.val("");
+        
+        // Clear passphrase
+        DOM.passphrase.val("");
+        
+        // Reset entropy inputs
+        DOM.entropy.val("");
+        DOM.entropyMnemonicLength.val("raw");
+        DOM.entropyContainer.find("input[name='entropy-type'][value='hexadecimal']").prop('checked', true);
+        
+        // Don't change mnemonic type - let user keep their current selection (BIP39 or Electrum)
+        
+        // Reset word strength to default (24)
+        DOM.generatedStrength.val("24");
+        
+        // Reset BIP derivation values to defaults
+        DOM.bip44account.val("0");
+        DOM.bip44change.val("0");
+        DOM.bip49account.val("0");
+        DOM.bip49change.val("0");
+        DOM.bip84account.val("0");
+        DOM.bip84change.val("0");
+        DOM.bip86account.val("0");
+        DOM.bip86change.val("0");
+        DOM.nip06account.val("0");
+        
+        // Reset network to Bitcoin (index 0 in networks array)
+        DOM.network.val("0");
+        // Clear addresses list using built-in function
+        clearAddressesList();
+        
+        // Reset BIP85 fields to defaults
+        DOM.bip85application.val("bip39");
+        DOM.bip85mnemonicLength.val("12");
+        DOM.bip85index.val("0");
+        DOM.bip85bytes.val("64");
+        DOM.bip85Field.val("");
+        
+        // Reset split mnemonic to default (unchecked)
+        DOM.showSplitMnemonic.prop("checked", false);
+        DOM.phraseSplit.val("");
+        // Trigger the split mnemonic toggle to hide the field
+        toggleSplitMnemonic();
+        
+        // Language is reset by default (English is the default/only option)
+        
+        // BIP44 account keys already cleared by clearKeys() above
+        
+        // Reset derivation path field ONLY for the currently active tab
+        if (DOM.mnemonicType.val() === "electrum") {
+            if (electrumLegacyTabSelected()) {
+                DOM.electrumLegacyPath.val("m/");
+            } else if (electrumSegwitTabSelected()) {
+                DOM.electrumSegwitPath.val("m/0'");
+            }
+        } else {
+            // BIP39 mode - reset path only for the currently active tab
+            if (bip44TabSelected()) {
+                DOM.bip44path.val("m/44'/0'/0'/0");
+            } else if (bip49TabSelected()) {
+                DOM.bip49path.val("m/49'/0'/0'/0");
+            } else if (bip84TabSelected()) {
+                DOM.bip84path.val("m/84'/0'/0'/0");
+            } else if (bip86TabSelected()) {
+                DOM.bip86path.val("m/86'/0'/0'/0");
+            } else if (bip141TabSelected()) {
+                DOM.bip141path.val("m/0");
+            } else if (nip06TabSelected()) {
+                // NIP06 path is handled internally
+            } else if (bip32TabSelected()) {
+                DOM.bip32path.val("m/0");
+            }
+        }
+        
+        // Clear NIP06 fields
+        DOM.nostrPrivateKey.val("");
+        DOM.nostrPublicKey.val("");
+        DOM.nostrNpub.val("");
+        DOM.nostrNsec.val("");
+        
+        // Reset other checkboxes to defaults
+        DOM.privacyScreenToggle.prop("checked", false);
+        DOM.showNostrInTable.prop("checked", false);
+        
+        // Use built-in functions for cleanup
+        hidePending();  // Hide any pending/loading states
+        hideValidationError();  // Hide any validation errors
+        stopGenerating();  // Stop any ongoing generation processes
+        
+        // Clear remaining manual fields
+        DOM.hardenedAddresses.prop("checked", false);
+        DOM.useBip38.prop("checked", false);
+        DOM.bip38Password.val("");
+        
+        // Clear addresses table and CSV
+        DOM.addresses.empty();
+        DOM.csv.val("");
+        
+        // Don't force tab switching - let user keep their current tab active
+        
+        // Clear any error/warning displays  
+        hidePending();
+        // DOM.feedback is already handled by hideValidationError() above
+        DOM.entropyHashWarning.addClass("hidden");
+        
+        // Clear entropy display
+        DOM.entropyBits.text("");
+        DOM.entropyBinary.text("");
+        
+        // Stop any ongoing generation processes
+        stopGenerating();
+        
+        // Clear any timeouts that might refill fields
+        if (typeof phraseChangeTimeoutEvent !== 'undefined') {
+            clearTimeout(phraseChangeTimeoutEvent);
+        }
+        
+        // Trigger privacy screen toggle to ensure correct state
+        privacyScreenToggled();
+        
+        // Re-enable auto compute after a delay to ensure clearing is complete
+        setTimeout(function() {
+            DOM.autoCompute.prop("checked", true);
+        }, 200);
     }
 
     function languageChanged() {
