@@ -858,7 +858,7 @@
             // Re-enable BIP39 fields
             $(".entropy-container, .passphrase, .splitMnemonic").removeClass("disabled-for-electrum");
             $(".entropy-container input, .entropy-container select, .passphrase, .phraseSplit").prop("disabled", false);
-            $(".seed, .root-key, .fingerprint").prop("readonly", true).removeClass("electrum-generated");
+            $(".seed, .root-key, .fingerprint").prop("readonly", false).removeClass("electrum-generated");
             
             // Restore all mnemonic length options for BIP39
             DOM.generatedStrength.find("option").removeClass("hidden");
