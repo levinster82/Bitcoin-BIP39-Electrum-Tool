@@ -4,6 +4,9 @@ A Bitcoin-focused fork of [iancoleman/bip39](https://github.com/iancoleman/bip39
 
 ## New Features (This Fork)
 
+### Nostr Key Derivation
+- **NIP-06 support**: Deterministic derivation of npub nsec from mnemonic
+
 ### Fingerprint Display
 - **Fingerprint Display**: Shows wallet fingerprint for identification
 
@@ -18,8 +21,10 @@ A Bitcoin-focused fork of [iancoleman/bip39](https://github.com/iancoleman/bip39
 - **Change Addresses**: Toggle between receive and change address generation
 
 ### Tool Enhancements
+- **Updated Offline Usage section.  Don't Trust.. Verify! Always!**
+- **Added "Clear All" fields button**
 - **Bitcoin-Only Libraries**: Removed altcoin dependencies, upgraded to bitcoinjs-lib 6.1.7+
-- **Comprehensive Test Suite**: 190+ tests across 5 test files including BIP-86
+- **Comprehensive Test Suite**: 190+ tests validating proper function and key generation.
 - **Auto Day/Night Theme**: Automatically follows system dark/light mode preference
 - **Manual Theme Toggle**: Three-way toggle (Light → Dark → Auto) for user control
 
@@ -42,7 +47,7 @@ A Bitcoin-focused fork of [iancoleman/bip39](https://github.com/iancoleman/bip39
 
 Download from releases:
 - Original Release  `bip39-electrum-standalone.html` - v1.0.0 - Bitcoin Only Toxic Maxi Edition
-- Latest Release    `bip39-electrum-standalone.html` - v1.0.2 - Taproot for TOXIC Bitcoin Maxi's
+- Latest Release    `bip39-electrum-standalone.html` - v1.0.5 - NOSTR is Bitcoin only? GFY
 - https://github.com/levinster82/Bitcoin-BIP39-Electrum-Tool/releases/latest
 
 Build from source:
