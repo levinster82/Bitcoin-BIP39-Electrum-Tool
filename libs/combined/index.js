@@ -48,6 +48,7 @@ const jQuery = require('jquery')
 
 /* bootstrap */
 const bootstrapModule = require('bootstrap')
+require('bootstrap/dist/css/bootstrap.css')
 
 /* sjcl */
 const sjcl = require('sjcl')

@@ -1,11 +1,12 @@
 const path = require('path');
 const webpack = require('webpack');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
   entry: './index.js',
   output: {
-    path: path.resolve(__dirname, '../../src/js'),
-    filename: 'combined-libs.js',
+    path: path.resolve(__dirname, '../../src'),
+    filename: 'js/combined-libs.js',
     library: {
       name: 'libs',
       type: 'window'
@@ -13,6 +14,15 @@ module.exports = {
     globalObject: 'this'
   },
   mode: 'production',
+  devtool: 'source-map',
+  module: {
+    rules: [
+      {
+        test: /\.css$/i,
+        use: [MiniCssExtractPlugin.loader, 'css-loader']
+      }
+    ]
+  },
   resolve: {
     fallback: {
       "crypto": require.resolve("crypto-browserify"),
@@ -25,6 +35,9 @@ module.exports = {
     new webpack.ProvidePlugin({
       Buffer: ['buffer', 'Buffer'],
       process: 'process/browser'
+    }),
+    new MiniCssExtractPlugin({
+      filename: 'css/bootstrap.css'
     })
   ]
 };
