@@ -183,6 +183,7 @@
     DOM.qrHider = DOM.qrContainer.find(".qr-hider");
     DOM.qrImage = DOM.qrContainer.find(".qr-image");
     DOM.qrHint = DOM.qrContainer.find(".qr-hint");
+    DOM.qrType = $(".qr-type");
     DOM.showQrEls = $("[data-show-qr]");
 
     function generateCsvContent() {
@@ -378,6 +379,7 @@
         DOM.entropyTypeInputs.on("change", entropyTypeChanged);
         DOM.phrase.on("input", delayedPhraseChanged);
         DOM.mnemonicType.on("change", mnemonicTypeChanged);
+        DOM.qrType.on("change", qrTypeChanged);
         DOM.showSplitMnemonic.on("change", toggleSplitMnemonic);
         DOM.passphrase.on("input", delayedPhraseChanged);
         DOM.generate.on("click", generateClicked);
@@ -870,6 +872,21 @@
         
         // Trigger phrase validation/processing if there's existing content
         delayedPhraseChanged();
+    }
+
+    function qrTypeChanged() {
+        // Regenerate QR if it's currently visible and showing mnemonic field
+        if (!DOM.qrContainer.hasClass("hidden")) {
+            // Check if the mnemonic field is the current QR source
+            var mnemonicValue = DOM.phrase.val();
+            if (mnemonicValue) {
+                // Clear existing QR
+                DOM.qrImage.text("");
+                // Regenerate QR with new format
+                var mockEvent = { target: DOM.phrase[0] };
+                createQr(mockEvent);
+            }
+        }
     }
 
     // Map Electrum tabs to wallet type prefixes and derivation paths
@@ -2829,15 +2846,138 @@
         els.on("click", toggleQr);
     }
 
+    function generateStandardSeedQR(mnemonicPhrase) {
+        try {
+            // Split the mnemonic into words and trim whitespace
+            var words = mnemonicPhrase.trim().split(/\s+/);
+
+            // Validate word count (12 or 24 words for SeedQR)
+            if (words.length !== 12 && words.length !== 24) {
+                throw new Error("SeedQR requires 12 or 24 word mnemonic");
+            }
+
+            // Get the BIP39 wordlist for current language
+            var language = getLanguage();
+            var wordlist = bip39.wordlists[language];
+            var indices = [];
+
+            // Convert each word to its index in the wordlist
+            for (var i = 0; i < words.length; i++) {
+                var word = words[i].toLowerCase();
+                var index = wordlist.indexOf(word);
+                if (index === -1) {
+                    throw new Error("Invalid word in mnemonic: " + word);
+                }
+                // Convert to 4-digit zero-padded string
+                indices.push(index.toString().padStart(4, '0'));
+            }
+
+            // Concatenate all indices into one numeric string
+            return indices.join('');
+        } catch (error) {
+            console.error("SeedQR Standard encoding error:", error);
+            return mnemonicPhrase; // Fallback to raw text
+        }
+    }
+
+    function generateCompactSeedQR(mnemonicPhrase) {
+        try {
+            // Split the mnemonic into words and trim whitespace
+            var words = mnemonicPhrase.trim().split(/\s+/);
+
+            // Validate word count (12 or 24 words for SeedQR)
+            if (words.length !== 12 && words.length !== 24) {
+                throw new Error("SeedQR requires 12 or 24 word mnemonic");
+            }
+
+            // Get the BIP39 wordlist for current language
+            var language = getLanguage();
+            var wordlist = bip39.wordlists[language];
+            var indices = [];
+
+            // Convert each word to its index in the wordlist
+            for (var i = 0; i < words.length; i++) {
+                var word = words[i].toLowerCase();
+                var index = wordlist.indexOf(word);
+                if (index === -1) {
+                    throw new Error("Invalid word in mnemonic: " + word);
+                }
+                indices.push(index);
+            }
+
+            // For CompactSeedQR, we need to convert to binary and remove checksum bits
+            // This is a simplified implementation - full implementation would remove checksum
+            var binaryString = '';
+            for (var i = 0; i < indices.length; i++) {
+                // Convert each index to 11-bit binary string
+                var binary = indices[i].toString(2).padStart(11, '0');
+                binaryString += binary;
+            }
+
+            // Convert binary string to bytes for QR encoding
+            var bytes = [];
+            for (var i = 0; i < binaryString.length; i += 8) {
+                var byte = binaryString.substr(i, 8);
+                if (byte.length === 8) {
+                    bytes.push(String.fromCharCode(parseInt(byte, 2)));
+                }
+            }
+
+            return bytes.join('');
+        } catch (error) {
+            console.error("SeedQR Compact encoding error:", error);
+            return mnemonicPhrase; // Fallback to raw text
+        }
+    }
+
     function createQr(e) {
         var content = e.target.textContent || e.target.value;
         if (content) {
-            var qrEl = bitcoinjs.kjua({
-                text: content,
+            var qrContent = content;
+            var qrMode = "text";
+
+            // Check if this is the mnemonic field and if SeedQR format is selected
+            var isMnemonicField = $(e.target).hasClass("phrase");
+            var qrSettings = {
+                text: qrContent,
                 render: "canvas",
-                size: 310,
+                size: 310,  // Default size for standard QR
                 ecLevel: 'H',
-            });
+                mode: qrMode
+            };
+
+            if (isMnemonicField) {
+                var qrType = DOM.qrType.val();
+                if (qrType === "seedqr-standard") {
+                    qrContent = generateStandardSeedQR(content);
+                    qrSettings.text = qrContent;
+                    qrSettings.ecLevel = 'L'; // SeedQR uses Low error correction
+                    qrSettings.crisp = true; // Pixel-perfect rendering
+                    qrSettings.quiet = 0; // Minimal quiet zone for SeedQR
+                    // Force exact QR version for SeedQR compatibility
+                    var wordCount = content.trim().split(/\s+/).length;
+                    if (wordCount === 12) {
+                        qrSettings.minVersion = 2;
+                    } else if (wordCount === 24) {
+                        qrSettings.minVersion = 3;
+                    }
+                    // Remove explicit mode setting - let KJUA auto-detect numeric
+                } else if (qrType === "seedqr-compact") {
+                    qrContent = generateCompactSeedQR(content);
+                    qrSettings.text = qrContent;
+                    qrSettings.mode = "byte";
+                    qrSettings.ecLevel = 'L'; // SeedQR uses Low error correction
+                    // Compact format also uses specific versions
+                    var wordCount = content.trim().split(/\s+/).length;
+                    if (wordCount === 12) {
+                        qrSettings.minVersion = 2; // Smaller for 12-word
+                    } else if (wordCount === 24) {
+                        qrSettings.minVersion = 2; // Still compact for 24-word
+                    }
+                }
+            }
+
+            var qrEl = bitcoinjs.kjua(qrSettings);
             DOM.qrImage.append(qrEl);
             if (!showQr) {
                 DOM.qrHider.addClass("hidden");

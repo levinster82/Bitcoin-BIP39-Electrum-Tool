@@ -287,6 +287,17 @@
                             </div>
                         </div>
                         <div class="mb-3 row">
+                            <label for="qr-type" class="col-sm-2 form-label">QR Format</label>
+                            <div class="col-sm-10">
+                                <select id="qr-type" class="qr-type form-select">
+                                    <option value="raw" selected>Standard (Raw Text)</option>
+                                    <option value="seedqr-standard">SeedQR Standard</option>
+                                    <option value="seedqr-compact">SeedQR Compact</option>
+                                </select>
+                                <div class="form-text">Choose QR encoding format for mnemonic phrase</div>
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
                             <label for="phrase" class="col-sm-2 form-label"><span class="mnemonic-label">BIP39</span> Mnemonic</label>
                             <div class="col-sm-10">
                                 <textarea id="phrase" class="phrase private-data form-control" data-show-qr autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
