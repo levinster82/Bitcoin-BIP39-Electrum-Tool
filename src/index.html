@@ -26,7 +26,7 @@
                     <div class="header-content">
                         <h1 class="text-center"><a href="https://github.com/levinster82/Bitcoin-BIP39-Electrum-Tool/releases/latest" target="_blank" style="color: inherit; text-decoration: none;">Bitcoin Mnemonic Code Converter</a></h1>
                         <div class="text-center version">
-                            <a href="https://github.com/levinster82/Bitcoin-BIP39-Electrum-Tool/releases/latest" target="_blank" style="color: inherit; text-decoration: none;">v1.0.6</a>
+                            <a href="https://github.com/levinster82/Bitcoin-BIP39-Electrum-Tool/releases/latest" target="_blank" style="color: inherit; text-decoration: none;">v1.0.7</a>
                         </div>
                     </div>
                     <button class="theme-toggle" onclick="toggleTheme()" id="theme-toggle" aria-label="Toggle dark/light theme">
@@ -1685,9 +1685,9 @@ sub   brainpoolP512r1 2025-08-16 [E] [expires: 2050-08-10]</code></pre>
                     </p>
 
                     <p>
-                        <span>KJUA (QR Code) - </span>
-                        <a href="https://github.com/lrsjng/kjua" target="_blank">
-                            https://github.com/lrsjng/kjua
+                        <span>node-qrcode (QR Code) - </span>
+                        <a href="https://github.com/soldair/node-qrcode" target="_blank">
+                            https://github.com/soldair/node-qrcode
                         </a>
                     </p>
 
@@ -1717,9 +1717,17 @@ sub   brainpoolP512r1 2025-08-16 [E] [expires: 2050-08-10]</code></pre>
         </div>
 
         <div class="qr-container hidden">
-            <div class="qr-hint bg-primary">Click field to toggle QR</div>
             <div class="qr-hider hidden">
-                <div class="qr-image"></div>
+                <div class="qr-hint bg-primary">Click field to toggle QR</div>
+                <div class="qr-controls mb-2">
+                    <button id="qr-grid-toggle" class="btn btn-sm btn-outline-secondary">Show Grid</button>
+                </div>
+                <div class="qr-content-container">
+                    <div class="qr-image-container position-relative">
+                        <div class="qr-image"></div>
+                        <canvas id="qr-grid-overlay" class="position-absolute" style="pointer-events: none; display: none;"></canvas>
+                    </div>
+                </div>
                 <div class="qr-warning bg-primary">Caution: Scanner may keep history</div>
             </div>
         </div>

@@ -186,6 +186,8 @@
     DOM.qrImage = DOM.qrContainer.find(".qr-image");
     DOM.qrHint = DOM.qrContainer.find(".qr-hint");
     DOM.qrType = $(".qr-type");
+    DOM.qrGridToggle = $("#qr-grid-toggle");
+    DOM.qrGridOverlay = $("#qr-grid-overlay");
     DOM.showQrEls = $("[data-show-qr]");
 
     function generateCsvContent() {
@@ -382,6 +384,16 @@
         DOM.phrase.on("input", delayedPhraseChanged);
         DOM.mnemonicType.on("change", mnemonicTypeChanged);
         DOM.qrType.on("change", qrTypeChanged);
+        DOM.qrGridToggle.on("click", toggleQrGrid);
+        DOM.qrContainer.on("click", function(e) {
+            // Close QR if clicking anywhere except the grid toggle button
+            if (!$(e.target).closest("#qr-grid-toggle").length) {
+                destroyQr();
+                showQr = false;
+                qrLocked = false;
+                lockedQrField = null;
+            }
+        });
         DOM.showSplitMnemonic.on("change", toggleSplitMnemonic);
         DOM.passphrase.on("input", delayedPhraseChanged);
         DOM.generate.on("click", generateClicked);
@@ -877,6 +889,22 @@
     }
 
     function qrTypeChanged() {
+        var qrType = DOM.qrType.val();
+
+        // Show/hide grid button based on QR format
+        if (qrType === "seedqr-standard" || qrType === "seedqr-compact") {
+            DOM.qrGridToggle.removeClass("hidden");
+        } else {
+            DOM.qrGridToggle.addClass("hidden");
+            // Hide grid if it's currently visible
+            var canvas = DOM.qrGridOverlay[0];
+            if (canvas.style.display !== "none") {
+                canvas.style.display = "none";
+                DOM.qrGridToggle.text("Show Grid").removeClass("btn-secondary").addClass("btn-outline-secondary");
+                $('.qr-content-container').css('padding', '0');
+            }
+        }
+
         // Regenerate QR if it's currently visible and showing mnemonic field
         if (!DOM.qrContainer.hasClass("hidden")) {
             // Check if the mnemonic field is the current QR source
@@ -887,6 +915,15 @@
                 // Regenerate QR with new format
                 var mockEvent = { target: DOM.phrase[0] };
                 createQr(mockEvent);
+
+                // Redraw grid if it's currently visible and SeedQR format
+                var canvas = DOM.qrGridOverlay[0];
+                if (canvas.style.display !== "none" && (qrType === "seedqr-standard" || qrType === "seedqr-compact")) {
+                    // Wait for QR to be generated, then redraw grid
+                    setTimeout(function() {
+                        drawQrGrid();
+                    }, 100);
+                }
             }
         }
     }
@@ -2960,6 +2997,19 @@
 
             // Check if this is the mnemonic field and if SeedQR format is selected
             var isMnemonicField = $(e.target).hasClass("phrase");
+
+            // Show/hide grid button based on field type and QR format
+            if (isMnemonicField) {
+                var qrType = DOM.qrType.val();
+                if (qrType === "seedqr-standard" || qrType === "seedqr-compact") {
+                    DOM.qrGridToggle.removeClass("hidden");
+                } else {
+                    DOM.qrGridToggle.addClass("hidden");
+                }
+            } else {
+                // For non-mnemonic fields, hide grid button
+                DOM.qrGridToggle.addClass("hidden");
+            }
             var qrOptions = {
                 errorCorrectionLevel: 'H',
                 type: 'image/png',
@@ -3046,6 +3096,183 @@
             lockedQrField = currentField;
             createQr(e);
             DOM.qrHider.removeClass("hidden");
+        }
+    }
+
+    function toggleQrGrid() {
+        var canvas = DOM.qrGridOverlay[0];
+        var button = DOM.qrGridToggle;
+
+        if (canvas.style.display === "none") {
+            drawQrGrid();
+            canvas.style.display = "block";
+            button.text("Hide Grid").removeClass("btn-outline-secondary").addClass("btn-secondary");
+            // Expand inner container to show grid labels
+            $('.qr-content-container').css('padding', '25px');
+        } else {
+            canvas.style.display = "none";
+            button.text("Show Grid").removeClass("btn-secondary").addClass("btn-outline-secondary");
+            // Restore original container size
+            $('.qr-content-container').css('padding', '0');
+        }
+    }
+
+    function drawQrGrid() {
+        var canvas = DOM.qrGridOverlay[0];
+        var qrImage = DOM.qrImage.find("img")[0];
+
+        if (!qrImage) return;
+
+        // Add padding for labels
+        var labelPadding = 25;
+        canvas.width = qrImage.width + labelPadding;
+        canvas.height = qrImage.height + labelPadding;
+
+        // Position canvas to show labels outside QR image
+        // Account for .qr-image CSS margin of 5px horizontally only
+        var qrImageMargin = 5;
+        canvas.style.top = -labelPadding + "px";
+        canvas.style.left = (-labelPadding + qrImageMargin) + "px";
+
+        var ctx = canvas.getContext("2d");
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Get QR version from current mnemonic type and format
+        var qrSize = getQrSize();
+        var gridConfig = getGridConfig(qrSize);
+
+        if (!gridConfig) return;
+
+        // Account for QR code's internal margin (1 module on each side)
+        var qrMarginModules = 1;
+        var totalQrSize = gridConfig.size + (qrMarginModules * 2);
+        var moduleSize = qrImage.width / totalQrSize;
+        var qrMarginPixels = qrMarginModules * moduleSize;
+
+        // Draw grid lines and labels with proper offsets
+        drawGridLines(ctx, qrImage.width, qrImage.height, gridConfig, labelPadding, qrMarginPixels);
+        drawGridLabels(ctx, qrImage.width, qrImage.height, gridConfig, labelPadding, qrMarginPixels);
+    }
+
+    function getQrSize() {
+        // Get current mnemonic to determine word count
+        var mnemonic = DOM.phrase.val().trim();
+        if (!mnemonic) return 29; // Default to largest
+
+        var wordCount = mnemonic.split(/\s+/).length;
+        var qrType = DOM.qrType.val();
+
+        // Map based on SeedQR specification
+        if (qrType === "seedqr-compact") {
+            return wordCount === 12 ? 21 : 25; // V1 : V2
+        } else if (qrType === "seedqr-standard") {
+            return wordCount === 12 ? 25 : 29; // V2 : V3
+        }
+        return 29; // Default for raw text
+    }
+
+    function getGridConfig(qrSize) {
+        switch (qrSize) {
+            case 21:
+                // 21x21 divided into 3x3 sections of 7x7 modules each
+                return { size: 21, sections: 3, sectionSize: 7, labels: ['A','B','C'] };
+            case 25:
+                // 25x25 divided into 5x5 sections of 5x5 modules each
+                return { size: 25, sections: 5, sectionSize: 5, labels: ['A','B','C','D','E'] };
+            case 29:
+                // 29x29 divided into roughly 6x6 sections - uneven division
+                return { size: 29, sections: 6, sectionSizes: [5,5,5,5,5,4], labels: ['A','B','C','D','E','F'] };
+            default:
+                return null;
+        }
+    }
+
+    function drawGridLines(ctx, width, height, config, padding, qrMargin) {
+        ctx.strokeStyle = '#ff0000'; // Red grid lines
+        ctx.lineWidth = 1;
+
+        // Calculate actual QR module size accounting for margins
+        var totalQrSize = config.size + 2; // Add 2 for margins (1 on each side)
+        var moduleSize = width / totalQrSize;
+
+        // Start position accounts for both label padding and QR margin
+        var startX = padding + qrMargin;
+        var startY = padding + qrMargin;
+
+        // Draw initial vertical line at start position
+        ctx.beginPath();
+        ctx.moveTo(startX, startY);
+        ctx.lineTo(startX, startY + (config.size * moduleSize));
+        ctx.stroke();
+
+        // Draw vertical lines
+        var xPos = startX;
+        for (var i = 0; i < config.sections; i++) {
+            var sectionSize = config.sectionSizes ? config.sectionSizes[i] : config.sectionSize;
+            xPos += sectionSize * moduleSize;
+
+            ctx.beginPath();
+            ctx.moveTo(xPos, startY);
+            ctx.lineTo(xPos, startY + (config.size * moduleSize));
+            ctx.stroke();
+        }
+
+        // Draw initial horizontal line at start position
+        ctx.beginPath();
+        ctx.moveTo(startX, startY);
+        ctx.lineTo(startX + (config.size * moduleSize), startY);
+        ctx.stroke();
+
+        // Draw horizontal lines
+        var yPos = startY;
+        for (var i = 0; i < config.sections; i++) {
+            var sectionSize = config.sectionSizes ? config.sectionSizes[i] : config.sectionSize;
+            yPos += sectionSize * moduleSize;
+
+            ctx.beginPath();
+            ctx.moveTo(startX, yPos);
+            ctx.lineTo(startX + (config.size * moduleSize), yPos);
+            ctx.stroke();
+        }
+    }
+
+    function drawGridLabels(ctx, width, height, config, padding, qrMargin) {
+        ctx.fillStyle = '#000000';
+        ctx.font = 'bold 14px Arial';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+
+        // Calculate actual QR module size accounting for margins
+        var totalQrSize = config.size + 2; // Add 2 for margins (1 on each side)
+        var moduleSize = width / totalQrSize;
+
+        // Start position accounts for both label padding and QR margin
+        var startX = padding + qrMargin;
+        var startY = padding + qrMargin;
+
+        // Draw column labels (1, 2, 3...) above the grid
+        var xPos = startX;
+        for (var i = 0; i < config.sections; i++) {
+            var sectionSize = config.sectionSizes ? config.sectionSizes[i] : config.sectionSize;
+            var centerX = xPos + (sectionSize * moduleSize) / 2;
+
+            // Label above the grid
+            ctx.fillText((i + 1).toString(), centerX, padding / 2);
+
+            xPos += sectionSize * moduleSize;
+        }
+
+        // Draw row labels (A, B, C...) to the left of the grid
+        ctx.textAlign = 'center';
+        var yPos = startY;
+        for (var i = 0; i < config.sections; i++) {
+            var sectionSize = config.sectionSizes ? config.sectionSizes[i] : config.sectionSize;
+            var centerY = yPos + (sectionSize * moduleSize) / 2;
+
+            // Label to the left of the grid
+            ctx.fillText(config.labels[i], padding / 2, centerY);
+
+            yPos += sectionSize * moduleSize;
         }
     }
 

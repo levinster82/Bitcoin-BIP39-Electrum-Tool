@@ -1,3 +1,57 @@
+# v1.0.7
+
+## 🌟 New Features
+
+- **📱 SeedQR Display** - Added SeedQR display ability for compact QR code representations
+- **📚 QR Library Upgrade** - Switched from kjua to node-qrcode library for improved QR generation
+
+*Release Date: September 24, 2025*
+
+# v1.0.6
+
+## 🐛 Bug Fixes
+
+- **🔧 Bootstrap CSS Fix** - Fixed bootstrap.css linking for proper offline use
+
+## 🔮 Future Plans
+
+- Add seedqr/bbqr display selection
+- Multi-language support for BIP85
+
+*Release Date: September 6, 2023*
+
+# v1.0.5
+
+## 🐛 Bug Fixes
+
+- **🚫 NIP06 Tab Removal** - Removed unintended NIP06 derivation tab for Electrum mnemonics
+- **🧹 Clear All Button** - Added "Clear All" fields button for better UX
+
+## 📚 Documentation
+
+- Improvements to offline usage documentation
+
+*Release Date: September 5, 2023*
+
+# v1.0.4
+
+## 🌟 New Features
+
+- **⚡ NOSTR NIP-06 Support** - Added NOSTR key derivation from mnemonic seed phrase
+- **🔑 Deterministic Keys** - Deterministic key generation for npub/nsec pairs
+
+*Release Date: September 3, 2023*
+
+# v1.0.3
+
+## 🌟 New Features
+
+- **🎨 UI Improvements** - Enhanced user interface design
+- **🚀 Bootstrap 5** - Updated to Bootstrap 5 for modern styling
+- **₿ Bitcoin Logo** - Added Bitcoin logo to the interface
+
+*Release Date: August 30, 2023*
+
 # v1.0.2
 
 ## 🌟 New Features
@@ -6,7 +60,17 @@
 - **📏 24-Word Default** - BIP39 mnemonics now default to 24 words to align more with standards
 - **🧪 Enhanced Testing** - Expanded to 190+ tests with dedicated BIP-86 test suite
 
-# 1.0.0
+*Release Date: August 21, 2023*
+
+# v1.0.1
+
+## 🌟 New Features
+
+- **🌙 Dark Mode** - Added Dark Mode with three-way toggle (Light → Dark → Auto)
+
+*Release Date: August 19, 2023*
+
+# v1.0.0
 
 * Fork from iancoleman/bip39 as "Bitcoin BIP39 + Electrum Mnemonic Tool"
 * Add Electrum wallet support (Legacy and SegWit)

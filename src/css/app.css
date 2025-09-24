@@ -200,7 +200,7 @@ a {
     top: 0;
     right: 0;
     text-align: center;
-    background-color: var(--qr-bg);
+    background-color: white !important;
     border: 1px solid var(--border-color);
 }
 .qr-image {
@@ -209,7 +209,8 @@ a {
 .qr-hint,
 .qr-warning {
     padding: 2px;
-    max-width: 320px;
+    width: 100%;
+    box-sizing: border-box;
 }
 .more-info {
     cursor: help;
