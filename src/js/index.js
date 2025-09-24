@@ -3046,8 +3046,9 @@
             }
 
 
-            // Generate QR code using node-qrcode
-            bitcoinjs.qrcode.toDataURL(qrContent, qrOptions, function(err, url) {
+            // Generate QR code using node-qrcode directly to canvas (avoids data URL caching)
+            var canvas = document.createElement('canvas');
+            bitcoinjs.qrcode.toCanvas(canvas, qrContent, qrOptions, function(err) {
                 if (err) {
                     console.error('QR code generation error:', err);
                     return;
@@ -3056,13 +3057,13 @@
                 // Clear previous QR code
                 DOM.qrImage.empty();
 
-                // Create img element with QR code
-                var img = $('<img>').attr('src', url).css({
+                // Style the canvas element
+                $(canvas).css({
                     'max-width': '100%',
                     'height': 'auto'
                 });
 
-                DOM.qrImage.append(img);
+                DOM.qrImage.append(canvas);
 
                 if (!showQr) {
                     DOM.qrHider.addClass("hidden");
@@ -3119,16 +3120,16 @@
 
     function drawQrGrid() {
         var canvas = DOM.qrGridOverlay[0];
-        var qrImage = DOM.qrImage.find("img")[0];
+        var qrCanvas = DOM.qrImage.find("canvas")[0];
 
-        if (!qrImage) return;
+        if (!qrCanvas) return;
 
         // Add padding for labels
         var labelPadding = 25;
-        canvas.width = qrImage.width + labelPadding;
-        canvas.height = qrImage.height + labelPadding;
+        canvas.width = qrCanvas.width + labelPadding;
+        canvas.height = qrCanvas.height + labelPadding;
 
-        // Position canvas to show labels outside QR image
+        // Position canvas to show labels outside QR canvas
         // Account for .qr-image CSS margin of 5px horizontally only
         var qrImageMargin = 5;
         canvas.style.top = -labelPadding + "px";
@@ -3146,12 +3147,12 @@
         // Account for QR code's internal margin (1 module on each side)
         var qrMarginModules = 1;
         var totalQrSize = gridConfig.size + (qrMarginModules * 2);
-        var moduleSize = qrImage.width / totalQrSize;
+        var moduleSize = qrCanvas.width / totalQrSize;
         var qrMarginPixels = qrMarginModules * moduleSize;
 
         // Draw grid lines and labels with proper offsets
-        drawGridLines(ctx, qrImage.width, qrImage.height, gridConfig, labelPadding, qrMarginPixels);
-        drawGridLabels(ctx, qrImage.width, qrImage.height, gridConfig, labelPadding, qrMarginPixels);
+        drawGridLines(ctx, qrCanvas.width, qrCanvas.height, gridConfig, labelPadding, qrMarginPixels);
+        drawGridLabels(ctx, qrCanvas.width, qrCanvas.height, gridConfig, labelPadding, qrMarginPixels);
     }
 
     function getQrSize() {

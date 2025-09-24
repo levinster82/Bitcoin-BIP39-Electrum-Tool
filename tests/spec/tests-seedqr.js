@@ -134,17 +134,18 @@ function hoverElement(selector) {
 }
 
 function waitForQrCode() {
-    return driver.wait(until.elementLocated(By.css('.qr-container img')), 5000);
+    return driver.wait(until.elementLocated(By.css('.qr-container canvas')), 5000);
 }
 
 function captureQrCode() {
-    return driver.findElement(By.css('.qr-container img'))
-        .then(function(img) {
-            return img.getAttribute('src');
+    return driver.findElement(By.css('.qr-container canvas'))
+        .then(function(canvas) {
+            // Execute script to get canvas data as base64
+            return driver.executeScript('return arguments[0].toDataURL("image/png");', canvas);
         })
-        .then(function(src) {
+        .then(function(dataUrl) {
             // Extract base64 data from data URL
-            var base64Data = src.replace(/^data:image\/png;base64,/, '');
+            var base64Data = dataUrl.replace(/^data:image\/png;base64,/, '');
             return Buffer.from(base64Data, 'base64');
         });
 }
