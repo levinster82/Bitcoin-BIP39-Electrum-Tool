@@ -46,9 +46,7 @@ A Bitcoin-focused fork of [iancoleman/bip39](https://github.com/iancoleman/bip39
 ## Standalone Versions
 
 Download from releases:
-- Original Release  `bip39-electrum-standalone.html` - v1.0.0 - Bitcoin Only Toxic Maxi Edition
-- Latest Release    `bip39-electrum-standalone.html` - v1.0.5 - NOSTR is Bitcoin only? GFY
-- https://github.com/levinster82/Bitcoin-BIP39-Electrum-Tool/releases/latest
+- [Latest Release](https://github.com/levinster82/Bitcoin-BIP39-Electrum-Tool/releases/latest)    `bip39-electrum-standalone.html` - v1.0.7 - SEEDQR's omg!
 
 Build from source:
 ```
