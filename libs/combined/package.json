@@ -20,7 +20,7 @@
     "fast-levenshtein": "^2.0.6",
     "javascript-biginteger": "^0.9.2",
     "jquery": "^3.2.1",
-    "kjua": "^0.6.0",
+    "qrcode": "^1.5.4",
     "sjcl": "^1.0.8",
     "terser": "^5.43.1",
     "unorm": "^1.6.0",

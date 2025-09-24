@@ -2,7 +2,8 @@
   "name": "tests",
   "version": "1.0.0",
   "scripts": {
-    "test": "jasmine spec/tests.js"
+    "test": "jasmine spec/tests.js",
+    "test-seedqr": "jasmine spec/tests-seedqr.js"
   },
   "author": "Ian coleman",
   "description": "Tests for BIP39 tool",
@@ -12,7 +13,9 @@
   },
   "dependencies": {
     "jasmine": "^3.9.0",
-    "selenium-webdriver": "^4.0.0"
+    "selenium-webdriver": "^4.0.0",
+    "jimp": "^0.22.0",
+    "qrcode-reader": "^1.0.4"
   },
   "license": "MIT"
 }

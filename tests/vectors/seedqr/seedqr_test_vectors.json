@@ -1,0 +1,160 @@
+{
+  "description": "SeedQR Test Vectors from SeedSigner specification",
+  "source": "https://github.com/SeedSigner/seedsigner/blob/dev/docs/seed_qr/README.md",
+  "test_vectors": [
+    {
+      "id": 1,
+      "word_count": 24,
+      "seed_phrase": "attack pizza motion avocado network gather crop fresh patrol unusual wild holiday candy pony ranch winter theme error hybrid van cereal salon goddess expire",
+      "standard_seedqr": {
+        "numeric": "011513251154012711900771041507421289190620080870026613431420201617920614089619290300152408010643",
+        "hex": "01613F66CFBA9DA147A9AE1AAE5D8A8FA665CEB8F0583A65E13777EE18E9F5DCE8C395A3A0F16F93"
+      },
+      "compact_seedqr": {
+        "bitstream": "0000111001110100101101100100000100000111111110010100110011000000110011001111101011100110101000010011110111001011111011000011011001100010000101010100111111101100011001111110000011100000000010011001100111000000011110001001001001011001011111010001100100001010",
+        "hex": "0E74B64107F94CC0CCFAE6A13DCBEC3662154FEC67E0E00999C07892597D190A",
+        "bytestream_python": "b'\\x0et\\xb6A\\x07\\xf9L\\xc0\\xcc\\xfa\\xe6\\xa1=\\xcb\\xec6b\\x15O\\xecg\\xe0\\xe0\\t\\x99\\xc0x\\x92Y}\\x19\\n'"
+      }
+    },
+    {
+      "id": 2,
+      "word_count": 24,
+      "seed_phrase": "atom solve joy ugly ankle message setup typical bean era cactus various odor refuse element afraid meadow quick medal plate wisdom swap noble shallow",
+      "standard_seedqr": {
+        "numeric": "011416550964188800731119157218870156061002561932122514430573003611011405110613292018175411971576",
+        "hex": "015E47DD7C203863D615BE5C72E307C1722D1680187D3989440CD364F6DE8F5CB24593C3A59765F8"
+      },
+      "compact_seedqr": {
+        "bitstream": "0000111001011001110111011110001001110110000000001001001100010111111100010010011101011111000100111000100110001000100000000111100011001001100100110110100011010001111010000010010010001001101101011111011000101001010100110001111111000101101101101010010101101110",
+        "hex": "0E59DDE276009317F1275F1389888078C99368D1E82489B5F629531FC5B6A56E",
+        "bytestream_python": "b\"\\x0eY\\xdd\\xe2v\\x00\\x93\\x17\\xf1'_\\x13\\x89\\x88\\x80x\\xc9\\x93h\\xd1\\xe8$\\x89\\xb5\\xf6)S\\x1f\\xc5\\xb6\\xa5n\""
+      }
+    },
+    {
+      "id": 3,
+      "word_count": 24,
+      "seed_phrase": "sound federal bonus bleak light raise false engage round stock update render quote truck quality fringe palace foot recipe labor glow tortoise potato still",
+      "standard_seedqr": {
+        "numeric": "166206750203018810361417065805941507171219081456140818651401074412730727143709940798183613501710",
+        "hex": "13EB872772D62D9A605AC9D85411DF4AC6DCFEE8BAC2491CE6730349EB6938B56F3A76015DF1910E"
+      },
+      "compact_seedqr": {
+        "bitstream": "1100111111001010100011000110010110001011110010000001100101100010010101001001001001010010101111000111101011000011101110100101101100001011000000011101001001101011110010101110100010011111001010110101111011001110101111100010011000111101110010110010101000110110",
+        "hex": "CFCA8C658BC81962549252BC7AC3BA5B0B01D26BCAE89F2B5ECEBE263DCB2A36",
+        "bytestream_python": "b'\\xcf\\xca\\x8ce\\x8b\\xc8\\x19bT\\x92R\\xbcz\\xc3\\xba[\\x0b\\x01\\xd2k\\xca\\xe8\\x9f+^\\xce\\xbe&=\\xcb*6'"
+      }
+    },
+    {
+      "id": 4,
+      "word_count": 12,
+      "seed_phrase": "forum undo fragile fade shy sign arrest garment culture tube off merit",
+      "standard_seedqr": {
+        "numeric": "073318950739065415961602009907670428187212261116",
+        "hex": "0CD7BC470145DFC903B537CB56155B407F1E26FC"
+      },
+      "compact_seedqr": {
+        "bitstream": "01011011101111011001110101110001101010001110110001111001100100001000001100011010111111110011010110011101010000100110010101000101",
+        "hex": "5BBD9D71A8EC7990831AFF359D426545",
+        "bytestream_python": "b'[\\xbd\\x9dq\\xa8\\xecy\\x90\\x83\\x1a\\xff5\\x9dBeE'"
+      }
+    },
+    {
+      "id": 5,
+      "word_count": 12,
+      "seed_phrase": "good battle boil exact add seed angle hurry success glad carbon whisper",
+      "standard_seedqr": {
+        "numeric": "080301540200062600251559007008931730078802752004",
+        "hex": "0E10D8792B33984449F58209AE3250244E15B204"
+      },
+      "compact_seedqr": {
+        "bitstream": "01100100011000100110100001100100001001110010000000110011100001011100001000110011011111011101100001001100010100001000100111111101",
+        "hex": "6462686427203385C2337DD84C5089FD",
+        "bytestream_python": "b\"dbhd' 3\\x85\\xc23}\\xd8LP\\x89\\xfd\""
+      }
+    },
+    {
+      "id": 6,
+      "word_count": 12,
+      "seed_phrase": "approve fruit lens brass ring actual stool coin doll boss strong rate",
+      "standard_seedqr": {
+        "numeric": "008607501025021714880023171503630517020917211425",
+        "hex": "0181F94412F3508FC8D4197D4FB4C8FCE1F7A121"
+      },
+      "compact_seedqr": {
+        "bitstream": "00001010110010111011101000000000100011011001101110100000000001011111010110011001011010110100000010100011010001110101110011011001",
+        "hex": "0ACBBA008D9BA005F5996B40A3475CD9",
+        "bytestream_python": "b'\\n\\xcb\\xba\\x00\\x8d\\x9b\\xa0\\x05\\xf5\\x99k@\\xa3G\\\\\\xd9'"
+      }
+    },
+    {
+      "id": 7,
+      "word_count": 12,
+      "seed_phrase": "dignity utility vacant shiver thought canoe feel multiply item youth actor coyote",
+      "standard_seedqr": {
+        "numeric": "049619221923158517990268067811630950204300210397",
+        "hex": "08B100BBA83CA8EC7D6FBBCCA7531187B7F230DD"
+      },
+      "compact_seedqr": {
+        "bitstream": "00111110000111100000101111000001111000110001111000001110010000110001010100110100100010110111011011011111111011000000101010011000",
+        "hex": "3E1E0BC1E31E0E4315348B76DFEC0A98",
+        "bytestream_python": "b'>\\x1e\\x0b\\xc1\\xe3\\x1e\\x0eC\\x154\\x8bv\\xdf\\xec\\n\\x98'"
+      }
+    },
+    {
+      "id": 8,
+      "word_count": 12,
+      "seed_phrase": "corn voice scrap arrow original diamond trial property benefit choose junk lock",
+      "standard_seedqr": {
+        "numeric": "038719631547010112530489185713790169032209701051",
+        "hex": "06C83F925FA2BEB168978F9BAC6F72784D8398BB"
+      },
+      "compact_seedqr": {
+        "bitstream": "00110000011111101010111100000101100001100101100111001010011110100111101000001101011000110001010100100101000010011110010101000001",
+        "hex": "307EAF058659CA7A7A0D63152509E541",
+        "bytestream_python": "b'0~\\xaf\\x05\\x86Y\\xcazz\\rc\\x15%\\t\\xe5A'"
+      }
+    },
+    {
+      "id": 9,
+      "word_count": 12,
+      "seed_phrase": "vocal tray giggle tool duck letter category pattern train magnet excite swamp",
+      "standard_seedqr": {
+        "numeric": "196218530783182905421028028912901848107106301753",
+        "hex": "225EBE4427DC0ED4B6A3A8099A9A3B0B532DF739"
+      },
+      "compact_seedqr": {
+        "bitstream": "11110101010111001111010110000111111100100101010000111101000000010000100100001101000010101110011100010000101111010011101101101101",
+        "hex": "F55CF587F2543D01090D0AE710BD3B6D",
+        "bytestream_python": "b'\\xf5\\\\\\xf5\\x87\\xf2T=\\x01\\t\\r\\n\\xe7\\x10\\xbd;m'"
+      }
+    }
+  ],
+  "specification_notes": {
+    "standard_format": "4-digit zero-padded word indices concatenated",
+    "compact_format": "11-bit binary per word, checksum bits removed",
+    "checksum_bits": {
+      "12_word": 4,
+      "24_word": 8
+    },
+    "qr_versions": {
+      "standard_12_word": "V2 (25x25)",
+      "standard_24_word": "V3 (29x29)",
+      "compact_12_word": "V1 (21x21)",
+      "compact_24_word": "V2 (25x25)"
+    },
+    "error_correction": "Level L (Low, ~7% recovery)",
+    "language_requirement": "SeedQR specifically assumes and recommends using the English BIP39 wordlist",
+    "special_test_cases": {
+      "null_bytes": "Vector 2 includes \\x00 null byte - test QR readers handle this correctly",
+      "line_endings": {
+        "vector_7": "Contains \\n (newline)",
+        "vector_8": "Contains \\r (carriage return)",
+        "vector_9": "Contains \\r\\n (CRLF)"
+      }
+    },
+    "decoder_warnings": {
+      "zxing": "May return metadata: starts with '41 0' (12-word) or '42 0' (24-word), ends with padding",
+      "zbar": "Returns raw encoded data without metadata or padding"
+    }
+  }
+}

@@ -34,8 +34,8 @@ const bufferModule = require('buffer')
 /* fast-levenshtein */
 const levenshteinModule = require('fast-levenshtein')
 
-/* kjua qr codes */
-const kjuaModule = require('kjua')
+/* node-qrcode */
+const qrcodeModule = require('qrcode')
 
 /* unorm */
 const unormModule = require('unorm')
@@ -74,7 +74,7 @@ const libs = {
     ECPair: ecpair,
     buffer: bufferModule,
     levenshtein: levenshteinModule,
-    kjua: kjuaModule,
+    qrcode: qrcodeModule,
     unorm: unormModule,
     zxcvbn: zxcvbnModule,
     jquery: jQuery,
@@ -95,7 +95,7 @@ libs.bitcoinjs = {
     levenshtein: levenshteinModule,
     BigInteger: BigIntegerModule,
     zxcvbn: zxcvbnModule,
-    kjua: kjuaModule
+    qrcode: qrcodeModule
 }
 
 // Make globals available in browser

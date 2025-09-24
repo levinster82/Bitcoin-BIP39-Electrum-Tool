@@ -13,6 +13,8 @@
     var showPubKey = true;
     var showPrivKey = true;
     var showQr = false;
+    var qrLocked = false;
+    var lockedQrField = null;
     
     var entropyTypeAutoDetect = true;
     var entropyChangeTimeoutEvent = null;
@@ -2841,9 +2843,19 @@
     }
 
     function setQrEvents(els) {
-        els.on("mouseenter", createQr);
-        els.on("mouseleave", destroyQr);
-        els.on("click", toggleQr);
+        els.on("mouseenter", function(e) {
+            if (!qrLocked) {
+                createQr(e);
+            }
+        });
+        els.on("mouseleave", function() {
+            if (!qrLocked) {
+                destroyQr();
+            }
+        });
+        els.on("click", function(e) {
+            toggleQr(e);
+        });
     }
 
     function generateStandardSeedQR(mnemonicPhrase) {
@@ -2906,7 +2918,6 @@
             }
 
             // For CompactSeedQR, we need to convert to binary and remove checksum bits
-            // This is a simplified implementation - full implementation would remove checksum
             var binaryString = '';
             for (var i = 0; i < indices.length; i++) {
                 // Convert each index to 11-bit binary string
@@ -2914,16 +2925,28 @@
                 binaryString += binary;
             }
 
-            // Convert binary string to bytes for QR encoding
+            // Remove checksum bits from the end
+            var checksumBits;
+            if (words.length === 12) {
+                checksumBits = 4; // 12-word seed has 4 checksum bits
+            } else if (words.length === 24) {
+                checksumBits = 8; // 24-word seed has 8 checksum bits
+            }
+
+            // Remove checksum bits from the end of binary string
+            var entropyBits = binaryString.slice(0, -checksumBits);
+
+            // Convert entropy bits to bytes for QR encoding
             var bytes = [];
-            for (var i = 0; i < binaryString.length; i += 8) {
-                var byte = binaryString.substr(i, 8);
+            for (var i = 0; i < entropyBits.length; i += 8) {
+                var byte = entropyBits.substr(i, 8);
                 if (byte.length === 8) {
-                    bytes.push(String.fromCharCode(parseInt(byte, 2)));
+                    bytes.push(parseInt(byte, 2));
                 }
             }
 
-            return bytes.join('');
+            // Return as Uint8Array for proper binary encoding
+            return new Uint8Array(bytes);
         } catch (error) {
             console.error("SeedQR Compact encoding error:", error);
             return mnemonicPhrase; // Fallback to raw text
@@ -2934,70 +2957,96 @@
         var content = e.target.textContent || e.target.value;
         if (content) {
             var qrContent = content;
-            var qrMode = "text";
 
             // Check if this is the mnemonic field and if SeedQR format is selected
             var isMnemonicField = $(e.target).hasClass("phrase");
-            var qrSettings = {
-                text: qrContent,
-                render: "canvas",
-                size: 310,  // Default size for standard QR
-                ecLevel: 'H',
-                mode: qrMode
+            var qrOptions = {
+                errorCorrectionLevel: 'H',
+                type: 'image/png',
+                quality: 0.92,
+                margin: 1,
+                width: 310
             };
 
             if (isMnemonicField) {
                 var qrType = DOM.qrType.val();
                 if (qrType === "seedqr-standard") {
-                    qrContent = generateStandardSeedQR(content);
-                    qrSettings.text = qrContent;
-                    qrSettings.ecLevel = 'L'; // SeedQR uses Low error correction
-                    qrSettings.crisp = true; // Pixel-perfect rendering
-                    qrSettings.quiet = 0; // Minimal quiet zone for SeedQR
+                    var numericString = generateStandardSeedQR(content);
+                    qrContent = [{ data: numericString, mode: 'numeric' }];
+                    qrOptions.errorCorrectionLevel = 'L'; // SeedQR uses Low error correction
                     // Force exact QR version for SeedQR compatibility
                     var wordCount = content.trim().split(/\s+/).length;
                     if (wordCount === 12) {
-                        qrSettings.minVersion = 2;
+                        qrOptions.version = 2; // 25x25 modules for 12-word
                     } else if (wordCount === 24) {
-                        qrSettings.minVersion = 3;
+                        qrOptions.version = 3; // 29x29 modules for 24-word
                     }
-                    // Remove explicit mode setting - let KJUA auto-detect numeric
                 } else if (qrType === "seedqr-compact") {
-                    qrContent = generateCompactSeedQR(content);
-                    qrSettings.text = qrContent;
-                    qrSettings.mode = "byte";
-                    qrSettings.ecLevel = 'L'; // SeedQR uses Low error correction
-                    // Compact format also uses specific versions
+                    var binaryData = generateCompactSeedQR(content);
+                    qrContent = [{ data: binaryData, mode: 'byte' }];
+                    qrOptions.errorCorrectionLevel = 'L'; // SeedQR uses Low error correction
+                    // Compact format uses smaller versions
                     var wordCount = content.trim().split(/\s+/).length;
                     if (wordCount === 12) {
-                        qrSettings.minVersion = 2; // Smaller for 12-word
+                        qrOptions.version = 1; // V1 (21x21) for compact 12-word
                     } else if (wordCount === 24) {
-                        qrSettings.minVersion = 2; // Still compact for 24-word
+                        qrOptions.version = 2; // V2 (25x25) for compact 24-word
                     }
                 }
             }
 
-            var qrEl = bitcoinjs.kjua(qrSettings);
-            DOM.qrImage.append(qrEl);
-            if (!showQr) {
-                DOM.qrHider.addClass("hidden");
-            }
-            else {
-                DOM.qrHider.removeClass("hidden");
-            }
-            DOM.qrContainer.removeClass("hidden");
+
+            // Generate QR code using node-qrcode
+            bitcoinjs.qrcode.toDataURL(qrContent, qrOptions, function(err, url) {
+                if (err) {
+                    console.error('QR code generation error:', err);
+                    return;
+                }
+
+                // Clear previous QR code
+                DOM.qrImage.empty();
+
+                // Create img element with QR code
+                var img = $('<img>').attr('src', url).css({
+                    'max-width': '100%',
+                    'height': 'auto'
+                });
+
+                DOM.qrImage.append(img);
+
+                if (!showQr) {
+                    DOM.qrHider.addClass("hidden");
+                }
+                else {
+                    DOM.qrHider.removeClass("hidden");
+                }
+                DOM.qrContainer.removeClass("hidden");
+            });
         }
     }
 
     function destroyQr() {
-        DOM.qrImage.text("");
+        DOM.qrImage.empty();
         DOM.qrContainer.addClass("hidden");
     }
 
-    function toggleQr() {
-        showQr = !showQr;
-        DOM.qrHider.toggleClass("hidden");
-        DOM.qrHint.toggleClass("hidden");
+    function toggleQr(e) {
+        var currentField = e.target;
+
+        if (qrLocked && lockedQrField === currentField) {
+            // Clicking the same locked field - unlock and hide
+            showQr = false;
+            qrLocked = false;
+            lockedQrField = null;
+            DOM.qrHider.addClass("hidden");
+        } else {
+            // Clicking a different field or no field is locked - show QR for this field
+            showQr = true;
+            qrLocked = true;
+            lockedQrField = currentField;
+            createQr(e);
+            DOM.qrHider.removeClass("hidden");
+        }
     }
 
     function bip44TabSelected() {
