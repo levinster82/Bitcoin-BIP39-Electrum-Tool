@@ -15,6 +15,7 @@
     var showQr = false;
     var qrLocked = false;
     var lockedQrField = null;
+    var qrFieldInfo = null; // Logical tracking of what QR is showing
     
     var entropyTypeAutoDetect = true;
     var entropyChangeTimeoutEvent = null;
@@ -392,6 +393,7 @@
                 showQr = false;
                 qrLocked = false;
                 lockedQrField = null;
+                qrFieldInfo = null;
             }
         });
         DOM.showSplitMnemonic.on("change", toggleSplitMnemonic);
@@ -597,6 +599,9 @@
         // Show the word indexes
         showWordIndexes();
         writeSplitPhrase(phrase);
+
+        // Update QR code if it's currently displayed
+        updateQrIfNeeded();
     }
 
     function tabChanged() {
@@ -782,6 +787,9 @@
         // Calculate and display
         calcForDerivationPath();
         calcBip85();
+
+        // Update QR code if it's currently displayed
+        updateQrIfNeeded();
     }
 
     function rootKeyChanged() {
@@ -797,6 +805,9 @@
         calcBip32RootKeyFromBase58(rootKeyBase58);
         calcForDerivationPath();
         calcBip85();
+
+        // Update QR code if it's currently displayed
+        updateQrIfNeeded();
     }
 
 
@@ -1174,11 +1185,16 @@
             displayNip06Info();
         }
         displayBip32Info();
-        
+
         // Update CSV if CSV tab is currently visible - delay to ensure table is updated
         setTimeout(function() {
             updateCsvIfVisible();
         }, 500);
+
+        // Update QR after table has time to populate
+        setTimeout(function() {
+            updateQrIfNeeded();
+        }, 600);
     }
 
     function generateClicked() {
@@ -2113,6 +2129,8 @@
                         if (isLast) {
                             hidePending();
                             updateCsv();
+                            // Update QR code if it's currently displayed
+                            updateQrIfNeeded();
                         }
                         return;
                     } else {
@@ -2124,6 +2142,8 @@
                         if (isLast) {
                             hidePending();
                             updateCsv();
+                            // Update QR code if it's currently displayed
+                            updateQrIfNeeded();
                         }
                         return;
                     }
@@ -2284,6 +2304,11 @@
                 if (isLast) {
                     hidePending();
                     updateCsv();
+                    // Regenerate QR if it was showing a table element
+                    if (!DOM.qrContainer.hasClass("hidden") && lockedQrField && $(lockedQrField).closest(".addresses").length > 0) {
+                        var mockEvent = { target: lockedQrField };
+                        createQr(mockEvent);
+                    }
                 }
             }, 50)
         }
@@ -3072,6 +3097,12 @@
                     DOM.qrHider.removeClass("hidden");
                 }
                 DOM.qrContainer.removeClass("hidden");
+
+                // Update grid if it's currently visible
+                var gridCanvas = DOM.qrGridOverlay[0];
+                if (gridCanvas.style.display !== "none") {
+                    drawQrGrid();
+                }
             });
         }
     }
@@ -3079,6 +3110,83 @@
     function destroyQr() {
         DOM.qrImage.empty();
         DOM.qrContainer.addClass("hidden");
+    }
+
+    function getQrFieldInfo(field) {
+        var $field = $(field);
+        var $row = $field.closest("tr");
+
+        // Check if it's a table row element
+        if ($row.length > 0 && $row.closest(".addresses").length > 0) {
+            var rowIndex = $row.index();
+            var cellType = "";
+
+            if ($field.closest(".address").length > 0) cellType = "address";
+            else if ($field.closest(".pubkey").length > 0) cellType = "pubkey";
+            else if ($field.closest(".privkey").length > 0) cellType = "privkey";
+            else if ($field.closest(".index").length > 0) cellType = "index";
+
+            return {
+                type: "table",
+                rowIndex: rowIndex,
+                cellType: cellType
+            };
+        }
+
+        // Check for static fields by ID or class
+        if ($field.hasClass("phrase") || $field.attr("id") === "phrase") {
+            return { type: "phrase" };
+        }
+        if ($field.hasClass("seed") || $field.attr("id") === "seed") {
+            return { type: "seed" };
+        }
+        if ($field.hasClass("root-key") || $field.attr("id") === "root-key") {
+            return { type: "root-key" };
+        }
+
+        // For other fields, try to identify by ID or class
+        var fieldId = $field.attr("id");
+        if (fieldId) {
+            return { type: "static", id: fieldId };
+        }
+
+        return { type: "unknown" };
+    }
+
+    function findFieldFromInfo(info) {
+        if (!info) return null;
+
+        if (info.type === "table") {
+            var $rows = DOM.addresses.find("tr");
+            if (info.rowIndex < $rows.length) {
+                var $row = $rows.eq(info.rowIndex);
+                var $cell = $row.find("." + info.cellType + " span");
+                if ($cell.length > 0) {
+                    return $cell[0];
+                }
+            }
+        } else if (info.type === "phrase") {
+            return DOM.phrase[0];
+        } else if (info.type === "seed") {
+            return DOM.seed[0];
+        } else if (info.type === "root-key") {
+            return DOM.rootKey[0];
+        } else if (info.type === "static" && info.id) {
+            return document.getElementById(info.id);
+        }
+
+        return null;
+    }
+
+    function updateQrIfNeeded() {
+        if (!DOM.qrContainer.hasClass("hidden") && qrFieldInfo) {
+            var newField = findFieldFromInfo(qrFieldInfo);
+            if (newField) {
+                lockedQrField = newField;
+                var mockEvent = { target: newField };
+                createQr(mockEvent);
+            }
+        }
     }
 
     function toggleQr(e) {
@@ -3089,12 +3197,14 @@
             showQr = false;
             qrLocked = false;
             lockedQrField = null;
+            qrFieldInfo = null;
             DOM.qrHider.addClass("hidden");
         } else {
             // Clicking a different field or no field is locked - show QR for this field
             showQr = true;
             qrLocked = true;
             lockedQrField = currentField;
+            qrFieldInfo = getQrFieldInfo(currentField);
             createQr(e);
             DOM.qrHider.removeClass("hidden");
         }

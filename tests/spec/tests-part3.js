@@ -758,30 +758,30 @@ it('Uses as much entropy as possible for the mnemonic', async function() {
 // QR Code support
 // TODO this doesn't work in selenium with firefox
 // see https://stackoverflow.com/q/40360223
-it('Shows a qr code on hover for the phrase', async function() {
-    if (browser == "firefox") {
-        pending("Selenium + Firefox bug for mouseMove, see https://stackoverflow.com/q/40360223");
-    }
+it('Shows a qr code on click for the phrase', async function() {
     // generate a random mnemonic
     const generateEl = await driver.findElement(By.css('.generate'));
     await generateEl.click();
-    // toggle qr to show (hidden by default)
+    await driver.sleep(generateDelay);
+
+    // click on the phrase field to show QR
     const phraseEl = await driver.findElement(By.css(".phrase"));
     await phraseEl.click();
-    const rootKeyEl = await driver.findElement(By.css(".root-key"));
-    await driver.sleep(generateDelay);
-    // hover over the root key
-    await driver.actions().move({origin: rootKeyEl}).perform();
+
     // check the qr code shows
     const qrShowing = await driver.executeScript(function() {
         return $(".qr-container").find("canvas").length > 0;
     });
     expect(qrShowing).toBe(true);
-    // hover away from the phrase
-    await driver.actions().move({origin: generateEl}).perform();
+
+    // click the QR container to hide it
+    await driver.executeScript(function() {
+        $(".qr-container").click();
+    });
+
     // check the qr code hides
     const qrHidden = await driver.executeScript(function() {
-        return $(".qr-container").find("canvas").length == 0;
+        return $(".qr-container").hasClass("hidden");
     });
     expect(qrHidden).toBe(true);
 });
