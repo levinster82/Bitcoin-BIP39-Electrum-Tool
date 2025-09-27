@@ -4,6 +4,12 @@ A Bitcoin-focused fork of [iancoleman/bip39](https://github.com/iancoleman/bip39
 
 ## New Features (This Fork)
 
+### SeedQR Display
+- **Generate QR codes for easy transcription per [seedqr](https://github.com/SeedSigner/seedsigner/tree/dev/docs/seed_qr) standard**
+  - **SeedQR Standard**: 12-word (25×25 modules), 24-word (29×29 modules)
+  - **SeedQR Compact**: 12-word (21×21 modules), 24-word (25×25 modules)
+  - **Grid Overlay**: Visual grid for manual verification and hand transcription
+
 ### Nostr Key Derivation
 - **NIP-06 support**: Deterministic derivation of npub nsec from mnemonic
 
@@ -46,7 +52,7 @@ A Bitcoin-focused fork of [iancoleman/bip39](https://github.com/iancoleman/bip39
 ## Standalone Versions
 
 Download from releases:
-- [Latest Release](https://github.com/levinster82/Bitcoin-BIP39-Electrum-Tool/releases/latest)    `bip39-electrum-standalone.html` - v1.0.7 - SEEDQR's omg!
+- [Latest Release](https://github.com/levinster82/Bitcoin-BIP39-Electrum-Tool/releases/latest)    `bip39-electrum-standalone.html` - v1.0.8 - SEEDQR's omg!
 
 Build from source:
 ```
