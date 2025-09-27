@@ -1,3 +1,14 @@
+# v1.0.8
+
+## 🐛 Bug Fixes
+
+- **🔄 Dynamic QR Updates** - QR codes now update automatically when mnemonic, seed, or derivation parameters change
+- **🗂️ Table QR Regeneration** - Fixed QR codes for derived addresses/keys to update properly when table regenerates
+- **📐 SeedQR Grid Synchronization** - SeedQR grid overlay now updates correctly when QR dimensions change
+- **🧪 Test Updates** - Updated QR display tests to use click interaction instead of hover
+
+*Release Date: September 27, 2025*
+
 # v1.0.7
 
 ## 🌟 New Features

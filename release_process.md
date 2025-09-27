@@ -4,7 +4,7 @@ created with the following steps:
 1. Run tests and ensure all tests pass
 1. Set the version in index.html
 1. Update changelog
-1. Compile libs. `cd libs/combined && node run build`
+1. Compile libs. `cd libs/combined && npm run build`
 1. Run `python compile.py`
 1. Sign checksum `gpg --armor --detach-sign bip39-electrum-standalone.html.sha256sum`
 1. Commit these changes with message `Release vX.Y.Z`
