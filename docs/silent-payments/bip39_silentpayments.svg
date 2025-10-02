@@ -1,0 +1,241 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1600" width="1200" height="1600">
+  <!-- Background -->
+  <rect width="1200" height="1500" fill="#f8fafc"/>
+  
+  <!-- Title -->
+  <text x="600" y="50" font-family="Arial, sans-serif" font-size="32" font-weight="bold" text-anchor="middle" fill="#1e293b">
+    BIP39 HD Wallet Tree with Silent Payments
+  </text>
+  
+  <!-- Mnemonic -->
+  <g id="mnemonic">
+    <g transform="translate(425, 80)">
+      <rect x="0" y="0" width="350" height="55" rx="8" fill="#f97316" stroke="#ea580c" stroke-width="2"/>
+      <text x="175" y="32" font-family="monospace" font-size="18" text-anchor="middle" fill="white" font-weight="500">
+        BIP39 Mnemonic (12-24 words)
+      </text>
+     <!-- Arrow 1 -->
+     <path d="M 175 65 L 175 110" stroke="#94a3b8" stroke-width="3" fill="none" marker-end="url(#arrowhead)"/>
+    </g>
+  </g>
+  
+  <!-- 512-bit Seed -->
+  <g id="512-bit-seed">
+    <g transform="translate(475, 200)">
+      <rect x="0" y="0" width="250" height="55" rx="8" fill="#fb923c" stroke="#f97316" stroke-width="2"/>
+      <text x="130" y="32" font-family="monospace" font-size="18" text-anchor="middle" fill="white" font-weight="500">
+        512-bit Seed
+      </text>
+      <!-- Arrow 2 -->
+      <path d="M 125 65 L 125 110" stroke="#94a3b8" stroke-width="3" fill="none" marker-end="url(#arrowhead)"/>
+    </g>
+  </g>
+
+  <!-- Master Private Key -->
+  <g id="master-priv-key">
+    <g transform="translate(400, 320)">
+      <rect x="0" y="0" width="400" height="55" rx="8" fill="#9333ea" stroke="#7e22ce" stroke-width="2"/>
+      <text x="200" y="32" font-family="monospace" font-size="18" text-anchor="middle" fill="white" font-weight="500">
+        Master Private Key (m)
+      </text>
+      <!-- Arrow 3 -->
+      <path d="M 200 65 L 200 110" stroke="#94a3b8" stroke-width="3" fill="none" marker-end="url(#arrowhead)"/>
+    </g>
+  </g>
+  
+  <!-- Purpose Level -->
+  <g id="purpose">
+    <g transform="translate(100, 440)">
+      <rect x="0" y="0" width="1000" height="55" rx="8" fill="#2563eb" stroke="#1d4ed8" stroke-width="2"/>
+      <text x="500" y="32" font-family="monospace" font-size="18" text-anchor="middle" fill="white" font-weight="500">
+        Purpose: m/44' (Legacy) | m/84' (SegWit) | m/352' (Silent Payments)
+      </text>
+
+      <!-- Arrow 4a -->
+      <path d="M 150 65 L 150 110" stroke="#cbd5e1" stroke-width="3" fill="none" marker-end="url(#arrowhead-light)"/>
+
+      <!-- Arrow 4b -->
+      <path d="M 500 65 L 500 110" stroke="#cbd5e1" stroke-width="3" fill="none" marker-end="url(#arrowhead-light)"/>
+  
+      <!-- Arrow 4c -->
+      <path d="M 850 65 L 850 110" stroke="#94a3b8" stroke-width="3" fill="none" marker-end="url(#arrowhead)"/>
+
+    </g>
+  </g>
+  
+  
+  <!-- Three Branches Container -->
+  <g id="branches">
+    <!-- Legacy Branch -->
+    <g transform="translate(110, 560)">
+      <rect x="0" y="0" width="280" height="60" rx="8" fill="#94a3b8" stroke="#64748b" stroke-width="2"/>
+      <text x="140" y="25" font-family="monospace" font-size="16" text-anchor="middle" fill="white" font-weight="600">
+        m/44'/0'/0'
+      </text>
+      <text x="140" y="45" font-family="Arial, sans-serif" font-size="16" text-anchor="middle" fill="white">
+        Legacy addresses
+      </text>
+      
+      <path d="M 140 70 L 140 100" stroke="#cbd5e1" stroke-width="2" fill="none" marker-end="url(#arrowhead-light)"/>
+      
+      <rect x="50" y="110" width="180" height="45" rx="6" fill="#cbd5e1" stroke="#94a3b8" stroke-width="2"/>
+      <text x="140" y="138" font-family="monospace" font-size="14" text-anchor="middle" fill="#475569">
+        m/44'/0'/0'/0/0
+      </text>
+    </g>
+    
+    <!-- SegWit Branch -->
+    <g transform="translate(460, 560)">
+      <rect x="0" y="0" width="280" height="60" rx="8" fill="#94a3b8" stroke="#64748b" stroke-width="2"/>
+      <text x="140" y="25" font-family="monospace" font-size="16" text-anchor="middle" fill="white" font-weight="600">
+        m/84'/0'/0'
+      </text>
+      <text x="140" y="45" font-family="Arial, sans-serif" font-size="16" text-anchor="middle" fill="white">
+        SegWit addresses
+      </text>
+      
+      <path d="M 140 70 L 140 100" stroke="#cbd5e1" stroke-width="2" fill="none" marker-end="url(#arrowhead-light)"/>
+      
+      <rect x="50" y="110" width="180" height="45" rx="6" fill="#cbd5e1" stroke="#94a3b8" stroke-width="2"/>
+      <text x="140" y="138" font-family="monospace" font-size="14" text-anchor="middle" fill="#475569">
+        m/84'/0'/0'/0/0
+      </text>
+    </g>
+    
+    <!-- Silent Payments Branch (HIGHLIGHTED) -->
+    <g transform="translate(810, 560)">
+      <rect x="0" y="0" width="280" height="60" rx="8" fill="#16a34a" stroke="#15803d" stroke-width="5"/>
+      <text x="140" y="25" font-family="monospace" font-size="16" font-weight="bold" text-anchor="middle" fill="white">
+        m/352'/0'/0'
+      </text>
+      <text x="140" y="45" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="white">
+        Silent Payments
+      </text>
+      
+      <path d="M 140 70 L 140 120" stroke="#22c55e" stroke-width="3" fill="none" marker-end="url(#arrowhead-green)"/>
+      
+      <!-- Keys Container -->
+      <g id="keys">
+        <g transform="translate(0, 20)">
+          <rect x="-20" y="110" width="320" height="200" rx="8" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+          
+          <text x="35" y="135" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="#166534">
+            Derives to:
+          </text>
+          
+          <!-- Scan Key Box -->
+          <rect x="-5" y="145" width="290" height="70" rx="6" fill="white" stroke="#16a34a" stroke-width="1.5"/>
+          
+          <!-- Key Icon for Scan -->
+          <g transform="translate(10, 160)">
+            <circle cx="8" cy="8" r="6" stroke="#16a34a" stroke-width="2" fill="none"/>
+            <rect x="5" y="14" width="6" height="8" fill="none" stroke="#16a34a" stroke-width="2"/>
+            <line x1="8" y1="22" x2="8" y2="30" stroke="#16a34a" stroke-width="2"/>
+          </g>
+          
+          <text x="35" y="173" font-family="monospace" font-size="16" font-weight="bold" text-anchor="start" fill="#166534">
+            Scan Key
+          </text>
+          <text x="35" y="191" font-family="monospace" font-size="16" text-anchor="start" fill="#64748b">
+            m/352'/0'/0'/1'/0
+          </text>
+          <text x="35" y="206" font-family="Arial, sans-serif" font-size="12" text-anchor="start" fill="#64748b">
+            (detect payments)
+          </text>
+          
+          <!-- Spend Key Box -->
+          <rect x="-5" y="225" width="290" height="70" rx="6" fill="white" stroke="#16a34a" stroke-width="1.5"/>
+          
+          <!-- Lock Icon for Spend -->
+          <g transform="translate(10, 240)">
+            <rect x="4" y="12" width="12" height="10" rx="2" stroke="#16a34a" stroke-width="2" fill="none"/>
+            <path d="M 7 12 L 7 8 Q 7 4 10 4 Q 13 4 13 8 L 13 12" stroke="#16a34a" stroke-width="2" fill="none"/>
+          </g>
+          
+          <text x="35" y="253" font-family="monospace" font-size="16" font-weight="bold" text-anchor="start" fill="#166534">
+            Spend Key
+          </text>
+          <text x="35" y="271" font-family="monospace" font-size="16" text-anchor="start" fill="#64748b">
+            m/352'/0'/0'/0'/0
+          </text>
+          <text x="35" y="286" font-family="Arial, sans-serif" font-size="12" text-anchor="start" fill="#64748b">
+            (spend funds)
+          </text>
+        </g>
+      </g>
+    </g>
+  </g>
+  
+  <!-- Silent Payment Address Construction -->
+  <g id="silent-payment-address-construction">
+    <g transform="translate(60, 230)">
+      <rect x="150" y="720" width="900" height="300" rx="10" fill="#dcfce7" stroke="#16a34a" stroke-width="3"/>
+      
+      <text x="600" y="755" font-family="Arial, sans-serif" font-size="20" font-weight="bold" text-anchor="middle" fill="#166534">
+        Silent Payment Address Construction
+      </text>
+      
+      <rect x="200" y="775" width="800" height="40" rx="6" fill="white" stroke="#94a3b8" stroke-width="1"/>
+      <text x="600" y="800" font-family="Arial, sans-serif" font-size="16" text-anchor="middle" fill="#166534">
+        Scan Public Key (from scan private key)
+      </text>
+      
+      <text x="600" y="842" font-family="Arial, sans-serif" font-size="25" font-weight="bold" text-anchor="middle" fill="#64748b">
+        +
+      </text>
+      
+      <rect x="200" y="850" width="800" height="40" rx="6" fill="white" stroke="#94a3b8" stroke-width="1"/>
+      <text x="600" y="875" font-family="Arial, sans-serif" font-size="16" text-anchor="middle" fill="#166534">
+        Spend Public Key (from spend private key)
+      </text>
+      
+      <text x="600" y="940" font-family="Arial, sans-serif" font-size="60" font-weight="bold" text-anchor="middle" fill="#64748b">
+        ↓
+      </text>
+      
+      <rect x="200" y="960" width="800" height="40" rx="6" fill="#16a34a" stroke="#15803d" stroke-width="2"/>
+      <text x="600" y="985" font-family="monospace" font-size="20" font-weight="bold" text-anchor="middle" fill="white">
+        sp1q... (Your reusable Silent Payment address)
+      </text>
+    </g>
+  </g>
+  
+  <!-- Key Notes -->
+  <g id="notes">
+    <g transform="translate(-50, 340)">
+      <rect x="150" y="970" width="1000" height="160" rx="10" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="2"/>
+      
+      <text x="170" y="1000" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#475569">
+        Key Notes:
+      </text>
+      
+      <text x="170" y="1025" font-family="Arial, sans-serif" font-size="14" fill="#64748b">
+        • BIP 352 defines the m/352' derivation path for Silent Payments
+      </text>
+      <text x="170" y="1048" font-family="Arial, sans-serif" font-size="14" fill="#64748b">
+        • The Scan Key is used to detect payments on the blockchain
+      </text>
+      <text x="170" y="1071" font-family="Arial, sans-serif" font-size="14" fill="#64748b">
+        • The Spend Key is used to actually spend received funds
+      </text>
+      <text x="170" y="1094" font-family="Arial, sans-serif" font-size="14" fill="#64748b">
+        • Both keys are derived deterministically from your seed phrase
+      </text>
+      <text x="170" y="1117" font-family="Arial, sans-serif" font-size="14" fill="#64748b">
+        • The apostrophe (') indicates hardened derivation
+      </text>
+    </g>
+  </g>
+  <!-- Arrow markers -->
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
+      <polygon points="0 0, 10 5, 0 10" fill="#94a3b8"/>
+    </marker>
+    <marker id="arrowhead-light" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
+      <polygon points="0 0, 10 5, 0 10" fill="#cbd5e1"/>
+    </marker>
+    <marker id="arrowhead-green" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
+      <polygon points="0 0, 10 5, 0 10" fill="#22c55e"/>
+    </marker>
+  </defs>
+</svg>
