@@ -128,6 +128,25 @@
     DOM.bip86accountXprv = $("#bip86 .account-xprv");
     DOM.bip86accountXpub = $("#bip86 .account-xpub");
     DOM.bip86change = $("#bip86 .change");
+    DOM.bip352tab = $("#bip352-tab");
+    DOM.bip352unavailable = $("#bip352 .unavailable");
+    DOM.bip352available = $("#bip352 .available");
+    DOM.bip352purpose = $("#purpose-bip352");
+    DOM.bip352coin = $("#coin-bip352");
+    DOM.bip352account = $("#account-bip352");
+    DOM.bip352change = $("#change-bip352");
+    DOM.bip352addressIndex = $("#address-index-bip352");
+    DOM.bip352scanKeyPriv = $("#scan-key-priv-bip352");
+    DOM.bip352scanKeyPub = $("#scan-key-pub-bip352");
+    DOM.bip352spendKeyPriv = $("#spend-key-priv-bip352");
+    DOM.bip352spendKeyPub = $("#spend-key-pub-bip352");
+    DOM.bip352silentPaymentAddress = $("#silent-payment-address-bip352");
+    DOM.bip352scanXprv = $("#scan-xprv-bip352");
+    DOM.bip352scanXpub = $("#scan-xpub-bip352");
+    DOM.bip352spendXprv = $("#spend-xprv-bip352");
+    DOM.bip352spendXpub = $("#spend-xpub-bip352");
+    DOM.bip352scanPath = $("#scan-path-bip352");
+    DOM.bip352spendPath = $("#spend-path-bip352");
     DOM.nip06tab = $("#nip06-tab");
     DOM.nip06panel = $("#nip06");
     DOM.nip06path = $("#bip32-path-nip06");
@@ -414,6 +433,9 @@
         DOM.bip84change.on("input", calcForDerivationPath);
         DOM.bip86account.on("input", calcForDerivationPath);
         DOM.bip86change.on("input", calcForDerivationPath);
+        DOM.bip352account.on("input", calcForDerivationPath);
+        DOM.bip352change.on("input", calcForDerivationPath);
+        DOM.bip352addressIndex.on("input", calcForDerivationPath);
         DOM.nip06account.on("input", calcForDerivationPath);
         DOM.nip06addressIndex.on("input", calcForDerivationPath);
         DOM.bip85application.on('input', calcBip85);
@@ -828,12 +850,12 @@
             DOM.mnemonicLabel.text("Electrum");
             DOM.seedLabel.text("Electrum Seed");
             DOM.passphraseLabel.text("Passphrase (optional)");
-            // Hide BIP tabs (including NIP06) and show Electrum tabs
-            $("#bip32-tab, #bip44-tab, #bip49-tab, #bip84-tab, #bip141-tab, #bip86-tab, #nip06-tab").addClass("hidden").removeClass("active");
+            // Hide BIP tabs (including BIP352 and NIP06) and show Electrum tabs
+            $("#bip32-tab, #bip44-tab, #bip49-tab, #bip84-tab, #bip141-tab, #bip86-tab, #bip352-tab, #nip06-tab").addClass("hidden").removeClass("active");
             // Remove active class from BIP tab links
-            $("#bip32-tab a, #bip44-tab a, #bip49-tab a, #bip84-tab a, #bip141-tab a, #bip86-tab a, #nip06-tab a").removeClass("active");
+            $("#bip32-tab a, #bip44-tab a, #bip49-tab a, #bip84-tab a, #bip141-tab a, #bip86-tab a, #bip352-tab a, #nip06-tab a").removeClass("active");
             // Hide BIP tab content panels
-            $("#bip32, #bip44, #bip49, #bip84, #bip141, #bip86, #nip06").removeClass("active");
+            $("#bip32, #bip44, #bip49, #bip84, #bip141, #bip86, #bip352, #nip06").removeClass("active");
             DOM.electrumTabs.removeClass("hidden").show();
             // Activate first Electrum tab by default
             DOM.electrumLegacyTab.addClass("active");
@@ -864,8 +886,8 @@
             DOM.mnemonicLabel.text("BIP39");
             DOM.seedLabel.text("BIP39 Seed");
             DOM.passphraseLabel.text("BIP39 Passphrase (optional)");
-            // Show BIP tabs (including NIP06) and hide Electrum tabs
-            $("#bip32-tab, #bip44-tab, #bip49-tab, #bip84-tab, #bip141-tab, #bip86-tab, #nip06-tab").removeClass("hidden");
+            // Show BIP tabs (including BIP352 and NIP06) and hide Electrum tabs
+            $("#bip32-tab, #bip44-tab, #bip49-tab, #bip84-tab, #bip141-tab, #bip86-tab, #bip352-tab, #nip06-tab").removeClass("hidden");
             DOM.electrumTabs.addClass("hidden").hide();
             DOM.electrumTabPanels.removeClass("active");
             // Remove active class from Electrum tabs
@@ -1175,6 +1197,9 @@
         else if (bip86TabSelected()) {
             displayBip86Info();
         }
+        else if (bip352TabSelected()) {
+            displayBip352Info();
+        }
         else if (electrumLegacyTabSelected()) {
             displayElectrumLegacyInfo();
         }
@@ -1261,6 +1286,7 @@
         DOM.bip84change.val("0");
         DOM.bip86account.val("0");
         DOM.bip86change.val("0");
+        DOM.bip352account.val("0");
         DOM.nip06account.val("0");
         
         // Reset network to Bitcoin (index 0 in networks array)
@@ -1772,6 +1798,12 @@
             var derivationPath = DOM.bip86path.val();
             return derivationPath;
         }
+        else if (bip352TabSelected()) {
+            // BIP352 uses spend key path for general derivation validation
+            var account = parseIntNoNaN(DOM.bip352account.val(), 0);
+            var path = "m/352'/0'/" + account + "'/0'/0";
+            return path;
+        }
         else if (bip32TabSelected()) {
             var derivationPath = DOM.bip32path.val();
             return derivationPath;
@@ -1924,7 +1956,68 @@
         DOM.bip86accountXprv.val(accountXprv);
         DOM.bip86accountXpub.val(accountXpub);
     }
-    
+
+    function displayBip352Info() {
+        // Get the derivation parameters
+        var account = parseIntNoNaN(DOM.bip352account.val(), 0);
+        var change = parseIntNoNaN(DOM.bip352change.val(), 0);
+        var addressIndex = parseIntNoNaN(DOM.bip352addressIndex.val(), 0);
+
+        // Update paths to show current values
+        var scanPath = "m/352'/0'/" + account + "'/1'/" + addressIndex;
+        var spendPath = "m/352'/0'/" + account + "'/0'/" + addressIndex;
+        DOM.bip352scanPath.val(scanPath);
+        DOM.bip352spendPath.val(spendPath);
+
+        // Generate Silent Payment keys using BIP352 library
+        try {
+            // Use the global bip32RootKey variable
+            if (!bip32RootKey) {
+                throw new Error("No root key available. Please generate or enter a mnemonic first.");
+            }
+
+            // Derive the specific keys based on change and address index
+            var basePath = bip32RootKey
+                .deriveHardened(352)
+                .deriveHardened(0)
+                .deriveHardened(account);
+
+            // Derive scan key (change=1) and spend key (change=0)
+            var scanKey = basePath.deriveHardened(1).derive(addressIndex);
+            var spendKey = basePath.deriveHardened(0).derive(addressIndex);
+
+            // Generate Silent Payment address from both keys
+            var silentPaymentAddress = BIP352.encodeSilentPaymentAddress(
+                scanKey.publicKey,
+                spendKey.publicKey,
+                false
+            );
+
+            // Display scan key
+            DOM.bip352scanKeyPriv.val(scanKey.privateKey.toString('hex'));
+            DOM.bip352scanKeyPub.val(scanKey.publicKey.toString('hex'));
+            DOM.bip352scanXprv.val(scanKey.toBase58());
+            DOM.bip352scanXpub.val(scanKey.neutered().toBase58());
+
+            // Display spend key
+            DOM.bip352spendKeyPriv.val(spendKey.privateKey.toString('hex'));
+            DOM.bip352spendKeyPub.val(spendKey.publicKey.toString('hex'));
+            DOM.bip352spendXprv.val(spendKey.toBase58());
+            DOM.bip352spendXpub.val(spendKey.neutered().toBase58());
+
+            // Display Silent Payment address
+            DOM.bip352silentPaymentAddress.val(silentPaymentAddress);
+        } catch (e) {
+            console.error("BIP352 Error:", e);
+            // Clear fields on error
+            DOM.bip352scanKeyPriv.val("");
+            DOM.bip352scanKeyPub.val("");
+            DOM.bip352spendKeyPriv.val("");
+            DOM.bip352spendKeyPub.val("");
+            DOM.bip352silentPaymentAddress.val("Error: " + e.message);
+        }
+    }
+
     function displayElectrumLegacyInfo() {
         // Electrum Legacy account extended key - use ROOT level (m/) based on Electrum source code
         var bitcoinMainnet = bitcoinjs.bitcoin.networks.bitcoin;
@@ -2143,6 +2236,68 @@
                             hidePending();
                             updateCsv();
                             // Update QR code if it's currently displayed
+                            updateQrIfNeeded();
+                        }
+                        return;
+                    }
+                }
+
+                // BIP352 Silent Payments - alternating scan/spend keys
+                if (bip352TabSelected()) {
+                    try {
+                        // Get the account from the UI
+                        var account = parseIntNoNaN(DOM.bip352account.val(), 0);
+
+                        // Determine if this row is for scan (odd) or spend (even)
+                        var isScanKey = (index % 2 === 1);
+                        var addressIndex = Math.floor(index / 2);
+
+                        // Derive the specific keys based on change and address index
+                        var basePath = bip32RootKey
+                            .deriveHardened(352)
+                            .deriveHardened(0)
+                            .deriveHardened(account);
+
+                        // Derive scan and spend keys at this address index
+                        var scanKey = basePath.deriveHardened(1).derive(addressIndex);
+                        var spendKey = basePath.deriveHardened(0).derive(addressIndex);
+
+                        // Generate Silent Payment address from both keys
+                        var silentPaymentAddress = BIP352.encodeSilentPaymentAddress(
+                            scanKey.publicKey,
+                            spendKey.publicKey,
+                            false
+                        );
+
+                        // Determine which key to display in this row
+                        var keyType = isScanKey ? "Scan" : "Spend";
+                        var keyData = isScanKey ? scanKey : spendKey;
+                        var keyPath = "m/352'/0'/" + account + "'/" + (isScanKey ? "1" : "0") + "'/" + addressIndex;
+
+                        self.index = index;
+                        self.path = keyPath;
+                        self.address = silentPaymentAddress; // Silent Payment address (sp1q...)
+                        self.pubkey = keyData.publicKey.toString('hex');
+                        self.privkey = keyData.privateKey.toString('hex');
+
+                        var indexText = keyPath + " (" + keyType + ")";
+                        addAddressToList(indexText, silentPaymentAddress, self.pubkey, self.privkey);
+
+                        if (isLast) {
+                            hidePending();
+                            updateCsv();
+                            updateQrIfNeeded();
+                        }
+                        return;
+                    } catch (e) {
+                        console.error("BIP352 table generation error:", e);
+                        self.address = "Error";
+                        self.pubkey = "Error";
+                        self.privkey = "Error: " + e.message;
+                        addAddressToList("Error", "Error", "Error", "Error");
+                        if (isLast) {
+                            hidePending();
+                            updateCsv();
                             updateQrIfNeeded();
                         }
                         return;
@@ -3425,6 +3580,10 @@
         return DOM.bip86tab.find(".nav-link").hasClass("active");
     }
 
+    function bip352TabSelected() {
+        return DOM.bip352tab.find(".nav-link").hasClass("active");
+    }
+
     function bip141TabSelected() {
         return DOM.bip141tab.find(".nav-link").hasClass("active");
     }
@@ -3438,6 +3597,7 @@
         DOM.bip49coin.val(coinValue);
         DOM.bip84coin.val(coinValue);
         DOM.bip86coin.val(coinValue);
+        DOM.bip352coin.val(coinValue);
     }
 
     function showSegwitAvailable() {
@@ -3447,6 +3607,8 @@
         DOM.bip84available.removeClass("hidden");
         DOM.bip86unavailable.addClass("hidden");
         DOM.bip86available.removeClass("hidden");
+        DOM.bip352unavailable.addClass("hidden");
+        DOM.bip352available.removeClass("hidden");
         DOM.bip141unavailable.addClass("hidden");
         DOM.bip141available.removeClass("hidden");
     }
@@ -3458,6 +3620,8 @@
         DOM.bip84unavailable.removeClass("hidden");
         DOM.bip86available.addClass("hidden");
         DOM.bip86unavailable.removeClass("hidden");
+        DOM.bip352available.addClass("hidden");
+        DOM.bip352unavailable.removeClass("hidden");
         DOM.bip141available.addClass("hidden");
         DOM.bip141unavailable.removeClass("hidden");
     }

@@ -1,3 +1,28 @@
+# v1.1.0
+
+## 🌟 New Features
+
+- **🔒 BIP-352 Silent Payments** - Complete implementation of reusable, privacy-preserving payment addresses
+  - Dual-key architecture with separate scan and spend keys
+  - Derivation paths: `m/352'/0'/account'/[0|1]'/address_index`
+  - Silent Payment address format: `sp1q...` (bech32m encoding)
+  - Full extended key support (xprv/xpub) for both scan and spend keys
+  - Generate multiple addresses by incrementing address index or account
+  - Custom BIP-352 library with comprehensive test coverage
+- **🧪 Expanded Test Suite** - Increased from 270+ to 278+ tests
+  - 8 new BIP-352 UI integration tests
+  - 416 cryptographic validation tests for Silent Payments
+  - Cross-implementation validation (JavaScript + Python)
+
+## 📚 Documentation
+
+- Added BIP-352 Silent Payments to More Info section
+- Updated CLAUDE.md with BIP-352 architecture details
+- Comprehensive test vector documentation
+- Updated build instructions for BIP-352 library
+
+*Release Date: October 4, 2025*
+
 # v1.0.8
 
 ## 🐛 Bug Fixes

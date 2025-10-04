@@ -4,6 +4,17 @@ A Bitcoin-focused fork of [iancoleman/bip39](https://github.com/iancoleman/bip39
 
 ## New Features (This Fork)
 
+### BIP-352 Silent Payments 🔒
+- **Reusable Payment Addresses**: Privacy-preserving addresses that can be published publicly
+- **Dual-Key Architecture**: Separate scan and spend keys for enhanced privacy
+- **Derivation Paths**:
+  - Scan key: `m/352'/0'/account'/1'/address_index`
+  - Spend key: `m/352'/0'/account'/0'/address_index`
+- **SP Address Format**: Bech32m encoded addresses (sp1q...)
+- **Extended Keys**: Full xprv/xpub support for both scan and spend keys
+- **Multiple Addresses**: Generate new Silent Payment addresses by incrementing the address index or account
+- **Custom Implementation**: Built-in BIP-352 library with comprehensive test coverage (424 automated tests)
+
 ### SeedQR Display
 - **Generate QR codes for easy transcription per [seedqr](https://github.com/SeedSigner/seedsigner/tree/dev/docs/seed_qr) standard**
   - **SeedQR Standard**: 12-word (25×25 modules), 24-word (29×29 modules)
@@ -30,7 +41,7 @@ A Bitcoin-focused fork of [iancoleman/bip39](https://github.com/iancoleman/bip39
 - **Updated Offline Usage section.  Don't Trust.. Verify! Always!**
 - **Added "Clear All" fields button**
 - **Bitcoin-Only Libraries**: Removed altcoin dependencies, upgraded to bitcoinjs-lib 6.1.7+
-- **Comprehensive Test Suite**: 190+ tests validating proper function and key generation.
+- **Comprehensive Test Suite**: 278+ tests validating proper function and key generation
 - **Auto Day/Night Theme**: Automatically follows system dark/light mode preference
 - **Manual Theme Toggle**: Three-way toggle (Light → Dark → Auto) for user control
 
@@ -39,9 +50,17 @@ A Bitcoin-focused fork of [iancoleman/bip39](https://github.com/iancoleman/bip39
 ### Standard BIP39
 1. Select "BIP39" mnemonic type
 1. Generate or enter mnemonic phrase
-2. Select derivation path (BIP44, BIP49, BIP84, etc.)
+2. Select derivation path (BIP44, BIP49, BIP84, BIP86, BIP352, etc.)
 3. Adjust derivation Path "account" and "change" as needed.
 5. View addresses and private keys
+
+### Silent Payments (BIP-352)
+1. Select "BIP39" mnemonic type
+2. Generate or enter mnemonic phrase
+3. Select "BIP352" tab
+4. Adjust "Account" and "Address Index" as needed
+5. View scan/spend keys and Silent Payment address (sp1q...)
+6. **Note**: Silent Payments require blockchain scanning to detect incoming payments
 
 ### Electrum Wallets
 1. Select "Electrum" mnemonic type
@@ -52,15 +71,29 @@ A Bitcoin-focused fork of [iancoleman/bip39](https://github.com/iancoleman/bip39
 ## Standalone Versions
 
 Download from releases:
-- [Latest Release](https://github.com/levinster82/Bitcoin-BIP39-Electrum-Tool/releases/latest)    `bip39-electrum-standalone.html` - v1.0.8 - SEEDQR's omg!
+- [Latest Release](https://github.com/levinster82/Bitcoin-BIP39-Electrum-Tool/releases/latest)    `bip39-electrum-standalone.html` - v1.1.0 - BIP-352 Silent Payments!
 
 Build from source:
-```
-# Generate libs ./libs/combined ./libs/electrum-mnemonic
+```bash
+# Build combined libraries
+cd libs/combined
 npm install --no-optional
 npm run build
-# copy output combined-libs.js & electrum-mnemonic.js to ./src/js
-### Build
+
+# Build Electrum mnemonic library
+cd ../electrum-mnemonic
+npm install
+npm run build
+
+# Build BIP-352 Silent Payments library
+cd ../bip352-silentpayments
+npm install
+npm run build
+
+# All libraries automatically copy to src/js/
+
+# Generate standalone HTML
+cd ../..
 python compile.py
 ```
 

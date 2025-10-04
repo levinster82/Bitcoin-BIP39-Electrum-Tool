@@ -1,0 +1,440 @@
+{
+  "generated_by": "Python BIP-352 Test Vector Generator",
+  "generated_at": "2025-10-03T17:50:18.412218Z",
+  "implementation": "mnemonic + bip32 + custom bech32m",
+  "note": "Test vectors for BIP-352 Silent Payments full derivation from mnemonic",
+  "test_vectors": [
+    {
+      "test_name": "BIP39 Test Vector 1",
+      "mnemonic": "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about",
+      "passphrase": "",
+      "seed_hex": "5eb00bbddcf069084889a8ab9155568165f5c453ccb85e70811aaed6f6da5fc19a5ac40b389cd370d086206dec8aa6c43daea6690f20ad3d8d48b2d2ce9e38e4",
+      "root_xprv": "xprv9s21ZrQH143K3GJpoapnV8SFfukcVBSfeCficPSGfubmSFDxo1kuHnLisriDvSnRRuL2Qrg5ggqHKNVpxR86QEC8w35uxmGoggxtQTPvfUu",
+      "root_xpub": "xpub661MyMwAqRbcFkPHucMnrGNzDwb6teAX1RbKQmqtEF8kK3Z7LZ59qafCjB9eCRLiTVG3uxBxgKvRgbubRhqSKXnGGb1aoaqLrpMBDrVxga8",
+      "account": 0,
+      "address_index": 0,
+      "derivation": {
+        "scan_path": "m/352'/0'/0'/1'/0",
+        "spend_path": "m/352'/0'/0'/0'/0"
+      },
+      "scan_key": {
+        "private_key_hex": "78e7fd7d2b7a2c1456709d147021a122d2dccaafeada040cc1002083e2833b09",
+        "public_key_hex": "024139b0f81042e243a90478e43990c6a27be0e3346f0c71adbbcdd511beaea1e3",
+        "xprv": "xprvA3LU75fVCv9roeU7QeG2brvoWnm3NkaMVKeYQv5KXQkxg6xrCpGzdU9R8es6rwkwsr9Hh8ELuyqw3br9uPyXryxwAmmdvm1oS7ExxR5Vojh",
+        "xpub": "xpub6GKpWbCP3HiA28YaWfo2xzsY4pbXnDJCrYa9DJUw5kHwYuHzkMbFBGTtyuUM1c7zF4vsgpTpN2NUxTh5GwHnu2L4Uq6QnYqXknBDRCWp7eH"
+      },
+      "spend_key": {
+        "private_key_hex": "c88567742d5019d7ccc81f6e82cef8ef01997a6a3761cc9166036b580549539b",
+        "public_key_hex": "02fa210b3c4a60b80dd1616f48ae53bbdf0db744b3f9083385108f81be0acb58c6",
+        "xprv": "xprvA3KgATaUCwK1AGmw5pfpFL8WETs57ezhvuivL745aq4JTLPqqJ5fetBwYMCFfi644ZsFcrg9q8mBWhc8rJzMfPyzotKjQ5Z538oUcKasNBU",
+        "xpub": "xpub6GK2Zy7N3JsJNkrQBrCpcU5EnVhZX7iZJ8eX8VTh9AbHL8izNqPvCgWRPcbsH9WTMLnnUKkVDGcXtQZ9E3HryPYdyfdiBBJ3jy8Ekcr9SPj"
+      },
+      "silent_payment_address": "sp1qqpyzwdslqgy9cjr4yz83epejrr2y7lquv6x7rr34kaum4g3h6h2rcczlgssk0z2vzuqm5tpday2u5ammuxmw39nlyyr8pgs37qmuzkttrrq5yasta"
+    },
+    {
+      "test_name": "BIP39 Test Vector 1",
+      "mnemonic": "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about",
+      "passphrase": "",
+      "seed_hex": "5eb00bbddcf069084889a8ab9155568165f5c453ccb85e70811aaed6f6da5fc19a5ac40b389cd370d086206dec8aa6c43daea6690f20ad3d8d48b2d2ce9e38e4",
+      "root_xprv": "xprv9s21ZrQH143K3GJpoapnV8SFfukcVBSfeCficPSGfubmSFDxo1kuHnLisriDvSnRRuL2Qrg5ggqHKNVpxR86QEC8w35uxmGoggxtQTPvfUu",
+      "root_xpub": "xpub661MyMwAqRbcFkPHucMnrGNzDwb6teAX1RbKQmqtEF8kK3Z7LZ59qafCjB9eCRLiTVG3uxBxgKvRgbubRhqSKXnGGb1aoaqLrpMBDrVxga8",
+      "account": 0,
+      "address_index": 1,
+      "derivation": {
+        "scan_path": "m/352'/0'/0'/1'/1",
+        "spend_path": "m/352'/0'/0'/0'/1"
+      },
+      "scan_key": {
+        "private_key_hex": "2ad12540d30fcc88437d40ce2b8324ce959945ce1c0bec30622c4133833c124b",
+        "public_key_hex": "025c6e8803c33081b146fe443a975bd3571206fe66535b02c94f824eb2ca577e2c",
+        "xprv": "xprvA3LU75fVCv9rtM8jNCcfTn4xmGKjJtLgwMTq1uhLMe3mXSniFbmBYFdfZ5jqij2BBNewtzDwMVhhvVv1qAaqGMSdNvomP4PxQzMH27Dzk7D",
+        "xpub": "xpub6GKpWbCP3HiA6qDCUE9fpv1hKJADiM4YJaPRpJ6wuyakQF7ro95S63x9QM9TWGWSkmBb1poCrBMfR9Ahi63o7TDZLnKPYnv3VAceFGJWJtQ"
+      },
+      "spend_key": {
+        "private_key_hex": "4f7ab86cfcc46149983262721736e3b9434124d0fea2965b47cb45b5f88105a2",
+        "public_key_hex": "021462e6f85c2933839077ebb40ada3e63b8e61fa5f4a8e5550a07a9bb0218be10",
+        "xprv": "xprvA3KgATaUCwK1BQpYumaDpydRxGfPrbdrJeh5fYxKakFnfWdzANERUF5z36NgThRiWWrLdpFcTDFj8KJGVqrcXoTuhtLYs581sT4hNVrT2oD",
+        "xpub": "xpub6GK2Zy7N3JsJPtu21o7EC7aAWJVtG4MhfscgTwMw95nmYJy8huYg23QTtLxRT6ddKZHuMznVEZqpoNHXVsYkvBuT7ynJemEJ2aRmvrfKSUd"
+      },
+      "silent_payment_address": "sp1qqp9cm5gq0pnpqd3gmlygw5ht0f4wysxlen9xkcze98cyn4jefthutqzz33wd7zu9yec8yrhaw6q4k37vwuwv8a97j5w24g2q75mkqschcgqpvh609"
+    },
+    {
+      "test_name": "BIP39 Test Vector 1",
+      "mnemonic": "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about",
+      "passphrase": "",
+      "seed_hex": "5eb00bbddcf069084889a8ab9155568165f5c453ccb85e70811aaed6f6da5fc19a5ac40b389cd370d086206dec8aa6c43daea6690f20ad3d8d48b2d2ce9e38e4",
+      "root_xprv": "xprv9s21ZrQH143K3GJpoapnV8SFfukcVBSfeCficPSGfubmSFDxo1kuHnLisriDvSnRRuL2Qrg5ggqHKNVpxR86QEC8w35uxmGoggxtQTPvfUu",
+      "root_xpub": "xpub661MyMwAqRbcFkPHucMnrGNzDwb6teAX1RbKQmqtEF8kK3Z7LZ59qafCjB9eCRLiTVG3uxBxgKvRgbubRhqSKXnGGb1aoaqLrpMBDrVxga8",
+      "account": 0,
+      "address_index": 2,
+      "derivation": {
+        "scan_path": "m/352'/0'/0'/1'/2",
+        "spend_path": "m/352'/0'/0'/0'/2"
+      },
+      "scan_key": {
+        "private_key_hex": "70fcd77f8cd319b5217a86da3a247c33971f2ba4c3af25ed83d0e7311800efcf",
+        "public_key_hex": "0219113f7104411b5c194516800373bb438c5f06223077ea09793904ead8bede2a",
+        "xprv": "xprvA3LU75fVCv9rvupvTEhz4aZ1Kkhmc4eY13Aba34aC1BtT1PjpNFda9m8RNty4dj51xczvKh3bM7QZPeZgEUrHFNSLYk2C9rktVDCNcvS6i3",
+        "xpub": "xpub6GKpWbCP3HiA9PuPZGEzRiVjsnYG1XNPNG6CNRUBkLisKoitMuZt7x5cGdG1hY8RX9WQm8CXP8KXBS5Xf92KpbTAk5PrtBMdVMtEcXKgkgr"
+      },
+      "spend_key": {
+        "private_key_hex": "b5ddadb8aa314728a3a440ff0e31d1fec4507cba600808caf042be0456f3ae82",
+        "public_key_hex": "03c5fdb8440cd75c9641d138cd0daa37744f48157f76b89b099b08cd8a4bee8fef",
+        "xprv": "xprvA3KgATaUCwK1EDTaYzRu87oCWyThbThDwVxthEgaYp1uJm7wpfkUNyrYJx6vWYMoXSPwEh8c2MWDjsRakJReNGgrKsSirwgHp61xXiCAZ5K",
+        "xpub": "xpub6GK2Zy7N3JsJShY3f1xuVFjw51JBzvR5JitVVd6C79YtBZT6ND4ivnB2AFCY2MdQBSMVAhHPdq8tk7Zi1zuPhv2btSDzouXwu2T6jSsfMYS"
+      },
+      "silent_payment_address": "sp1qqppjyflwyzyzx6ur9z3dqqrwwa58rzlqc3rqal2p9unjp82mzldu2srch7ms3qv6awfvsw38rxsm23hw385s9tlw6ufkzvmprxc5jlw3lhsv99myv"
+    },
+    {
+      "test_name": "BIP39 Test Vector 1",
+      "mnemonic": "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about",
+      "passphrase": "",
+      "seed_hex": "5eb00bbddcf069084889a8ab9155568165f5c453ccb85e70811aaed6f6da5fc19a5ac40b389cd370d086206dec8aa6c43daea6690f20ad3d8d48b2d2ce9e38e4",
+      "root_xprv": "xprv9s21ZrQH143K3GJpoapnV8SFfukcVBSfeCficPSGfubmSFDxo1kuHnLisriDvSnRRuL2Qrg5ggqHKNVpxR86QEC8w35uxmGoggxtQTPvfUu",
+      "root_xpub": "xpub661MyMwAqRbcFkPHucMnrGNzDwb6teAX1RbKQmqtEF8kK3Z7LZ59qafCjB9eCRLiTVG3uxBxgKvRgbubRhqSKXnGGb1aoaqLrpMBDrVxga8",
+      "account": 1,
+      "address_index": 0,
+      "derivation": {
+        "scan_path": "m/352'/0'/1'/1'/0",
+        "spend_path": "m/352'/0'/1'/0'/0"
+      },
+      "scan_key": {
+        "private_key_hex": "ecf5559aa6201ef9f3ae96e82678ebcf39ded31a4855fc118acf48f2a710e2f6",
+        "public_key_hex": "03fac9f16f3b8dbc8901dbaa8ddff6a759fa4cc69fe720fdfbed5eb513692a5fe6",
+        "xprv": "xprvA3XGUxyNJpeyDUARo3Y9f7USevX65fvYHx2eB3Z7CmFZ1zCFTtyo8sR6nYsEfqNi7VxpUBp3a7Y6DW8VGVd5gSGuGzXSYFdhNDPWwNS6yT2",
+        "xpub": "xpub6GWctUWG9CDGRxEtu55A2FRBCxMaV8ePfAxEyRxim6nXtnXQ1SJ3gfjadqwqa3H1JgRsRrNTrreaXaWobt3VdoiTNDG5RtVPsJk7sdrrR8B"
+      },
+      "spend_key": {
+        "private_key_hex": "14992d9d0101622d2d8e4275f078229a3476f851c6b915d330e54479c81e4aa4",
+        "public_key_hex": "033fa2319a70786a5da48c20592e73589972d432e5d9f9423d15bdd9dd74b892c5",
+        "xprv": "xprvA2XEXKmyywuLpqwE8n3HssZMkzwqTRVWkMf8VRsay8S1kYLa4iiBEvyjJh2DiWXF9uHi1z3P9UgQTiQHSY7ddh8gj3WiamRnKvtnJHNtag6",
+        "xpub": "xpub6FWavqJspKTe3L1hEoaJF1W6K2nKrtDN7aajHpHCXTxzdLficG2RnjJD9zKgcSP5wPWrfTDCNzARkFCg76G8CG7HfyeQnCBMTkeoA88RNs9"
+      },
+      "silent_payment_address": "sp1qqpl4j03duacm0yfq8d64rwl76n4n7jvc607wg8al0k4adgndy49lesr873rrxns0p49mfyvypvjuu6cn9edgvh9m8u5y0g4hhva6a9cjtzsnfatpw"
+    },
+    {
+      "test_name": "BIP39 Test Vector 1",
+      "mnemonic": "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about",
+      "passphrase": "",
+      "seed_hex": "5eb00bbddcf069084889a8ab9155568165f5c453ccb85e70811aaed6f6da5fc19a5ac40b389cd370d086206dec8aa6c43daea6690f20ad3d8d48b2d2ce9e38e4",
+      "root_xprv": "xprv9s21ZrQH143K3GJpoapnV8SFfukcVBSfeCficPSGfubmSFDxo1kuHnLisriDvSnRRuL2Qrg5ggqHKNVpxR86QEC8w35uxmGoggxtQTPvfUu",
+      "root_xpub": "xpub661MyMwAqRbcFkPHucMnrGNzDwb6teAX1RbKQmqtEF8kK3Z7LZ59qafCjB9eCRLiTVG3uxBxgKvRgbubRhqSKXnGGb1aoaqLrpMBDrVxga8",
+      "account": 1,
+      "address_index": 1,
+      "derivation": {
+        "scan_path": "m/352'/0'/1'/1'/1",
+        "spend_path": "m/352'/0'/1'/0'/1"
+      },
+      "scan_key": {
+        "private_key_hex": "3db82da4d8fce269b6adc93ee5b1951e1177f6894a2cbeaf6faf84e3a4ef26f9",
+        "public_key_hex": "036bb177b6fba36f83b03b3be624130206e6066c21f705ca2cecf28ac5240adc0e",
+        "xprv": "xprvA3XGUxyNJpeyHQfmpQ5pBDdodbfuDHSM7hEoWdbjRg6rpe4PSunjptTiZtCrjQC2wGBLJXJq19aaask9GKoAYVWW6x5S7LXuanzKhRA8o7M",
+        "xpub": "xpub6GWctUWG9CDGVtkEvRcpYMaYBdWPckACUvAQK21Lz1dqhSPXzT6zNgnCRBXcguykqbeR3X33iC95De4CbZShRx6ePcVXa17L9dRHobDKanh"
+      },
+      "spend_key": {
+        "private_key_hex": "36d491bf6b8d488dc27e1d59d66faff9450179ac3fcdd4c3902121a263fda24a",
+        "public_key_hex": "030da5fff79c12314109df58ee309f28930fe4571929aa4aca417253cfc5fb9d71",
+        "xprv": "xprvA2XEXKmyywuLsKuPPf9hMRBpa1rRyMRwV8BtiKtQd6P69PGNzyRrvfmYm8V1qMcVc2vemAUogxXFnwtpDj41gjXwQycDGd3kupjRYiJLzFk",
+        "xpub": "xpub6FWavqJspKTe5oyrVgghiZ8Z83gvNp9nrM7VWiJ2BRv52BbXYWk7UU62cR9PWu9wZ6RJXtZXTz6qduPtPTtRt6kL97oneFBejZBiaeKe9nz"
+      },
+      "silent_payment_address": "sp1qqpkhvthkma6xmurkqanhe3yzvpqdesxdsslwpw29nk09zk9ys9dcrsrpkjllauuzgc5zzwltrhrp8egjv87g4ce9x4y4jjpwfful30mn4cs84kfx7"
+    },
+    {
+      "test_name": "BIP39 Test Vector 1",
+      "mnemonic": "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about",
+      "passphrase": "",
+      "seed_hex": "5eb00bbddcf069084889a8ab9155568165f5c453ccb85e70811aaed6f6da5fc19a5ac40b389cd370d086206dec8aa6c43daea6690f20ad3d8d48b2d2ce9e38e4",
+      "root_xprv": "xprv9s21ZrQH143K3GJpoapnV8SFfukcVBSfeCficPSGfubmSFDxo1kuHnLisriDvSnRRuL2Qrg5ggqHKNVpxR86QEC8w35uxmGoggxtQTPvfUu",
+      "root_xpub": "xpub661MyMwAqRbcFkPHucMnrGNzDwb6teAX1RbKQmqtEF8kK3Z7LZ59qafCjB9eCRLiTVG3uxBxgKvRgbubRhqSKXnGGb1aoaqLrpMBDrVxga8",
+      "account": 1,
+      "address_index": 2,
+      "derivation": {
+        "scan_path": "m/352'/0'/1'/1'/2",
+        "spend_path": "m/352'/0'/1'/0'/2"
+      },
+      "scan_key": {
+        "private_key_hex": "e08c651f15caf754b078c72cbfe725994248f14d49e36cd90b4cd203e28a4cd3",
+        "public_key_hex": "02ebd791300d0d5901ab73c778ce6485b5654497b3e9443341986699b6c315a887",
+        "xprv": "xprvA3XGUxyNJpeyKSVKEzv4i5voNhGkTLhxGZ8us71dYSRaX9hc5nQ1NLzXLXW3inkhtTWYxkXH3bV2DWSSuf6ZjR5L2Agc57shnLA7L8dDDoX",
+        "xpub": "xpub6GWctUWG9CDGXvZnM2T55DsXvj7EroRodn4WfVRF6mxZPx2kdKiFv9K1BncneKZnfHymoWVw6sf8DWf7YAKXdhbKtZu2nwrtvzzru38gRsH"
+      },
+      "spend_key": {
+        "private_key_hex": "d6a50d0c6bb1bdba79268a7d86ecadb5e558f6e9ee2db26307f8ea7303f2e6f8",
+        "public_key_hex": "03a73c26672ee5027013222c2088238512dbb469fd477375fe722d009f6378142a",
+        "xprv": "xprvA2XEXKmyywuLvShTt5WJ8Z9QioP4nbSvbhTJvZWTt3TVe9R9n39dr1sAD86pFwtfShgZfMYqSFQZEATnNgfAMGzrTz78ebaEku8MFirrUqm",
+        "xpub": "xpub6FWavqJspKTe8vmvz73JVh69GqDZC4AmxvNuiwv5SNzUWwkJKaTtPpBe4QiSriiHbuzwSSGz9RbiU5QRH7QUh81SR4ssS95vMawge8iJMGJ"
+      },
+      "silent_payment_address": "sp1qqpwh4u3xqxs6kgp4deuw7xwvjzm2e2yj7e7j3pngxvxdxdkcv263pcr5u7zveewu5p8qyez9ssgsgu9ztdmg60agaehtlnj95qf7cmczs4qgyxuzc"
+    },
+    {
+      "test_name": "BIP39 Test Vector 1",
+      "mnemonic": "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about",
+      "passphrase": "",
+      "seed_hex": "5eb00bbddcf069084889a8ab9155568165f5c453ccb85e70811aaed6f6da5fc19a5ac40b389cd370d086206dec8aa6c43daea6690f20ad3d8d48b2d2ce9e38e4",
+      "root_xprv": "xprv9s21ZrQH143K3GJpoapnV8SFfukcVBSfeCficPSGfubmSFDxo1kuHnLisriDvSnRRuL2Qrg5ggqHKNVpxR86QEC8w35uxmGoggxtQTPvfUu",
+      "root_xpub": "xpub661MyMwAqRbcFkPHucMnrGNzDwb6teAX1RbKQmqtEF8kK3Z7LZ59qafCjB9eCRLiTVG3uxBxgKvRgbubRhqSKXnGGb1aoaqLrpMBDrVxga8",
+      "account": 2,
+      "address_index": 0,
+      "derivation": {
+        "scan_path": "m/352'/0'/2'/1'/0",
+        "spend_path": "m/352'/0'/2'/0'/0"
+      },
+      "scan_key": {
+        "private_key_hex": "7f9450c4697d96125a3c023726127980d6fd040b9b1b4337f031bd9fae6cb401",
+        "public_key_hex": "02e0613b602a268367457ce08725c84c64adc9297c9ee18a9c35c659cb3af3953b",
+        "xprv": "xprvA3Kvri5P4PQB2ApJ2xGjhC1cohxEszbL88wYQo22Ntz8C7J27zFPuWwVRHGbRc17AXW2LiyLNWTkKnjtiu5mCHaH6QaucqBNorbq7wDqNNd",
+        "xpub": "xpub6GKHGDcGtkxUEetm8yok4KxMMjnjHTKBVMs9DBRdwEX74udAfXZeTKFyGZ2zWEGUohDEX46Q1ceGk6GLiUkoczQKh9NsGPqAgdZ9N7aaR4e"
+      },
+      "spend_key": {
+        "private_key_hex": "9e10bf20a25f311d22e8a3c9707dac39f023352bdbaf29b7375f482d5b43dd5e",
+        "public_key_hex": "02705a2a0ed8ee27a718d258dd3c16ce5a6a413cf01f30130d2c741c6935b8b042",
+        "xprv": "xprvA3yktAdqiThrtW2KDsqXZvQusU2xojpLfJir37a38yUtJC6Um22TRFCnp8zYWtTMxFZKX6ggnuky17drwQFngK1eojXfQtXscK4cFYX7crf",
+        "xpub": "xpub6Gy7HgAjYqGA6z6nKuNXw4MeRVsTDCYC2XeSqVyehK1sAzRdJZLhy3XGfPgBGw4pJhxbfGMnWi5bLLajFv819pJh9GAHd4THaybjBPKhVnx"
+      },
+      "silent_payment_address": "sp1qqpwqcfmvq4zdqm8g47wppe9epxxftwf997facv2ns6uvkwt8tee2wczwpdz5rkcacn6wxxjtrwnc9kwtf4yz08srucpxrfvwswxjddckppqm7ppcp"
+    },
+    {
+      "test_name": "BIP39 Test Vector 1",
+      "mnemonic": "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about",
+      "passphrase": "",
+      "seed_hex": "5eb00bbddcf069084889a8ab9155568165f5c453ccb85e70811aaed6f6da5fc19a5ac40b389cd370d086206dec8aa6c43daea6690f20ad3d8d48b2d2ce9e38e4",
+      "root_xprv": "xprv9s21ZrQH143K3GJpoapnV8SFfukcVBSfeCficPSGfubmSFDxo1kuHnLisriDvSnRRuL2Qrg5ggqHKNVpxR86QEC8w35uxmGoggxtQTPvfUu",
+      "root_xpub": "xpub661MyMwAqRbcFkPHucMnrGNzDwb6teAX1RbKQmqtEF8kK3Z7LZ59qafCjB9eCRLiTVG3uxBxgKvRgbubRhqSKXnGGb1aoaqLrpMBDrVxga8",
+      "account": 2,
+      "address_index": 1,
+      "derivation": {
+        "scan_path": "m/352'/0'/2'/1'/1",
+        "spend_path": "m/352'/0'/2'/0'/1"
+      },
+      "scan_key": {
+        "private_key_hex": "a79fe47c880697ba175f2b570283b05d63cfb0ccf3677702d37b12d8b68df60b",
+        "public_key_hex": "036191a668a0d8ba9bd7c88e7b75f59bafc0cda4d501842a934f74384876537dbb",
+        "xprv": "xprvA3Kvri5P4PQB3cbrbTU1qRcRftC78arH5pU9YJ7QxwJSWyb5vSH97x2riZzKFRs8fRe499zsAKVMv5Edx4j9uVtY2Q5MhyKz692rTHshuZk",
+        "xpub": "xpub6GKHGDcGtkxUG6gKhV12CZZADv2bY3a8T3PkLgX2XGqRPmvETybPfkMLZrRyPdBHJh9e86d18hAEkYxytmvLTBc3yF4zBAp4PhoLPyXAsY8"
+      },
+      "spend_key": {
+        "private_key_hex": "ea5fbc4f5ff7d202267e59c57be4466ed9e2348fe72e8afd4966af83dd665579",
+        "public_key_hex": "03300f2d9f25a98b8aa9ba80af385e06211c73b2d58fa11ba39b89db67ce64d0ac",
+        "xprv": "xprvA3yktAdqiThrvLh2pqkraTjdV1KYKVBMajcwLSDEdiYQqEUN4yaJGCnXbDLtYehwYfCHHfh72tTLYcJqZHHSGrzSLFGSVQ1ADJfzBk9KiGZ",
+        "xpub": "xpub6Gy7HgAjYqGA8pmVvsHrwbgN33A2iwuCwxYY8pcrC45Pi2oWcWtYp171SUuM1LSou8ZTFuxR87zMTexp8EFv9DFo68azPLzjWaEyE3bjeRj"
+      },
+      "silent_payment_address": "sp1qqpkrydxdzsd3w5m6lygu7m47kd6lsxd5n2srpp2jd8hgwzgwefhmwcrxq8jm8e94x9c42d6szhnshsxyyw88vk437s3hgum38dk0nny6zkqk8ggxg"
+    },
+    {
+      "test_name": "BIP39 Test Vector 1",
+      "mnemonic": "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about",
+      "passphrase": "",
+      "seed_hex": "5eb00bbddcf069084889a8ab9155568165f5c453ccb85e70811aaed6f6da5fc19a5ac40b389cd370d086206dec8aa6c43daea6690f20ad3d8d48b2d2ce9e38e4",
+      "root_xprv": "xprv9s21ZrQH143K3GJpoapnV8SFfukcVBSfeCficPSGfubmSFDxo1kuHnLisriDvSnRRuL2Qrg5ggqHKNVpxR86QEC8w35uxmGoggxtQTPvfUu",
+      "root_xpub": "xpub661MyMwAqRbcFkPHucMnrGNzDwb6teAX1RbKQmqtEF8kK3Z7LZ59qafCjB9eCRLiTVG3uxBxgKvRgbubRhqSKXnGGb1aoaqLrpMBDrVxga8",
+      "account": 2,
+      "address_index": 2,
+      "derivation": {
+        "scan_path": "m/352'/0'/2'/1'/2",
+        "spend_path": "m/352'/0'/2'/0'/2"
+      },
+      "scan_key": {
+        "private_key_hex": "5d46db3e09e5334b5f7759c0c838f424a95378ecf526eb21c6800ccff625f67d",
+        "public_key_hex": "038c44b95fcba4ab2810ca98362344aff325e87aea00dd60ccf8cde25d4d7cd570",
+        "xprv": "xprvA3Kvri5P4PQB6TFwfeqrNriCsUrPRgB2HZKoC5S9sZgc8k4J1MMrUebVd2GeBgqaXgjLkTikch1LWhn2xPxGpAbW4ESUgriyHXex6HggkPx",
+        "xpub": "xpub6GKHGDcGtkxUJwLQmgNrjzewRWgsq8tsenFPzTqmRuDb1YPSYtg72SuyUKbr9EGEa3kmGHsUuJuAKBy8DrNnWBjWea4XYgnL3LwznmxXCRW"
+      },
+      "spend_key": {
+        "private_key_hex": "98ee01a47b9356e5ded40a7d8a2cfb98c8a0982bc05631f367abb9d79335a745",
+        "public_key_hex": "024ad4c3b1eea1cc3723b958f13f5beeb847a3b3b99b6e99066d434d27ac0325cc",
+        "xprv": "xprvA3yktAdqiThryqqqme4F3rr7S3q6tLnDYzmoDxeicpaRuQmJ5VrSfUDJSNVsHJCMdoonTXab66aaHxX8u7ftd7ieFRBaj1nRsK2wcbCqUU4",
+        "xpub": "xpub6Gy7HgAjYqGACKvJsfbFQznqz5fbHoW4vDhQ2M4LBA7QnD6Sd3AhDGXnHcwEoM4AMXmdDbbjg244zCGx2zH4WTBDD8ABWjJmiCL7U1kU4Df"
+      },
+      "silent_payment_address": "sp1qqpcc39etl96f2egzr9fsd3rgjhlxf0g0t4qphtqenuvmcjaf47d2uqzft2v8v0w58xrwgaetrcn7klwhpr68vaendhfjpndgdxj0tqryhxqv0a00r"
+    },
+    {
+      "test_name": "BIP39 Test Vector 2",
+      "mnemonic": "legal winner thank year wave sausage worth useful legal winner thank yellow",
+      "passphrase": "",
+      "seed_hex": "878386efb78845b3355bd15ea4d39ef97d179cb712b77d5c12b6be415fffeffe5f377ba02bf3f8544ab800b955e51fbff09828f682052a20faa6addbbddfb096",
+      "root_xprv": "xprv9s21ZrQH143K2x4gnzRB1eZDq92Uuvy9CXbvgQGdvykXZ9mkkot6LBjzDpgaAfvzkuxJe9JKJXQ38VoPutxvACA5MsyoBs5UyQ4HZKGshGs",
+      "root_xpub": "xpub661MyMwAqRbcFS99u1xBNnVxPAryKPgzZkXXUngFVKHWRx6uJMCLsz4U56FN7PxTSeVqL8tPJpiCrs1KZh1dV2Bh6QyAbmNmjFRPnkrZP52",
+      "account": 0,
+      "address_index": 0,
+      "derivation": {
+        "scan_path": "m/352'/0'/0'/1'/0",
+        "spend_path": "m/352'/0'/0'/0'/0"
+      },
+      "scan_key": {
+        "private_key_hex": "6e712a346f52dcf173bea1e135c2652d72296f8dc58b7daa7b1df0fb0523519f",
+        "public_key_hex": "03b1a38d86d3b4565a9e9e2941d5bf0bb6192e8f85309a244ff271f4250e7e087c",
+        "xprv": "xprvA3e1RrycdYTahaAPSoEs5SZNmNpgigfWJpHt3Eskqk1c7osHRAvUu7DAVwzQx5DjfCifyKvVyZrkzEiyAZbuuXMK7tR5bDN6sE79Pnpg25t",
+        "xpub": "xpub6GdMqNWWTv1sv4ErYpmsSaW7KQfB89PMg3DUqdHNQ5YazcCRxiEjSuXeMFUX2Ct6A7CbdaTxTcNek2mgic87u3yMHyorNdRGjioeLubHpYX"
+      },
+      "spend_key": {
+        "private_key_hex": "ecc457e343c4f1bd72d94aa52ee9e4a558161d19e89b44fbe55ab8ecf7f5a305",
+        "public_key_hex": "03aca6c1736410f3db2863545558a69d3188bc6a73e99d02aa361125c57d53b2da",
+        "xprv": "xprvA2brpzxeuA1Gpaq2AixWw8wG99fb3gvFs8gD24rNbmKUg7KRwMgfxpXrM3fft7ZftKoN57wwBEHsBC76Ug7GezZwtfa9KXtznbgSSH7TaMw",
+        "xpub": "xpub6FbDEWVYjXZa34uVGkVXJGszhBW5T9e7EMbopTFzA6rTYueaUtzvWcrLCL9wkhKSUkbszcy5fV6iaR4gxfq3ZTSuNbr5qqERfAChy2fdDei"
+      },
+      "silent_payment_address": "sp1qqpmrgudsmfmg4j6n60zjsw4hu9mvxfw37znpx3yfle8rap9pelqslqr4jnvzumyzreak2rr23243f5axxytc6nnaxws923kzyju2l2nktdq99qmv4"
+    },
+    {
+      "test_name": "BIP39 Test Vector 2",
+      "mnemonic": "legal winner thank year wave sausage worth useful legal winner thank yellow",
+      "passphrase": "",
+      "seed_hex": "878386efb78845b3355bd15ea4d39ef97d179cb712b77d5c12b6be415fffeffe5f377ba02bf3f8544ab800b955e51fbff09828f682052a20faa6addbbddfb096",
+      "root_xprv": "xprv9s21ZrQH143K2x4gnzRB1eZDq92Uuvy9CXbvgQGdvykXZ9mkkot6LBjzDpgaAfvzkuxJe9JKJXQ38VoPutxvACA5MsyoBs5UyQ4HZKGshGs",
+      "root_xpub": "xpub661MyMwAqRbcFS99u1xBNnVxPAryKPgzZkXXUngFVKHWRx6uJMCLsz4U56FN7PxTSeVqL8tPJpiCrs1KZh1dV2Bh6QyAbmNmjFRPnkrZP52",
+      "account": 0,
+      "address_index": 1,
+      "derivation": {
+        "scan_path": "m/352'/0'/0'/1'/1",
+        "spend_path": "m/352'/0'/0'/0'/1"
+      },
+      "scan_key": {
+        "private_key_hex": "b5ac42c42ac476d85dfebe85ba0906eaa2ce7620a3498153946b18304fe73b1e",
+        "public_key_hex": "03c8dc0f51a3a8ce691ebce0791e8a25449633344d83be4305e69c811ce2019afe",
+        "xprv": "xprvA3e1RrycdYTaiWXpWveEdVEAT3F6d71k3tJttSRSofxX6JVm8JtRAKRLuC64dJTVY2EdRd1XKPdQWTM2JYzqAGAtY2iyx4r96Sedo71UTUk",
+        "xpub": "xpub6GdMqNWWTv1svzcHcxBEzdAu155b2ZjbR7EVgpq4N1VVy6pufrCfi7jpkVD2LubPkkU4xAp9Xm5mSBk95DTw9LukeknSYkKAHUiw9UP8LV6"
+      },
+      "spend_key": {
+        "private_key_hex": "8f4fb560b08f3aa745b8a3b0ced393f3df69345ad72bcba4b7b8e20d6b7e9286",
+        "public_key_hex": "02c6a92cf8f6bf7dafb16b70f2ebdc2ffe3d7cc140ecbefce899c2d76e3632fae7",
+        "xprv": "xprvA2brpzxeuA1Grh6eGH7ys6FpW2P4kqohLPk8mFLz8bfsjNfKFStFrpZNKZCEnE8DHHTC2QxVGAJLQAskS7eWXjLnv1McWRFcH6aEHnp1f1C",
+        "xpub": "xpub6FbDEWVYjXZa5BB7NJezEECZ44DZAJXYhcfjZdkbgwCrcAzTnzCWQcsrApeP3uGGVbDZW6mETHQ8aFKTjvQtKCiQWGMLY1fmUq8SBHrN1Am"
+      },
+      "silent_payment_address": "sp1qqpu3hq02x363nnfr67wq7g73gj5f93nx3xc80jrqhnfeqguugqe4lszc65je78kha76lvttwrewhhp0lc7hes2qajl0e6yecttkud3jltnss4pl3d"
+    },
+    {
+      "test_name": "BIP39 Test Vector 2",
+      "mnemonic": "legal winner thank year wave sausage worth useful legal winner thank yellow",
+      "passphrase": "",
+      "seed_hex": "878386efb78845b3355bd15ea4d39ef97d179cb712b77d5c12b6be415fffeffe5f377ba02bf3f8544ab800b955e51fbff09828f682052a20faa6addbbddfb096",
+      "root_xprv": "xprv9s21ZrQH143K2x4gnzRB1eZDq92Uuvy9CXbvgQGdvykXZ9mkkot6LBjzDpgaAfvzkuxJe9JKJXQ38VoPutxvACA5MsyoBs5UyQ4HZKGshGs",
+      "root_xpub": "xpub661MyMwAqRbcFS99u1xBNnVxPAryKPgzZkXXUngFVKHWRx6uJMCLsz4U56FN7PxTSeVqL8tPJpiCrs1KZh1dV2Bh6QyAbmNmjFRPnkrZP52",
+      "account": 1,
+      "address_index": 0,
+      "derivation": {
+        "scan_path": "m/352'/0'/1'/1'/0",
+        "spend_path": "m/352'/0'/1'/0'/0"
+      },
+      "scan_key": {
+        "private_key_hex": "10a40ed65308bba30ca87adced742602612b171ac4c29bd03e52bf4162a27845",
+        "public_key_hex": "02118e56cef1d4ef272065c830cb090981c3b0d91d2ced5770340865d006e0430a",
+        "xprv": "xprvA3Xh8GCQ6exWnD9mygVbCF2wsBGfTGpp1rWZedVmFeJJfE6KrErw9kVBYPRL6VGJnBMEFtYLj8USRbVtxN1x3NhmggfXrazmPV7Yx29BpzV",
+        "xpub": "xpub6GX3XmjHw2WozhEF5i2bZNygRD79rjYfP5SAT1uNoyqHY2RUPnBBhYofPeTVuy2hrrwH27uFjkUcfYMuUDywXt1vGnTjQo6AkFuMS8z7bTM"
+      },
+      "spend_key": {
+        "private_key_hex": "ab2e384928a8b5650f00f1df9d072274f7c761dcade2fc35b2bca2e8f6cf480e",
+        "public_key_hex": "02806fdf93635bf640b8b9d24157b6f446b346dafebb8fa71264bb4d3e03416840",
+        "xprv": "xprvA385jvEdgmXXqxS3DNUneg14o54a3eHFqtSZWWNxCt3JVQfK3HdFsk185KfMDz76BFRmDZj8mwNbt7g2qbWp1sUDjcosgJimsfobmH5yJGq",
+        "xpub": "xpub6G7S9RmXX95q4SWWKQ1o1owoM6u4T717D7NAJtnZmDaHNCzTapwWRYKbvaNHqhBCZYtz3dqR7GQ8tq1MPuTAJDuBwhrcQgyLsBxh9CQ1w2S"
+      },
+      "silent_payment_address": "sp1qqpprrjkemcafme8ypjusvxtpyycrsasmywjem2hwq6qsewsqmsyxzszsphalymrt0mypw9e6fq40dh5g6e5dkh7hw86wynyhdxnuq6pdpqqshqh59"
+    },
+    {
+      "test_name": "BIP39 Test Vector 2",
+      "mnemonic": "legal winner thank year wave sausage worth useful legal winner thank yellow",
+      "passphrase": "",
+      "seed_hex": "878386efb78845b3355bd15ea4d39ef97d179cb712b77d5c12b6be415fffeffe5f377ba02bf3f8544ab800b955e51fbff09828f682052a20faa6addbbddfb096",
+      "root_xprv": "xprv9s21ZrQH143K2x4gnzRB1eZDq92Uuvy9CXbvgQGdvykXZ9mkkot6LBjzDpgaAfvzkuxJe9JKJXQ38VoPutxvACA5MsyoBs5UyQ4HZKGshGs",
+      "root_xpub": "xpub661MyMwAqRbcFS99u1xBNnVxPAryKPgzZkXXUngFVKHWRx6uJMCLsz4U56FN7PxTSeVqL8tPJpiCrs1KZh1dV2Bh6QyAbmNmjFRPnkrZP52",
+      "account": 1,
+      "address_index": 1,
+      "derivation": {
+        "scan_path": "m/352'/0'/1'/1'/1",
+        "spend_path": "m/352'/0'/1'/0'/1"
+      },
+      "scan_key": {
+        "private_key_hex": "8aaa76fb9051994d482041a8c9e53198c4cbd1d51d7aaf05d7d0cc6ad8e95f8b",
+        "public_key_hex": "02c098627a0977707d5012422ed1dc49a8017cd66a4452b76efa781e37040a96d8",
+        "xprv": "xprvA3Xh8GCQ6exWpTDynWMDsXkKtRwoXqMBuSMkuD3Xqfdcd5RtnVgRJZu2JKv1Z5JrFG6qJiah4uHfgGB9d4RbmEEdzqXXyjJUFbpxA2VgprR",
+        "xpub": "xpub6GX3XmjHw2Wp2wJStXtEEfh4STnHwJ53GfHMhbT9Q1AbVsm3L2zfrNDW9bMXYpJhxwBgncErXXKkPPDvD77bkBFz66RDCadzCp8XjpCyL4t"
+      },
+      "spend_key": {
+        "private_key_hex": "6ae09ba55688ae9d97e77aba4921d240da197efcbfb4d361f4f5a7aff07674ea",
+        "public_key_hex": "025e8bd976f5ed0e038e512933b50695ec7d8afeeb532c7b05b734a42574003b0f",
+        "xprv": "xprvA385jvEdgmXXt1pjKoWrFEwPAZsFscNp8uNx1kxQMcwys6yXru2KAys19chxuj3yowxsVxzdi1c3bWisz3NYK6tDfx5tyenqJnpUELm2CVZ",
+        "xpub": "xpub6G7S9RmXX95q6VuCRq3rcNt7ibhkH56fW8JYp9N1uxUxjuJgQSLZinBUzseJNTho1khLbBvfTKZbBFCjFKUicK8JAHHozQFXxcGieSq5E5j"
+      },
+      "silent_payment_address": "sp1qqpvpxrz0gyhwura2qfyytk3m3y6sqtu6e4yg54hdma8s83hqs9fdkqzt69ajah4a58q8rj39yem2p54a37c4lht2vk8kpdhxjjz2aqq8v8scaykud"
+    },
+    {
+      "test_name": "BIP39 with Passphrase",
+      "mnemonic": "letter advice cage absurd amount doctor acoustic avoid letter advice cage above",
+      "passphrase": "TREZOR",
+      "seed_hex": "d71de856f81a8acc65e6fc851a38d4d7ec216fd0796d0a6827a3ad6ed5511a30fa280f12eb2e47ed2ac03b5c462a0358d18d69fe4f985ec81778c1b370b652a8",
+      "root_xprv": "xprv9s21ZrQH143K2shfP28KM3nr5Ap1SXjz8gc2rAqqMEynmjt6o1qboCDpxckqXavCwdnYds6yBHZGKHv7ef2eTXy461PXUjBFQg6PrwY4Gzq",
+      "root_xpub": "xpub661MyMwAqRbcFMn8V3fKiBjadCeVqzTqVuXdeZFSuaWmeYDFLZ9rLzYJouWdoUJqKfoXL6Jpx5Pn5McZGFswJozevPZhn9NemzzyB11Zq86",
+      "account": 0,
+      "address_index": 0,
+      "derivation": {
+        "scan_path": "m/352'/0'/0'/1'/0",
+        "spend_path": "m/352'/0'/0'/0'/0"
+      },
+      "scan_key": {
+        "private_key_hex": "5d294195eed767968f312b0df76da6cc1a45f15275fa6d5143e555a135ec8cdc",
+        "public_key_hex": "0225ac3adfe1a686ce40bc9c5ad5c78fa7cadbc2e375bd5008446908d8a7ca1d2a",
+        "xprv": "xprvA2dMCVy9QDHSgE6TCtWNds98sZquodbFtG3mtFHL7VixwkzcYcT3Tw88Mh6ZEfMy3txrbjckqzkA1tbDiDDsSsaMu6KuQh7bXTPrjBQLVVK",
+        "xpub": "xpub6Fchc1W3EaqjtiAvJv3P115sRbgQD6K7FUyNgdgwfqFwpZKm69mJ1jScCwhtJUaV8mMaKXNWBrKFyYBY1SuzKeRbden64cfZiKttzsduy41"
+      },
+      "spend_key": {
+        "private_key_hex": "60a3dfbd6e6339123f0b9dc125accd9f37df084339d81fc8cdd2ddbb8f225f5e",
+        "public_key_hex": "029be2af6ac9bb15eb6decc250ced38f24d4bf89dc3062b196bd0a367617e8569f",
+        "xprv": "xprvA3PdnNViyBDmWJn797ezKNjVveqt32xRX8GMRLpxkBk8VcvRwgLTtpfcQ7ZMd2UZ1G9KKuQ7zhsupH6EvfqLvUqXa37U3CNFbURGmeq43X8",
+        "xpub": "xpub6GNzBt2coYn4inraF9BzgWgEUggNSVgGtMBxDjEaJXH7NRFaVDeiScz6FP3DQZknz1jBS6T9htSJXXoofHSGC6Gt9KfUYAnKaup2xw7TzDC"
+      },
+      "silent_payment_address": "sp1qqpzttp6mls6dpkwgz7fckk4c7860jkmct3ht02sppzxjzxc5l9p62szn03276kfhv27km0vcfgva5u0yn2tlzwuxp3tr94apgm8v9lg260sz35cqf"
+    },
+    {
+      "test_name": "BIP39 with Passphrase",
+      "mnemonic": "letter advice cage absurd amount doctor acoustic avoid letter advice cage above",
+      "passphrase": "TREZOR",
+      "seed_hex": "d71de856f81a8acc65e6fc851a38d4d7ec216fd0796d0a6827a3ad6ed5511a30fa280f12eb2e47ed2ac03b5c462a0358d18d69fe4f985ec81778c1b370b652a8",
+      "root_xprv": "xprv9s21ZrQH143K2shfP28KM3nr5Ap1SXjz8gc2rAqqMEynmjt6o1qboCDpxckqXavCwdnYds6yBHZGKHv7ef2eTXy461PXUjBFQg6PrwY4Gzq",
+      "root_xpub": "xpub661MyMwAqRbcFMn8V3fKiBjadCeVqzTqVuXdeZFSuaWmeYDFLZ9rLzYJouWdoUJqKfoXL6Jpx5Pn5McZGFswJozevPZhn9NemzzyB11Zq86",
+      "account": 0,
+      "address_index": 1,
+      "derivation": {
+        "scan_path": "m/352'/0'/0'/1'/1",
+        "spend_path": "m/352'/0'/0'/0'/1"
+      },
+      "scan_key": {
+        "private_key_hex": "66e2b6e77d14956a5ba00dcb1f4022ea6a4bdb56a1b3bacc21a1b11690b5aa7a",
+        "public_key_hex": "0255432365207857708a8d8a82346e49caed3e4ddde90dc821c3dd307f9471e72c",
+        "xprv": "xprvA2dMCVy9QDHSin4ActkpPZvCGEzH2nCyJYchEGVR4WVk57NpsfNgWZiUjy4mNbrUJBJL1MfH4LxZne6k1AYG1xTDFyevsHQCh9Ftwzh9zzH",
+        "xpub": "xpub6Fchc1W3EaqjwG8divHpkhrvpGpmSEvpfmYJ2eu2cr2iwuhyRCgw4N2xbDxmeguLjJ4amBAeF9sEri1L8uR2Pcb3YusCJ8Pqpk7w8XmmsnR"
+      },
+      "spend_key": {
+        "private_key_hex": "3f7d35a6f01449b61d3366789668ef091c1a8306008b1b256c1824a378fd0510",
+        "public_key_hex": "02f3d1c8d75c878c1b41e061fb851db927947fdf07eb5aa27a5f9ad81f6adf8765",
+        "xprv": "xprvA3PdnNViyBDmZwZQZgeFtrtwZzHGF6E2Rrq4PnqyEsoBk975VqKE8i9gh9LNudWD7QzKuKvy2fANmRL5nZs7FrA9qywJFBazDeKbSguXhtL",
+        "xpub": "xpub6GNzBt2coYn4nRdsfiBGFzqg827keYwso5kfCBFaoDLAcwSE3NdUgWUAYRjZeWexpgHjzVMt94bEtoFV4dGfJeWsfxepocSkXsGkAe48rk2"
+      },
+      "silent_payment_address": "sp1qqp92serv5s8s4ms32xc4q35deyu4mf7fhw7jrwgy8pa6vrlj3c7wtqz70gu346us7xpks0qv8ac28dey728lhc8add2y7jlntvp76klsajsgshg6f"
+    },
+    {
+      "test_name": "12-word Mnemonic",
+      "mnemonic": "zoo zoo zoo zoo zoo zoo zoo zoo zoo zoo zoo wrong",
+      "passphrase": "",
+      "seed_hex": "b6a6d8921942dd9806607ebc2750416b289adea669198769f2e15ed926c3aa92bf88ece232317b4ea463e84b0fcd3b53577812ee449ccc448eb45e6f544e25b6",
+      "root_xprv": "xprv9s21ZrQH143K2PfMvkNViFc1fgumGqBew45JD8SxA59Jc5M66n3diqb92JjvaR61zT9P89Grys12kdtV4EFVo6tMwER7U2hcUmZ9VfMYPLC",
+      "root_xpub": "xpub661MyMwAqRbcEsjq2muW5PYkDikFgHuWJGzu1WrZiQgHUsgEeKMtGducsZe1iRsGAGNGDzmWYDM69ya24LMyR7mDhtzqQsc286XEQfM2kkV",
+      "account": 0,
+      "address_index": 0,
+      "derivation": {
+        "scan_path": "m/352'/0'/0'/1'/0",
+        "spend_path": "m/352'/0'/0'/0'/0"
+      },
+      "scan_key": {
+        "private_key_hex": "0d9bfd1f5980ebdb5c7d143ea31e511dcf4563f72d33ad8a6b3fb5539fdd2a6b",
+        "public_key_hex": "021386b6030f1c6e4fa9a2a07f77cca3219c6c29e984489e859147262095a712eb",
+        "xprv": "xprvA2rmB74tw74T474b9zykGFqYMaq5A5vBrkNETsBrnGPV47sU4sZCDooGbjZKZ6bh9ViPFiHU9YJworv1BDC5GjchNLR8R1V6DF8WJG1355G",
+        "xpub": "xpub6Fr7acbnmUckGb94G2WkdPnGucfZZYe3DyHqGFbULbvTvvCccQsSmc7kSzdh8nk9f7Ppuu9mbnyFmApXBWunYjgSrqeUb8zTWhUBt3vViXB"
+      },
+      "spend_key": {
+        "private_key_hex": "fcf26825237e4ac4e3b80128ceb54356036a9fd0e47c6f366327f9ee433f0d24",
+        "public_key_hex": "0295c17955c88819f86e09df3e68541d0b6ea5635c3949464a490c9c82eebf8603",
+        "xprv": "xprvA4Hz7VWKiJRSGe7GDYmjzwGJZu7pn5WZsNKPgJMaRM3LEXJ5DxREhsjdVr35jRGAvtKYmkm6YfU65e1oqoTrcZkTZSM6yBDGERRdDAKUWM9",
+        "xpub": "xpub6HHLX13DYfyjV8BjKaJkN5D37vxKBYEREbEzUgmBygaK7KdDmVjVFg47M6HQJ4RiFH54xGEb1kSezA968zqezCEUvG48wANUAm8BNZ3DXq1"
+      },
+      "silent_payment_address": "sp1qqpp8p4kqv83cmj04x32qlmhej3jr8rv985cgjy7skg5wf3qjkn396czjhqhj4wg3qvlsmsfmulxs4qapdh22c6u89y5vjjfpjwg9m4lscpshrmtwg"
+    }
+  ]
+}

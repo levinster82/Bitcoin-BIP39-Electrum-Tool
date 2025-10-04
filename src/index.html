@@ -26,7 +26,7 @@
                     <div class="header-content">
                         <h1 class="text-center"><a href="https://github.com/levinster82/Bitcoin-BIP39-Electrum-Tool/releases/latest" target="_blank" style="color: inherit; text-decoration: none;">Bitcoin Mnemonic Code Converter</a></h1>
                         <div class="text-center version">
-                            <a href="https://github.com/levinster82/Bitcoin-BIP39-Electrum-Tool/releases/latest" target="_blank" style="color: inherit; text-decoration: none;">v1.0.8</a>
+                            <a href="https://github.com/levinster82/Bitcoin-BIP39-Electrum-Tool/releases/latest" target="_blank" style="color: inherit; text-decoration: none;">v1.1.0</a>
                         </div>
                     </div>
                     <button class="theme-toggle" onclick="toggleTheme()" id="theme-toggle" aria-label="Toggle dark/light theme">
@@ -490,6 +490,9 @@
                         </li>
                         <li class="nav-item" id="bip86-tab">
                             <a class="nav-link" href="#bip86" role="tab" data-bs-toggle="tab">BIP86</a>
+                        </li>
+                        <li class="nav-item" id="bip352-tab">
+                            <a class="nav-link" href="#bip352" role="tab" data-bs-toggle="tab">BIP352</a>
                         </li>
                         <li class="nav-item" id="electrum-legacy-tab" style="display: none;">
                             <a class="nav-link" href="#electrum-legacy" role="tab" data-bs-toggle="tab">Electrum Legacy</a>
@@ -1038,6 +1041,177 @@
                                 </div>
                             </form>
                         </div>
+                        <div id="bip352" class="tab-pane">
+                            <form role="form">
+                                <div class="unavailable hidden">
+                                    <div class="mb-3 row">
+                                        <div class="col-sm-2"></div>
+                                        <div class="col-sm-10">
+                                            <p>BIP352 Silent Payments is unavailable for this coin.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="available">
+                                    <div class="row mt-3">
+                                        <div class="col-sm-2"></div>
+                                        <div class="col-sm-10">
+                                            <p>
+                                                <strong>Silent Payments (BIP-352)</strong> enable reusable payment addresses while maintaining privacy.
+                                                Each payment derives a unique on-chain address from your static Silent Payment address.
+                                            </p>
+                                            <p>
+                                                For more info see the
+                                                <a href="https://github.com/bitcoin/bips/blob/master/bip-0352.mediawiki" target="_blank">BIP352 spec</a> and
+                                                <a href="https://silentpayments.xyz/" target="_blank">Silent Payments website</a>.
+                                            </p>
+                                            <p class="text-warning">
+                                                <strong>⚠️ Important:</strong> BIP-352 is in "Proposed" status. Silent Payments require blockchain scanning (~30-50 MB/month).
+                                                Not all wallets support this feature yet. See <a href="./docs/silent-payments/README.md" target="_blank">full documentation</a>.
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3 row">
+                                        <label for="purpose-bip352" class="col-sm-2 form-label">
+                                            <a href="https://github.com/bitcoin/bips/blob/master/bip-0352.mediawiki" target="_blank">Purpose</a>
+                                        </label>
+                                        <div class="col-sm-10">
+                                            <input id="purpose-bip352" type="text" class="purpose form-control" value="352" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3 row">
+                                        <label for="coin-bip352" class="col-sm-2 form-label">
+                                            <a href="https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki#registered-coin-types" target="_blank">Coin</a>
+                                        </label>
+                                        <div class="col-sm-10">
+                                            <input id="coin-bip352" type="text" class="coin form-control" value="0" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3 row">
+                                        <label for="account-bip352" class="col-sm-2 form-label">
+                                            <a href="https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki#account" target="_blank">Account</a>
+                                        </label>
+                                        <div class="col-sm-10">
+                                            <input id="account-bip352" type="text" class="account form-control" value="0">
+                                        </div>
+                                    </div>
+                                    <div class="mb-3 row">
+                                        <label for="change-bip352" class="col-sm-2 form-label">
+                                            <a href="https://github.com/bitcoin/bips/blob/master/bip-0352.mediawiki" target="_blank">Change</a>
+                                        </label>
+                                        <div class="col-sm-10">
+                                            <input id="change-bip352" type="text" class="change form-control" value="0" readonly>
+                                            <small class="form-text">0 for Spend key, 1 for Scan key</small>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3 row">
+                                        <label for="address-index-bip352" class="col-sm-2 form-label">Address Index</label>
+                                        <div class="col-sm-10">
+                                            <input id="address-index-bip352" type="text" class="address-index form-control" value="0">
+                                        </div>
+                                    </div>
+                                    <div class="mt-4 mb-2 row">
+                                        <label class="col-sm-2 form-label">
+                                        </label>
+                                        <div class="col-sm-10">
+                                            <p><strong>Silent Payments use a dual-key architecture:</strong></p>
+                                            <ul>
+                                                <li><strong>Scan Key</strong> (m/352'/0'/0'/1'/0): Detects incoming payments by scanning the blockchain. Can be shared with watch-only wallets.</li>
+                                                <li><strong>Spend Key</strong> (m/352'/0'/0'/0'/0): Required to spend received funds. Must be kept secure.</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="mt-1 mb-3 row">
+                                        <label for="scan-key-priv-bip352" class="col-sm-2 form-label">
+                                            <span>Scan Private Key</span>
+                                        </label>
+                                        <div class="col-sm-10">
+                                            <textarea id="scan-key-priv-bip352" class="scan-key-priv private-data form-control" readonly data-show-qr autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3 row">
+                                        <label for="scan-key-pub-bip352" class="col-sm-2 form-label">
+                                            <span>Scan Public Key</span>
+                                        </label>
+                                        <div class="col-sm-10">
+                                            <textarea id="scan-key-pub-bip352" class="scan-key-pub form-control" readonly data-show-qr autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="mt-1 mb-3 row">
+                                        <label for="spend-key-priv-bip352" class="col-sm-2 form-label">
+                                            <span>Spend Private Key</span>
+                                        </label>
+                                        <div class="col-sm-10">
+                                            <textarea id="spend-key-priv-bip352" class="spend-key-priv private-data form-control" readonly data-show-qr autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3 row">
+                                        <label for="spend-key-pub-bip352" class="col-sm-2 form-label">
+                                            <span>Spend Public Key</span>
+                                        </label>
+                                        <div class="col-sm-10">
+                                            <textarea id="spend-key-pub-bip352" class="spend-key-pub form-control" readonly data-show-qr autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3 row">
+                                        <label class="col-sm-2 form-label">
+                                        </label>
+                                        <div class="col-sm-10">
+                                            <p><strong>Your Reusable Silent Payment Address:</strong></p>
+                                            <p>Share this address to receive payments. Each payment creates a unique on-chain Taproot address (bc1p...).</p>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3 row">
+                                        <label for="silent-payment-address-bip352" class="col-sm-2 form-label">Silent Payment Address</label>
+                                        <div class="col-sm-10">
+                                            <textarea id="silent-payment-address-bip352" class="silent-payment-address form-control" readonly data-show-qr autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" style="font-size: 0.9em;"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3 row">
+                                        <label class="col-sm-2 form-label">
+                                        </label>
+                                        <div class="col-sm-10">
+                                            <p>Extended keys for scan and spend derivation paths:</p>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3 row">
+                                        <label for="scan-xprv-bip352" class="col-sm-2 form-label">Scan Extended Private Key</label>
+                                        <div class="col-sm-10">
+                                            <textarea id="scan-xprv-bip352" class="scan-xprv private-data form-control" readonly data-show-qr autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3 row">
+                                        <label for="scan-xpub-bip352" class="col-sm-2 form-label">Scan Extended Public Key</label>
+                                        <div class="col-sm-10">
+                                            <textarea id="scan-xpub-bip352" class="scan-xpub form-control" readonly data-show-qr autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3 row">
+                                        <label for="spend-xprv-bip352" class="col-sm-2 form-label">Spend Extended Private Key</label>
+                                        <div class="col-sm-10">
+                                            <textarea id="spend-xprv-bip352" class="spend-xprv private-data form-control" readonly data-show-qr autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3 row">
+                                        <label for="spend-xpub-bip352" class="col-sm-2 form-label">Spend Extended Public Key</label>
+                                        <div class="col-sm-10">
+                                            <textarea id="spend-xpub-bip352" class="spend-xpub form-control" readonly data-show-qr autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3 row">
+                                        <label for="scan-path-bip352" class="col-sm-2 form-label">Scan Key Path</label>
+                                        <div class="col-sm-10">
+                                            <input id="scan-path-bip352" type="text" class="scan-path form-control" value="m/352'/0'/0'/1'/0" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3 row">
+                                        <label for="spend-path-bip352" class="col-sm-2 form-label">Spend Key Path</label>
+                                        <div class="col-sm-10">
+                                            <input id="spend-path-bip352" type="text" class="spend-path form-control" value="m/352'/0'/0'/0'/0" readonly>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
                         <div id="electrum-legacy" class="tab-pane electrum-tab-panel">
                     <form role="form">
                         <div class="row mt-3">
@@ -1431,6 +1605,13 @@
                         Read more at the
                         <a href="https://github.com/bitcoin/bips/blob/master/bip-0086.mediawiki" target="_blank">official BIP86 spec</a>
                     </p>
+                    <h3>BIP-352 <span class="small">Silent Payments - Reusable payment codes with privacy</span></h3>
+                    <p>
+                        Read more at the
+                        <a href="https://github.com/bitcoin/bips/blob/master/bip-0352.mediawiki" target="_blank">official BIP-352 spec</a>
+                        and
+                        <a href="https://silentpayments.xyz/" target="_blank">Silent Payments website</a>
+                    </p>
                     <h3>BIP85 <span class="small">Deterministic Entropy From BIP32 Keychains</span></h3>
                     <p>
                         Read more at the
@@ -1664,6 +1845,11 @@ sub   brainpoolP512r1 2025-08-16 [E] [expires: 2050-08-10]</code></pre>
                     </p>
 
                     <p>
+                        <span>BIP-352 Silent Payments - </span>
+                        <span>Custom implementation (libs/bip352-silentpayments)</span>
+                    </p>
+
+                    <p>
                         <span>SJCL - </span>
                         <a href="https://github.com/bitwiseshiftleft/sjcl" target="_blank">
                             https://github.com/bitwiseshiftleft/sjcl
@@ -1760,6 +1946,7 @@ sub   brainpoolP512r1 2025-08-16 [E] [expires: 2050-08-10]</code></pre>
         <script src="js/networks-bitcoin-only.js"></script>
         <script src="js/segwit-parameters.js"></script>
         <script src="js/electrum-mnemonic.js"></script>
+        <script src="js/bip352-silentpayments.js"></script>
         <script src="js/entropy.js"></script>
         <script src="js/index.js"></script>
     </body>
