@@ -1,3 +1,11 @@
+# v1.1.1
+
+## 🐛 Bug Fixes
+
+- **BIP-352 Custom Lib** - I was incorrectly encoding the bech32m "q" version as a byte 0x00.  Library now correctly encodes the "q" version 0 as 5 bits.
+
+*Release Date: October 4, 2025*
+
 # v1.1.0
 
 ## 🌟 New Features
