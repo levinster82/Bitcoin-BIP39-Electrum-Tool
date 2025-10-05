@@ -76,11 +76,14 @@ def encode_silent_payment_address(scan_pubkey, spend_pubkey, testnet=False):
     """
     hrp = "tsp" if testnet else "sp"
 
-    # Version 0 + scan_pubkey (33 bytes) + spend_pubkey (33 bytes)
-    data = bytes([0]) + scan_pubkey + spend_pubkey
+    # scan_pubkey (33 bytes) + spend_pubkey (33 bytes)
+    data = scan_pubkey + spend_pubkey
 
     # Convert to 5-bit groups for bech32m
-    words = convertbits(list(data), 8, 5, True)
+    data_words = convertbits(list(data), 8, 5, True)
+
+    # Prepend version as a 5-bit word (not a byte)
+    words = [0] + data_words
 
     return bech32_encode(hrp, words, BECH32M_CONST)
 

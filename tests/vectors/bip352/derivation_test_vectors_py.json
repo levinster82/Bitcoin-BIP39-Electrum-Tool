@@ -1,6 +1,6 @@
 {
   "generated_by": "Python BIP-352 Test Vector Generator",
-  "generated_at": "2025-10-03T17:50:18.412218Z",
+  "generated_at": "2025-10-04T23:58:03.804355Z",
   "implementation": "mnemonic + bip32 + custom bech32m",
   "note": "Test vectors for BIP-352 Silent Payments full derivation from mnemonic",
   "test_vectors": [
@@ -29,7 +29,7 @@
         "xprv": "xprvA3KgATaUCwK1AGmw5pfpFL8WETs57ezhvuivL745aq4JTLPqqJ5fetBwYMCFfi644ZsFcrg9q8mBWhc8rJzMfPyzotKjQ5Z538oUcKasNBU",
         "xpub": "xpub6GK2Zy7N3JsJNkrQBrCpcU5EnVhZX7iZJ8eX8VTh9AbHL8izNqPvCgWRPcbsH9WTMLnnUKkVDGcXtQZ9E3HryPYdyfdiBBJ3jy8Ekcr9SPj"
       },
-      "silent_payment_address": "sp1qqpyzwdslqgy9cjr4yz83epejrr2y7lquv6x7rr34kaum4g3h6h2rcczlgssk0z2vzuqm5tpday2u5ammuxmw39nlyyr8pgs37qmuzkttrrq5yasta"
+      "silent_payment_address": "sp1qqfqnnv8czppwysafq3uwgwvsc638hc8rx3hscuddh0xa2yd746s7xqh6yy9ncjnqhqxazct0fzh98w7lpkm5fvlepqec2yy0sxlq4j6ccc3h6t0g"
     },
     {
       "test_name": "BIP39 Test Vector 1",
@@ -56,7 +56,7 @@
         "xprv": "xprvA3KgATaUCwK1BQpYumaDpydRxGfPrbdrJeh5fYxKakFnfWdzANERUF5z36NgThRiWWrLdpFcTDFj8KJGVqrcXoTuhtLYs581sT4hNVrT2oD",
         "xpub": "xpub6GK2Zy7N3JsJPtu21o7EC7aAWJVtG4MhfscgTwMw95nmYJy8huYg23QTtLxRT6ddKZHuMznVEZqpoNHXVsYkvBuT7ynJemEJ2aRmvrfKSUd"
       },
-      "silent_payment_address": "sp1qqp9cm5gq0pnpqd3gmlygw5ht0f4wysxlen9xkcze98cyn4jefthutqzz33wd7zu9yec8yrhaw6q4k37vwuwv8a97j5w24g2q75mkqschcgqpvh609"
+      "silent_payment_address": "sp1qqfwxazqrcvcgrv2xlezr496m6dt3yph7vef4kqkff7pyavk22alzcqs5vtn0shpfxwpeqaltks9d50nrhrnplf054rj42zs84xasyx97zqcs2mkj"
     },
     {
       "test_name": "BIP39 Test Vector 1",
@@ -83,7 +83,7 @@
         "xprv": "xprvA3KgATaUCwK1EDTaYzRu87oCWyThbThDwVxthEgaYp1uJm7wpfkUNyrYJx6vWYMoXSPwEh8c2MWDjsRakJReNGgrKsSirwgHp61xXiCAZ5K",
         "xpub": "xpub6GK2Zy7N3JsJShY3f1xuVFjw51JBzvR5JitVVd6C79YtBZT6ND4ivnB2AFCY2MdQBSMVAhHPdq8tk7Zi1zuPhv2btSDzouXwu2T6jSsfMYS"
       },
-      "silent_payment_address": "sp1qqppjyflwyzyzx6ur9z3dqqrwwa58rzlqc3rqal2p9unjp82mzldu2srch7ms3qv6awfvsw38rxsm23hw385s9tlw6ufkzvmprxc5jlw3lhsv99myv"
+      "silent_payment_address": "sp1qqgv3z0m3q3q3khqeg5tgqqmnhdpcchcxygc806sf0yusf6kchm0z5q79lkuygrxhtjtyr5fce5x65dm5fayp2lmkhzdsnxcgek9yhm50aundry8c"
     },
     {
       "test_name": "BIP39 Test Vector 1",
@@ -110,7 +110,7 @@
         "xprv": "xprvA2XEXKmyywuLpqwE8n3HssZMkzwqTRVWkMf8VRsay8S1kYLa4iiBEvyjJh2DiWXF9uHi1z3P9UgQTiQHSY7ddh8gj3WiamRnKvtnJHNtag6",
         "xpub": "xpub6FWavqJspKTe3L1hEoaJF1W6K2nKrtDN7aajHpHCXTxzdLficG2RnjJD9zKgcSP5wPWrfTDCNzARkFCg76G8CG7HfyeQnCBMTkeoA88RNs9"
       },
-      "silent_payment_address": "sp1qqpl4j03duacm0yfq8d64rwl76n4n7jvc607wg8al0k4adgndy49lesr873rrxns0p49mfyvypvjuu6cn9edgvh9m8u5y0g4hhva6a9cjtzsnfatpw"
+      "silent_payment_address": "sp1qq0avnut08wxmezgpmw4gmhlk5avl5nxxnlnjpl0ma40t2ymf9f07vqel5gce5urcdfw6frpqtyh8xkyewt2r9ewel9pr69dam8whfwyjc5c8ef34"
     },
     {
       "test_name": "BIP39 Test Vector 1",
@@ -137,7 +137,7 @@
         "xprv": "xprvA2XEXKmyywuLsKuPPf9hMRBpa1rRyMRwV8BtiKtQd6P69PGNzyRrvfmYm8V1qMcVc2vemAUogxXFnwtpDj41gjXwQycDGd3kupjRYiJLzFk",
         "xpub": "xpub6FWavqJspKTe5oyrVgghiZ8Z83gvNp9nrM7VWiJ2BRv52BbXYWk7UU62cR9PWu9wZ6RJXtZXTz6qduPtPTtRt6kL97oneFBejZBiaeKe9nz"
       },
-      "silent_payment_address": "sp1qqpkhvthkma6xmurkqanhe3yzvpqdesxdsslwpw29nk09zk9ys9dcrsrpkjllauuzgc5zzwltrhrp8egjv87g4ce9x4y4jjpwfful30mn4cs84kfx7"
+      "silent_payment_address": "sp1qqd4mzaaklw3klqas8va7vfqnqgrwvpnvy8mstj3vaneg43fyptwquqcd5hll08qjx9qsnh6caccf72ynplj9wxff4f9v5stj208ut7uawyxx782a"
     },
     {
       "test_name": "BIP39 Test Vector 1",
@@ -164,7 +164,7 @@
         "xprv": "xprvA2XEXKmyywuLvShTt5WJ8Z9QioP4nbSvbhTJvZWTt3TVe9R9n39dr1sAD86pFwtfShgZfMYqSFQZEATnNgfAMGzrTz78ebaEku8MFirrUqm",
         "xpub": "xpub6FWavqJspKTe8vmvz73JVh69GqDZC4AmxvNuiwv5SNzUWwkJKaTtPpBe4QiSriiHbuzwSSGz9RbiU5QRH7QUh81SR4ssS95vMawge8iJMGJ"
       },
-      "silent_payment_address": "sp1qqpwh4u3xqxs6kgp4deuw7xwvjzm2e2yj7e7j3pngxvxdxdkcv263pcr5u7zveewu5p8qyez9ssgsgu9ztdmg60agaehtlnj95qf7cmczs4qgyxuzc"
+      "silent_payment_address": "sp1qqt4a0yfsp5x4jqdtw0rh3nnysk6k23yhk055gv6pnpnfndkrzk5gwqa88snxwth9qfcpxg3vyzyz8pgjmw6xnl28wd6luu3dqz0kx7q59gymr3vm"
     },
     {
       "test_name": "BIP39 Test Vector 1",
@@ -191,7 +191,7 @@
         "xprv": "xprvA3yktAdqiThrtW2KDsqXZvQusU2xojpLfJir37a38yUtJC6Um22TRFCnp8zYWtTMxFZKX6ggnuky17drwQFngK1eojXfQtXscK4cFYX7crf",
         "xpub": "xpub6Gy7HgAjYqGA6z6nKuNXw4MeRVsTDCYC2XeSqVyehK1sAzRdJZLhy3XGfPgBGw4pJhxbfGMnWi5bLLajFv819pJh9GAHd4THaybjBPKhVnx"
       },
-      "silent_payment_address": "sp1qqpwqcfmvq4zdqm8g47wppe9epxxftwf997facv2ns6uvkwt8tee2wczwpdz5rkcacn6wxxjtrwnc9kwtf4yz08srucpxrfvwswxjddckppqm7ppcp"
+      "silent_payment_address": "sp1qqtsxzwmq9gngxe690nsgwfwgf3j2mjff0j0wrz5uxhr9nje67w2nkqnstg4qak8wy7n335jcm57pdnj6dfqneuqlxqfs6tr5r35ntw9sggf0wrdm"
     },
     {
       "test_name": "BIP39 Test Vector 1",
@@ -218,7 +218,7 @@
         "xprv": "xprvA3yktAdqiThrvLh2pqkraTjdV1KYKVBMajcwLSDEdiYQqEUN4yaJGCnXbDLtYehwYfCHHfh72tTLYcJqZHHSGrzSLFGSVQ1ADJfzBk9KiGZ",
         "xpub": "xpub6Gy7HgAjYqGA8pmVvsHrwbgN33A2iwuCwxYY8pcrC45Pi2oWcWtYp171SUuM1LSou8ZTFuxR87zMTexp8EFv9DFo68azPLzjWaEyE3bjeRj"
       },
-      "silent_payment_address": "sp1qqpkrydxdzsd3w5m6lygu7m47kd6lsxd5n2srpp2jd8hgwzgwefhmwcrxq8jm8e94x9c42d6szhnshsxyyw88vk437s3hgum38dk0nny6zkqk8ggxg"
+      "silent_payment_address": "sp1qqdserfng5rvt4x7hez88ka04nwhupndy65qcg25nfa6rsjrk2d7mkqespuke7fdf3w92nw5q4uu9up3pr3em94v05yd68xufmdnuuexs4sauj60k"
     },
     {
       "test_name": "BIP39 Test Vector 1",
@@ -245,7 +245,7 @@
         "xprv": "xprvA3yktAdqiThryqqqme4F3rr7S3q6tLnDYzmoDxeicpaRuQmJ5VrSfUDJSNVsHJCMdoonTXab66aaHxX8u7ftd7ieFRBaj1nRsK2wcbCqUU4",
         "xpub": "xpub6Gy7HgAjYqGACKvJsfbFQznqz5fbHoW4vDhQ2M4LBA7QnD6Sd3AhDGXnHcwEoM4AMXmdDbbjg244zCGx2zH4WTBDD8ABWjJmiCL7U1kU4Df"
       },
-      "silent_payment_address": "sp1qqpcc39etl96f2egzr9fsd3rgjhlxf0g0t4qphtqenuvmcjaf47d2uqzft2v8v0w58xrwgaetrcn7klwhpr68vaendhfjpndgdxj0tqryhxqv0a00r"
+      "silent_payment_address": "sp1qqwxyfw2lewj2k2qse2vrvg6y4lejt6r6agqd6cxvlrx7yh2d0n2hqqj26npmrm4pesmj8w2c7yl4hm4cg73m8wvmd6vsvm2rf5n6cqe9esuq0qll"
     },
     {
       "test_name": "BIP39 Test Vector 2",
@@ -272,7 +272,7 @@
         "xprv": "xprvA2brpzxeuA1Gpaq2AixWw8wG99fb3gvFs8gD24rNbmKUg7KRwMgfxpXrM3fft7ZftKoN57wwBEHsBC76Ug7GezZwtfa9KXtznbgSSH7TaMw",
         "xpub": "xpub6FbDEWVYjXZa34uVGkVXJGszhBW5T9e7EMbopTFzA6rTYueaUtzvWcrLCL9wkhKSUkbszcy5fV6iaR4gxfq3ZTSuNbr5qqERfAChy2fdDei"
       },
-      "silent_payment_address": "sp1qqpmrgudsmfmg4j6n60zjsw4hu9mvxfw37znpx3yfle8rap9pelqslqr4jnvzumyzreak2rr23243f5axxytc6nnaxws923kzyju2l2nktdq99qmv4"
+      "silent_payment_address": "sp1qqwc68rvx6w69vk57nc55r4dlpwmpjt50s5cf5fz07fclgfgw0cy8cqav5mqhxeqs70djsc6524v2d8f33z7x5ulfn5p25ds3yhzh65ajmg5jr72d"
     },
     {
       "test_name": "BIP39 Test Vector 2",
@@ -299,7 +299,7 @@
         "xprv": "xprvA2brpzxeuA1Grh6eGH7ys6FpW2P4kqohLPk8mFLz8bfsjNfKFStFrpZNKZCEnE8DHHTC2QxVGAJLQAskS7eWXjLnv1McWRFcH6aEHnp1f1C",
         "xpub": "xpub6FbDEWVYjXZa5BB7NJezEECZ44DZAJXYhcfjZdkbgwCrcAzTnzCWQcsrApeP3uGGVbDZW6mETHQ8aFKTjvQtKCiQWGMLY1fmUq8SBHrN1Am"
       },
-      "silent_payment_address": "sp1qqpu3hq02x363nnfr67wq7g73gj5f93nx3xc80jrqhnfeqguugqe4lszc65je78kha76lvttwrewhhp0lc7hes2qajl0e6yecttkud3jltnss4pl3d"
+      "silent_payment_address": "sp1qq0ydcr635w5vu6g7hns8j852y4zfvve5fkpmusc9u6wgz88zqxd0uqkx4yk03a4l0khmz6ms7t4actl7847vzs8vhm7w3xwz6ahrvvh6uu5a96ss"
     },
     {
       "test_name": "BIP39 Test Vector 2",
@@ -326,7 +326,7 @@
         "xprv": "xprvA385jvEdgmXXqxS3DNUneg14o54a3eHFqtSZWWNxCt3JVQfK3HdFsk185KfMDz76BFRmDZj8mwNbt7g2qbWp1sUDjcosgJimsfobmH5yJGq",
         "xpub": "xpub6G7S9RmXX95q4SWWKQ1o1owoM6u4T717D7NAJtnZmDaHNCzTapwWRYKbvaNHqhBCZYtz3dqR7GQ8tq1MPuTAJDuBwhrcQgyLsBxh9CQ1w2S"
       },
-      "silent_payment_address": "sp1qqpprrjkemcafme8ypjusvxtpyycrsasmywjem2hwq6qsewsqmsyxzszsphalymrt0mypw9e6fq40dh5g6e5dkh7hw86wynyhdxnuq6pdpqqshqh59"
+      "silent_payment_address": "sp1qqggcu4kw782w7feqvhyrpjcfpxqu8vxer5kw64msxsyxt5qxupps5q5qdl0exc6m7eqt3wwjg9tmdazxkdrd4l4m37n3ye9mf5lqxstggqep3mfm"
     },
     {
       "test_name": "BIP39 Test Vector 2",
@@ -353,7 +353,7 @@
         "xprv": "xprvA385jvEdgmXXt1pjKoWrFEwPAZsFscNp8uNx1kxQMcwys6yXru2KAys19chxuj3yowxsVxzdi1c3bWisz3NYK6tDfx5tyenqJnpUELm2CVZ",
         "xpub": "xpub6G7S9RmXX95q6VuCRq3rcNt7ibhkH56fW8JYp9N1uxUxjuJgQSLZinBUzseJNTho1khLbBvfTKZbBFCjFKUicK8JAHHozQFXxcGieSq5E5j"
       },
-      "silent_payment_address": "sp1qqpvpxrz0gyhwura2qfyytk3m3y6sqtu6e4yg54hdma8s83hqs9fdkqzt69ajah4a58q8rj39yem2p54a37c4lht2vk8kpdhxjjz2aqq8v8scaykud"
+      "silent_payment_address": "sp1qqtqfscn6p9mhql2szfpza5wufx5qzlxkdfz99dmwlfupudcyp2tdsqj730vhda0dpcpcu5ffxw6sd90v0k90a66n93astde55sjhgqpmpua5pktx"
     },
     {
       "test_name": "BIP39 with Passphrase",
@@ -380,7 +380,7 @@
         "xprv": "xprvA3PdnNViyBDmWJn797ezKNjVveqt32xRX8GMRLpxkBk8VcvRwgLTtpfcQ7ZMd2UZ1G9KKuQ7zhsupH6EvfqLvUqXa37U3CNFbURGmeq43X8",
         "xpub": "xpub6GNzBt2coYn4inraF9BzgWgEUggNSVgGtMBxDjEaJXH7NRFaVDeiScz6FP3DQZknz1jBS6T9htSJXXoofHSGC6Gt9KfUYAnKaup2xw7TzDC"
       },
-      "silent_payment_address": "sp1qqpzttp6mls6dpkwgz7fckk4c7860jkmct3ht02sppzxjzxc5l9p62szn03276kfhv27km0vcfgva5u0yn2tlzwuxp3tr94apgm8v9lg260sz35cqf"
+      "silent_payment_address": "sp1qqgj6cwkluxngdnjqhjw944w837nu4k7zud6m65qgg35s3k98egwj5q5mu2hk4jdmzh4kmmxz2r8d8rey6jlcnhpsv2ced0g2xemp06zknuxl5uaw"
     },
     {
       "test_name": "BIP39 with Passphrase",
@@ -407,7 +407,7 @@
         "xprv": "xprvA3PdnNViyBDmZwZQZgeFtrtwZzHGF6E2Rrq4PnqyEsoBk975VqKE8i9gh9LNudWD7QzKuKvy2fANmRL5nZs7FrA9qywJFBazDeKbSguXhtL",
         "xpub": "xpub6GNzBt2coYn4nRdsfiBGFzqg827keYwso5kfCBFaoDLAcwSE3NdUgWUAYRjZeWexpgHjzVMt94bEtoFV4dGfJeWsfxepocSkXsGkAe48rk2"
       },
-      "silent_payment_address": "sp1qqp92serv5s8s4ms32xc4q35deyu4mf7fhw7jrwgy8pa6vrlj3c7wtqz70gu346us7xpks0qv8ac28dey728lhc8add2y7jlntvp76klsajsgshg6f"
+      "silent_payment_address": "sp1qqf25xgm9ypu9wuy23k9gydrwf89w60jdmh5smjppc0wnqlu5w8njcqhn68ydwhy83sd5rcrplwz3mwf8j3la7pltt2385hu6mq0k4hu8v5qnqajl"
     },
     {
       "test_name": "12-word Mnemonic",
@@ -434,7 +434,7 @@
         "xprv": "xprvA4Hz7VWKiJRSGe7GDYmjzwGJZu7pn5WZsNKPgJMaRM3LEXJ5DxREhsjdVr35jRGAvtKYmkm6YfU65e1oqoTrcZkTZSM6yBDGERRdDAKUWM9",
         "xpub": "xpub6HHLX13DYfyjV8BjKaJkN5D37vxKBYEREbEzUgmBygaK7KdDmVjVFg47M6HQJ4RiFH54xGEb1kSezA968zqezCEUvG48wANUAm8BNZ3DXq1"
       },
-      "silent_payment_address": "sp1qqpp8p4kqv83cmj04x32qlmhej3jr8rv985cgjy7skg5wf3qjkn396czjhqhj4wg3qvlsmsfmulxs4qapdh22c6u89y5vjjfpjwg9m4lscpshrmtwg"
+      "silent_payment_address": "sp1qqgfcddsrpuwxunaf52s87a7v5vsecmpfaxzy3859j9rjvgy45ufwkq54c9u4tjygr8uxuzwl8e59g8gtd6jkxhpef9ry5jgvnjpwa0uxqv4q0q34"
     }
   ]
 }

@@ -84,20 +84,19 @@ function encodeSilentPaymentAddress(scanPubKey, spendPubKey, testnet = false) {
         throw new Error('Spend public key must be a 33-byte compressed public key');
     }
 
-    // Per BIP-352: version byte (0x00) + scan_pubkey (33 bytes) + spend_pubkey (33 bytes)
-    // Total: 67 bytes
+    // Per BIP-352: scan_pubkey (33 bytes) + spend_pubkey (33 bytes)
+    // Total: 66 bytes of data
     const hrp = testnet ? SILENT_PAYMENT_HRP_TESTNET : SILENT_PAYMENT_HRP;
 
-    // Convert to 5-bit words for bech32m encoding
-    // BIP-352 specifies: encode version + B_scan + B_spend
-    const data = Buffer.concat([
-        Buffer.from([SILENT_PAYMENT_VERSION]),
-        scanPubKey,
-        spendPubKey
-    ]);
+    // Concatenate scan and spend public keys
+    const data = Buffer.concat([scanPubKey, spendPubKey]);
 
     // Convert 8-bit bytes to 5-bit words
-    const words = convertBits(Array.from(data), 8, 5, true);
+    const dataWords = convertBits(Array.from(data), 8, 5, true);
+
+    // Prepend version as a 5-bit word (not a byte)
+    // BIP-352 specifies: The character 'q' represents version 0
+    const words = [SILENT_PAYMENT_VERSION, ...dataWords];
 
     // Encode using bech32m (not bech32)
     // Note: bech32 library accepts (hrp, words, LIMIT) where LIMIT is optional
@@ -127,18 +126,23 @@ function decodeSilentPaymentAddress(address) {
         throw new Error(`Invalid Silent Payment address prefix: ${prefix}`);
     }
 
-    // Convert 5-bit words back to 8-bit bytes
-    const data = convertBits(words, 5, 8, false);
-    const dataBuffer = Buffer.from(data);
-
-    // Expected: version (1 byte) + scan_pubkey (33 bytes) + spend_pubkey (33 bytes) = 67 bytes
-    if (dataBuffer.length !== 67) {
-        throw new Error(`Invalid Silent Payment address data length: ${dataBuffer.length} (expected 67)`);
+    // First word is the version
+    const version = words[0];
+    if (version !== SILENT_PAYMENT_VERSION) {
+        throw new Error(`Unsupported Silent Payment version: ${version}`);
     }
 
-    const version = dataBuffer[0];
-    const scanPubKey = dataBuffer.slice(1, 34);
-    const spendPubKey = dataBuffer.slice(34, 67);
+    // Convert remaining 5-bit words back to 8-bit bytes
+    const data = convertBits(words.slice(1), 5, 8, false);
+    const dataBuffer = Buffer.from(data);
+
+    // Expected: scan_pubkey (33 bytes) + spend_pubkey (33 bytes) = 66 bytes
+    if (dataBuffer.length !== 66) {
+        throw new Error(`Invalid Silent Payment address data length: ${dataBuffer.length} (expected 66)`);
+    }
+
+    const scanPubKey = dataBuffer.slice(0, 33);
+    const spendPubKey = dataBuffer.slice(33, 66);
 
     return {
         version,
