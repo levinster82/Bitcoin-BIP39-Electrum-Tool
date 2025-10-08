@@ -1959,13 +1959,14 @@
 
     function displayBip352Info() {
         // Get the derivation parameters
+        var coin = parseIntNoNaN(DOM.bip352coin.val(), 0);
         var account = parseIntNoNaN(DOM.bip352account.val(), 0);
         var change = parseIntNoNaN(DOM.bip352change.val(), 0);
         var addressIndex = parseIntNoNaN(DOM.bip352addressIndex.val(), 0);
 
         // Update paths to show current values
-        var scanPath = "m/352'/0'/" + account + "'/1'/" + addressIndex;
-        var spendPath = "m/352'/0'/" + account + "'/0'/" + addressIndex;
+        var scanPath = "m/352'/" + coin + "'/" + account + "'/1'/" + addressIndex;
+        var spendPath = "m/352'/" + coin + "'/" + account + "'/0'/" + addressIndex;
         DOM.bip352scanPath.val(scanPath);
         DOM.bip352spendPath.val(spendPath);
 
@@ -1976,21 +1977,25 @@
                 throw new Error("No root key available. Please generate or enter a mnemonic first.");
             }
 
-            // Derive the specific keys based on change and address index
+            // Derive the specific keys based on coin, account, change and address index
             var basePath = bip32RootKey
                 .deriveHardened(352)
-                .deriveHardened(0)
+                .deriveHardened(coin)
                 .deriveHardened(account);
 
             // Derive scan key (change=1) and spend key (change=0)
             var scanKey = basePath.deriveHardened(1).derive(addressIndex);
             var spendKey = basePath.deriveHardened(0).derive(addressIndex);
 
+            // Determine if testnet based on coin value
+            // coin 0 = Bitcoin mainnet, coin 1 = Bitcoin testnet
+            var isTestnet = (coin !== 0);
+
             // Generate Silent Payment address from both keys
             var silentPaymentAddress = BIP352.encodeSilentPaymentAddress(
                 scanKey.publicKey,
                 spendKey.publicKey,
-                false
+                isTestnet
             );
 
             // Display scan key
@@ -2245,34 +2250,38 @@
                 // BIP352 Silent Payments - alternating scan/spend keys
                 if (bip352TabSelected()) {
                     try {
-                        // Get the account from the UI
+                        // Get the coin and account from the UI
+                        var coin = parseIntNoNaN(DOM.bip352coin.val(), 0);
                         var account = parseIntNoNaN(DOM.bip352account.val(), 0);
 
                         // Determine if this row is for scan (odd) or spend (even)
                         var isScanKey = (index % 2 === 1);
                         var addressIndex = Math.floor(index / 2);
 
-                        // Derive the specific keys based on change and address index
+                        // Derive the specific keys based on coin, account, change and address index
                         var basePath = bip32RootKey
                             .deriveHardened(352)
-                            .deriveHardened(0)
+                            .deriveHardened(coin)
                             .deriveHardened(account);
 
                         // Derive scan and spend keys at this address index
                         var scanKey = basePath.deriveHardened(1).derive(addressIndex);
                         var spendKey = basePath.deriveHardened(0).derive(addressIndex);
 
+                        // Determine if testnet based on coin value
+                        var isTestnet = (coin !== 0);
+
                         // Generate Silent Payment address from both keys
                         var silentPaymentAddress = BIP352.encodeSilentPaymentAddress(
                             scanKey.publicKey,
                             spendKey.publicKey,
-                            false
+                            isTestnet
                         );
 
                         // Determine which key to display in this row
                         var keyType = isScanKey ? "Scan" : "Spend";
                         var keyData = isScanKey ? scanKey : spendKey;
-                        var keyPath = "m/352'/0'/" + account + "'/" + (isScanKey ? "1" : "0") + "'/" + addressIndex;
+                        var keyPath = "m/352'/" + coin + "'/" + account + "'/" + (isScanKey ? "1" : "0") + "'/" + addressIndex;
 
                         self.index = index;
                         self.path = keyPath;
