@@ -71,10 +71,13 @@ A Bitcoin-focused fork of [iancoleman/bip39](https://github.com/iancoleman/bip39
 ## Standalone Versions
 
 Download from releases:
-- [Latest Release](https://github.com/levinster82/Bitcoin-BIP39-Electrum-Tool/releases/latest)    `bip39-electrum-standalone.html` - v1.1.1 - BIP-352 Silent Payments!
+- [Latest Release](https://github.com/levinster82/Bitcoin-BIP39-Electrum-Tool/releases/latest)    `bip39-electrum-standalone.html` - v1.1.2 - BIP-352 Silent Payments!
 
 Build from source:
 ```bash
+# Initialize git submodules (includes BIP-352 library)
+git submodule update --init --recursive
+
 # Build combined libraries
 cd libs/combined
 npm install --no-optional
@@ -86,7 +89,7 @@ npm install
 npm run build
 
 # Build BIP-352 Silent Payments library
-cd ../bip352-silentpayments
+cd ../bip352-js
 npm install
 npm run build
 

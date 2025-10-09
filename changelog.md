@@ -1,3 +1,22 @@
+# v1.1.2
+
+## 🐛 Bug Fixes
+
+- **BIP-352 Network Support** - Fixed BIP-352 coin derivation to properly update when switching between mainnet/testnet/regtest networks
+  - Derivation path now correctly updates to `m/352'/coin'/account'/[0|1]'/address_index`
+  - Testnet/regtest addresses now properly generate with `tsp1q...` prefix
+  - Both main display and derived addresses table now update correctly
+
+## 🔧 Internal Improvements
+
+- **BIP-352 Library Refactor** - Replaced custom library with [bip352-js](https://github.com/levinster82/bip352-js) as git submodule
+  - 97% file size reduction (162KB → 4.6KB)
+  - Cleaner, more maintainable codebase
+  - Easier library updates via git submodule
+  - All tests passing with new implementation
+
+*Release Date: October 9, 2025*
+
 # v1.1.1
 
 ## 🐛 Bug Fixes

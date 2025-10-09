@@ -1987,15 +1987,12 @@
             var scanKey = basePath.deriveHardened(1).derive(addressIndex);
             var spendKey = basePath.deriveHardened(0).derive(addressIndex);
 
-            // Determine if testnet based on coin value
-            // coin 0 = Bitcoin mainnet, coin 1 = Bitcoin testnet
-            var isTestnet = (coin !== 0);
-
             // Generate Silent Payment address from both keys
-            var silentPaymentAddress = BIP352.encodeSilentPaymentAddress(
+            // New library uses coinType instead of testnet boolean
+            var silentPaymentAddress = BIP352.toAddress(
                 scanKey.publicKey,
                 spendKey.publicKey,
-                isTestnet
+                coin
             );
 
             // Display scan key
@@ -2268,14 +2265,12 @@
                         var scanKey = basePath.deriveHardened(1).derive(addressIndex);
                         var spendKey = basePath.deriveHardened(0).derive(addressIndex);
 
-                        // Determine if testnet based on coin value
-                        var isTestnet = (coin !== 0);
-
                         // Generate Silent Payment address from both keys
-                        var silentPaymentAddress = BIP352.encodeSilentPaymentAddress(
+                        // New library uses coinType instead of testnet boolean
+                        var silentPaymentAddress = BIP352.toAddress(
                             scanKey.publicKey,
                             spendKey.publicKey,
-                            isTestnet
+                            coin
                         );
 
                         // Determine which key to display in this row
