@@ -1,0 +1,3 @@
+[submodule "libs/bip352-js"]
+	path = libs/bip352-js
+	url = git@github.com:levinster82/bip352-js.git
