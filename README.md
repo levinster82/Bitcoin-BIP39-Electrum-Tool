@@ -75,28 +75,39 @@ Download from releases:
 
 Build from source:
 ```bash
+# Clone the repository
+git clone https://github.com/levinster82/Bitcoin-BIP39-Electrum-Tool.git
+cd Bitcoin-BIP39-Electrum-Tool
+
 # Initialize git submodules (includes BIP-352 library)
 git submodule update --init --recursive
+
+# Checkout webpack-build branch for BIP-352 library
+cd libs/bip352-js
+git checkout webpack-build
+cd ../..
 
 # Build combined libraries
 cd libs/combined
 npm install --no-optional
 npm run build
+cd ../..
 
 # Build Electrum mnemonic library
-cd ../electrum-mnemonic
+cd libs/electrum-mnemonic
 npm install
 npm run build
+cd ../..
 
 # Build BIP-352 Silent Payments library
-cd ../bip352-js
+cd libs/bip352-js
 npm install
 npm run build
+cd ../..
 
 # All libraries automatically copy to src/js/
 
 # Generate standalone HTML
-cd ../..
 python compile.py
 ```
 
