@@ -1,3 +1,28 @@
+# v1.2.0
+
+## 🌟 New Features
+
+- **BIP-392 Key Expressions** - Silent payment key material for `sp()` output script descriptors
+  - `spscan` - scan private key + spend public key, for watch-only wallets (`spscan1q...`)
+  - `spspend` - both private keys, for full wallets (`spspend1q...`)
+  - Bech32m encoded with `spscan`/`spspend` HRPs on mainnet, `tspscan`/`tspspend` on testnet
+  - Displayed in the BIP352 tab and tracks the Address Index field
+  - Note: BIP-392 is a Draft and has not published official test vectors; the encodings
+    here were cross-checked against an independent implementation of the spec
+
+## 🐛 Bug Fixes
+
+- **Dead Links** - The silentpayments.xyz domain now returns 404 on every path; all three
+  references replaced with the Bitcoin Design silent payments guide
+- **Outdated Status Notice** - Removed the BIP352 tab warning claiming BIP-352 is in
+  "Proposed" status, which is neither its current status nor a status in the present BIP-2 scheme
+
+## 🔧 Internal Improvements
+
+- **bip352-js v1.1.0** - Submodule updated with the BIP-392 encoders/decoders and 5 new unit tests
+
+*Release Date: August 4, 2026*
+
 # v1.1.2
 
 ## 🐛 Bug Fixes

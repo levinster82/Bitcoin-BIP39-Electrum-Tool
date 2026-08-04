@@ -15,6 +15,12 @@ A Bitcoin-focused fork of [iancoleman/bip39](https://github.com/iancoleman/bip39
 - **Multiple Addresses**: Generate new Silent Payment addresses by incrementing the address index or account
 - **Custom Implementation**: Built-in BIP-352 library with comprehensive test coverage (424 automated tests)
 
+### BIP-392 Key Expressions
+- **`spscan`**: Encodes the scan private key and spend public key, for watch-only wallets that can scan but not spend
+- **`spspend`**: Encodes both private keys, for full wallets that can scan and spend
+- **Bech32m Encoded**: `spscan1q...` / `spspend1q...` on mainnet, `tspscan1q...` / `tspspend1q...` on testnet
+- **Descriptor Ready**: Key material for `sp()` output script descriptors, shown alongside the Silent Payment address in the BIP352 tab
+
 ### SeedQR Display
 - **Generate QR codes for easy transcription per [seedqr](https://github.com/SeedSigner/seedsigner/tree/dev/docs/seed_qr) standard**
   - **SeedQR Standard**: 12-word (25×25 modules), 24-word (29×29 modules)
@@ -60,7 +66,8 @@ A Bitcoin-focused fork of [iancoleman/bip39](https://github.com/iancoleman/bip39
 3. Select "BIP352" tab
 4. Adjust "Account" and "Address Index" as needed
 5. View scan/spend keys and Silent Payment address (sp1q...)
-6. **Note**: Silent Payments require blockchain scanning to detect incoming payments
+6. View the BIP-392 `spscan`/`spspend` key expressions for use with `sp()` descriptors
+7. **Note**: Silent Payments require blockchain scanning to detect incoming payments
 
 ### Electrum Wallets
 1. Select "Electrum" mnemonic type
@@ -71,7 +78,7 @@ A Bitcoin-focused fork of [iancoleman/bip39](https://github.com/iancoleman/bip39
 ## Standalone Versions
 
 Download from releases:
-- [Latest Release](https://github.com/levinster82/Bitcoin-BIP39-Electrum-Tool/releases/latest)    `bip39-electrum-standalone.html` - v1.1.2 - BIP-352 Silent Payments!
+- [Latest Release](https://github.com/levinster82/Bitcoin-BIP39-Electrum-Tool/releases/latest)    `bip39-electrum-standalone.html` - v1.2.0 - BIP-392 Key Expressions!
 
 Build from source:
 ```bash
