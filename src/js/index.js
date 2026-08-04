@@ -145,6 +145,8 @@
     DOM.bip352scanXpub = $("#scan-xpub-bip352");
     DOM.bip352spendXprv = $("#spend-xprv-bip352");
     DOM.bip352spendXpub = $("#spend-xpub-bip352");
+    DOM.bip352scanKeyExpression = $("#scan-key-expression-bip352");
+    DOM.bip352spendKeyExpression = $("#spend-key-expression-bip352");
     DOM.bip352scanPath = $("#scan-path-bip352");
     DOM.bip352spendPath = $("#spend-path-bip352");
     DOM.nip06tab = $("#nip06-tab");
@@ -2009,6 +2011,18 @@
 
             // Display Silent Payment address
             DOM.bip352silentPaymentAddress.val(silentPaymentAddress);
+
+            // Display BIP392 key expressions for sp() descriptors
+            DOM.bip352scanKeyExpression.val(BIP352.toScanKeyExpression(
+                scanKey.privateKey,
+                spendKey.publicKey,
+                coin
+            ));
+            DOM.bip352spendKeyExpression.val(BIP352.toSpendKeyExpression(
+                scanKey.privateKey,
+                spendKey.privateKey,
+                coin
+            ));
         } catch (e) {
             console.error("BIP352 Error:", e);
             // Clear fields on error
@@ -2016,6 +2030,8 @@
             DOM.bip352scanKeyPub.val("");
             DOM.bip352spendKeyPriv.val("");
             DOM.bip352spendKeyPub.val("");
+            DOM.bip352scanKeyExpression.val("");
+            DOM.bip352spendKeyExpression.val("");
             DOM.bip352silentPaymentAddress.val("Error: " + e.message);
         }
     }

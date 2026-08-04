@@ -1198,6 +1198,26 @@
                                         </div>
                                     </div>
                                     <div class="mb-3 row">
+                                        <label class="col-sm-2 form-label">
+                                        </label>
+                                        <div class="col-sm-10">
+                                            <p><strong>BIP-392 Key Expressions:</strong></p>
+                                            <p>Key material for <code>sp()</code> output script descriptors. Use <code>spscan</code> for a watch-only wallet that can scan but not spend, and <code>spspend</code> for a full wallet that can do both.</p>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3 row">
+                                        <label for="scan-key-expression-bip352" class="col-sm-2 form-label">Scan Key Expression</label>
+                                        <div class="col-sm-10">
+                                            <textarea id="scan-key-expression-bip352" class="scan-key-expression private-data form-control" readonly data-show-qr autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" style="font-size: 0.9em;"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3 row">
+                                        <label for="spend-key-expression-bip352" class="col-sm-2 form-label">Spend Key Expression</label>
+                                        <div class="col-sm-10">
+                                            <textarea id="spend-key-expression-bip352" class="spend-key-expression private-data form-control" readonly data-show-qr autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" style="font-size: 0.9em;"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3 row">
                                         <label for="scan-path-bip352" class="col-sm-2 form-label">Scan Key Path</label>
                                         <div class="col-sm-10">
                                             <input id="scan-path-bip352" type="text" class="scan-path form-control" value="m/352'/0'/0'/1'/0" readonly>
