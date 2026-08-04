@@ -299,7 +299,7 @@ Check current wallet compatibility before relying on this feature for production
 - **Status**: Proposed (version 1.0.2, July 2025)
 - **Authors**: josibake and Ruben Somsen
 - **Bitcoin Optech**: [bitcoinops.org/en/topics/silent-payments](https://bitcoinops.org/en/topics/silent-payments/)
-- **Silent Payments Site**: [silentpayments.xyz](https://silentpayments.xyz/)
+- **Bitcoin Design Guide**: [bitcoin.design/guide/how-it-works/silent-payments](https://bitcoin.design/guide/how-it-works/silent-payments/)
 - **BIP 32**: Hierarchical Deterministic Wallets
 - **BIP 39**: Mnemonic code for generating deterministic keys
 - **BIP 341**: Taproot specification
