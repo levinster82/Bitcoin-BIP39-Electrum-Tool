@@ -4,3 +4,19 @@ bip39-standalone.html
 bip39-electrum-standalone.html
 bip39-electrum-standalone.html.sha256sum
 bip39-electrum-standalone.html.sha256sum.asc
+
+# Python virtualenvs and bytecode (tests/vectors/bip352 generators).
+# The venv currently self-ignores only because Python 3.11+ writes its own
+# venv/.gitignore; virtualenv and older Python do not.
+venv/
+.venv/
+__pycache__/
+*.pyc
+
+# Editor / OS cruft
+.vscode/
+.idea/
+.DS_Store
+
+# npm logs
+npm-debug.log*
