@@ -1,3 +1,6 @@
 [submodule "libs/bip352-js"]
 	path = libs/bip352-js
 	url = git@github.com:levinster82/bip352-js.git
+[submodule "libs/slip39-js"]
+	path = libs/slip39-js
+	url = git@github.com:levinster82/slip39-js.git

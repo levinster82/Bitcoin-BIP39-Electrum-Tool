@@ -1,0 +1,21 @@
+{
+  "name": "bip39-tool-slip39-bundle",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Browser bundle harness for the slip39-js submodule",
+  "scripts": {
+    "build": "webpack --mode=production"
+  },
+  "dependencies": {
+    "create-hmac": "^1.1.7",
+    "pbkdf2": "^3.1.2",
+    "randombytes": "^2.1.0"
+  },
+  "devDependencies": {
+    "buffer": "^6.0.3",
+    "process": "^0.11.10",
+    "stream-browserify": "^3.0.0",
+    "webpack": "^5.101.3",
+    "webpack-cli": "^6.0.1"
+  }
+}
