@@ -89,11 +89,6 @@ cd Bitcoin-BIP39-Electrum-Tool
 # Initialize git submodules (includes BIP-352 library)
 git submodule update --init --recursive
 
-# Checkout webpack-build branch for BIP-352 library
-cd libs/bip352-js
-git checkout webpack-build
-cd ../..
-
 # Build combined libraries
 cd libs/combined
 npm install --no-optional
@@ -106,8 +101,8 @@ npm install
 npm run build
 cd ../..
 
-# Build BIP-352 Silent Payments library
-cd libs/bip352-js
+# Build BIP-352 Silent Payments library (bundles the libs/bip352-js submodule)
+cd libs/bip352-bundle
 npm install
 npm run build
 cd ../..
