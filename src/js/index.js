@@ -990,6 +990,14 @@
             DOM.electrumSegwitTab.removeClass("active");
             $("#electrum-legacy-tab a, #electrum-segwit-tab a").removeClass("active");
             $("#electrum-legacy form, #electrum-segwit form").addClass("hidden");
+            // Clear "active" from every BIP tab first - a non-default tab (e.g. BIP86) could
+            // still be carrying it from before this mode switch, since nothing else clears BIP
+            // tabs when going bip39<->slip39 (unlike the electrum branch above, which always
+            // hides every BIP tab regardless of which one was active). Skipping this left two
+            // tabs simultaneously marked "active" after e.g. BIP39(BIP86 active) -> SLIP-39.
+            $("#bip32-tab, #bip44-tab, #bip49-tab, #bip84-tab, #bip141-tab, #bip86-tab, #bip352-tab, #nip06-tab").removeClass("active");
+            $("#bip32-tab a, #bip44-tab a, #bip49-tab a, #bip84-tab a, #bip141-tab a, #bip86-tab a, #bip352-tab a, #nip06-tab a").removeClass("active");
+            $("#bip32, #bip44, #bip49, #bip84, #bip141, #bip86, #bip352, #nip06").removeClass("active show");
             // Reactivate BIP44 tab as default
             $("#bip44-tab").addClass("active");
             $("#bip44-tab a").addClass("active");
@@ -1034,6 +1042,13 @@
             // Hide Electrum form content
             $("#electrum-legacy form, #electrum-segwit form").addClass("hidden");
             // Spacer removed
+            // Clear "active" from every BIP tab first - if arriving from SLIP-39 mode (which also
+            // shows the BIP tabs, so a non-default one like BIP86 could be active there too),
+            // nothing else clears it before this point. See the matching comment in the SLIP-39
+            // branch above for the bug this avoids.
+            $("#bip32-tab, #bip44-tab, #bip49-tab, #bip84-tab, #bip141-tab, #bip86-tab, #bip352-tab, #nip06-tab").removeClass("active");
+            $("#bip32-tab a, #bip44-tab a, #bip49-tab a, #bip84-tab a, #bip141-tab a, #bip86-tab a, #bip352-tab a, #nip06-tab a").removeClass("active");
+            $("#bip32, #bip44, #bip49, #bip84, #bip141, #bip86, #bip352, #nip06").removeClass("active show");
             // Reactivate BIP44 tab as default
             $("#bip44-tab").addClass("active");
             $("#bip44-tab a").addClass("active");
