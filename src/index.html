@@ -42,6 +42,7 @@
                             <div class="col-sm-10">
                                 <p class="mnemonic-description bip39-description"><a href="#offline-usage" style="color: inherit; text-decoration: underline;">Don't Trust.. Verify! Always! Use this tool offline.</a> You can enter an existing BIP39 mnemonic, or generate a new random one. Typing your own twelve words will probably not work how you expect, since the words require a particular structure (the last word contains a checksum).</p>
                                 <p class="mnemonic-description electrum-description hidden"><a href="#offline-usage" style="color: inherit; text-decoration: underline;">Don't Trust.. Verify! Always! Use this tool offline.</a> You can enter an existing Electrum seed phrase, or generate a new random one. Electrum does not follow BIP39 for mnemonic seed generation. Instead, it uses its own system with seeds that are versioned (e.g., 'legacy', 'segwit') and include a checksum. Because of these differences, Electrum mnemonics are not interchangeable with BIP39 mnemonics. At this time only english language is supported.</p>
+                                <p class="mnemonic-description slip39-description hidden"><a href="#offline-usage" style="color: inherit; text-decoration: underline;">Don't Trust.. Verify! Always! Use this tool offline.</a> SLIP-39 splits a master secret into a tree of mnemonic shares (groups of members, with a threshold at each level), so recovering it requires collecting a sufficient subset of shares rather than a single seed phrase. Generate a new share set below, or paste enough existing shares (one per line) into the Mnemonic field to recover a previously-generated secret. SLIP-39 uses its own wordlist and checksum scheme, unrelated to BIP39's, and the recovered master secret is used directly as the BIP32 seed.</p>
                                 <p class="mnemonic-spec-link bip39-spec-link">
                                     For more info see the
                                     <a href="https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki" target="_blank">BIP39 spec</a>.
@@ -49,6 +50,10 @@
                                 <p class="mnemonic-spec-link electrum-spec-link hidden">
                                     For more info see the
                                     <a href="https://electrum.readthedocs.io/en/latest/seedphrase.html" target="_blank">Electrum seed phrase documentation</a>.
+                                </p>
+                                <p class="mnemonic-spec-link slip39-spec-link hidden">
+                                    For more info see the
+                                    <a href="https://github.com/satoshilabs/slips/blob/master/slip-0039.md" target="_blank">SLIP-39 spec</a>.
                                 </p>
 
                                 <p>
@@ -75,6 +80,8 @@
                                         <option value="18">18</option>
                                         <option value="21">21</option>
                                         <option value="24" selected>24</option>
+                                        <option value="20" class="slip39-only hidden">20</option>
+                                        <option value="33" class="slip39-only hidden">33</option>
                                     </select>
                                     <span>words, or enter your own below.</span>
                                         <p class="warning form-text hidden">
@@ -144,12 +151,12 @@
                                     <div class="filtered private-data col-sm-9 form-text"></div>
                                     <label class="col-sm-3 form-label">Raw Binary</label>
                                     <div class="binary private-data col-sm-9 form-text"></div>
-                                    <label class="col-sm-3 form-label">Binary Checksum</label>
-                                    <div class="checksum private-data col-sm-9 form-text">&nbsp;</div>
-                                    <label class="col-sm-3 form-label">Word Indexes</label>
-                                    <div class="word-indexes private-data col-sm-9 form-text">&nbsp;</div>
-                                    <label class="col-sm-3 form-label">Mnemonic Length</label>
-                                    <div class="col-sm-9">
+                                    <label class="col-sm-3 form-label bip39-only-entropy-field">Binary Checksum</label>
+                                    <div class="checksum private-data col-sm-9 form-text bip39-only-entropy-field">&nbsp;</div>
+                                    <label class="col-sm-3 form-label bip39-only-entropy-field">Word Indexes</label>
+                                    <div class="word-indexes private-data col-sm-9 form-text bip39-only-entropy-field">&nbsp;</div>
+                                    <label class="col-sm-3 form-label bip39-only-entropy-field">Mnemonic Length</label>
+                                    <div class="col-sm-9 bip39-only-entropy-field">
                                         <select class="mnemonic-length form-select">
                                             <option value="raw" selected>Use Raw Entropy (3 words per 32 bits)</option>
                                             <option value="12">12 <span>Words</span></option>
@@ -164,8 +171,8 @@
                                             </span>
                                         </p>
                                     </div>
-                                    <label class="col-sm-3 form-label">PBKDF2 rounds</label>
-                                    <div class="col-sm-9">
+                                    <label class="col-sm-3 form-label bip39-only-entropy-field">PBKDF2 rounds</label>
+                                    <div class="col-sm-9 bip39-only-entropy-field">
                                         <select class="pbkdf2-rounds form-select" style="width: 60%;">
                                             <option value="2048" selected>2048 <span>(compatibility)</span></option>
                                             <option value="4096">4096 <span>iterations</span></option>
@@ -283,6 +290,7 @@
                                 <select id="mnemonic-type" class="mnemonic-type form-select">
                                     <option value="bip39" selected>BIP39</option>
                                     <option value="electrum">Electrum</option>
+                                    <option value="slip39">SLIP-39</option>
                                 </select>
                             </div>
                         </div>
@@ -302,7 +310,7 @@
                                 <textarea id="phrase" class="phrase private-data form-control" data-show-qr autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
                             </div>
                         </div>
-                        <div class="mb-3 row">
+                        <div class="mb-3 row hidden">
                             <div class="splitMnemonic hidden row">
                                 <label for="phrase" class="col-sm-2 form-label">BIP39 Split Mnemonic</label>
                                 <div class="col-sm-10">
@@ -324,6 +332,67 @@
                             <label for="passphrase" class="col-sm-2 form-label">BIP39 Passphrase (optional)</label>
                             <div class="col-sm-10">
                                 <textarea id="passphrase" class="passphrase private-data form-control" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
+                            </div>
+                        </div>
+                        <div class="slip39-container hidden">
+                            <div class="mb-3 row text-danger">
+                                <label class="col-sm-2 form-label">Warning</label>
+                                <div class="col-sm-10 form-text">
+                                    <span>Each share's group/threshold info is encoded in its mnemonic, so recovery works without remembering your configuration. But group descriptions are NOT encoded &mdash; only shown in the generated text &mdash; and how many shares were made per group is never encoded at all. Write those down separately if you'll need them.</span>
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <label for="slip39-group-threshold" class="col-sm-2 form-label">Groups Required</label>
+                                <div class="col-sm-10">
+                                    <input type="number" id="slip39-group-threshold" class="slip39-group-threshold form-control w-auto" value="2" min="1">
+                                    <p class="form-text">How many of the groups below are required to reconstruct the secret.</p>
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <label class="col-sm-2 form-label">Groups</label>
+                                <div class="col-sm-10">
+                                    <table class="table slip39-groups-table" id="slip39-groups-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Group</th>
+                                                <th>Threshold</th>
+                                                <th>Total Shares</th>
+                                                <th>Description (optional)</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td class="slip39-group-number">1</td>
+                                                <td><input type="number" class="slip39-group-row-threshold form-control" value="1" min="1"></td>
+                                                <td><input type="number" class="slip39-group-row-count form-control" value="1" min="1"></td>
+                                                <td><input type="text" class="slip39-group-row-description form-control" placeholder="e.g. Family"></td>
+                                                <td><button type="button" class="btn btn-sm btn-outline-danger slip39-remove-group">Remove</button></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="slip39-group-number">2</td>
+                                                <td><input type="number" class="slip39-group-row-threshold form-control" value="1" min="1"></td>
+                                                <td><input type="number" class="slip39-group-row-count form-control" value="1" min="1"></td>
+                                                <td><input type="text" class="slip39-group-row-description form-control" placeholder="e.g. Family"></td>
+                                                <td><button type="button" class="btn btn-sm btn-outline-danger slip39-remove-group">Remove</button></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="slip39-group-number">3</td>
+                                                <td><input type="number" class="slip39-group-row-threshold form-control" value="1" min="1"></td>
+                                                <td><input type="number" class="slip39-group-row-count form-control" value="1" min="1"></td>
+                                                <td><input type="text" class="slip39-group-row-description form-control" placeholder="e.g. Family"></td>
+                                                <td><button type="button" class="btn btn-sm btn-outline-danger slip39-remove-group">Remove</button></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <button type="button" class="btn btn-sm btn-secondary slip39-add-group">+ Add Group</button>
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <div class="col-sm-2"></div>
+                                <div class="col-sm-10 form-text">
+                                    <span>To split a specific master secret instead of a random one, check "Show entropy details" above and enter it there (binary, base 6, dice, base 10, hex, or cards all work) - it must be exactly 128 bits for 20-word shares, or 256 bits for 33-word shares, matching the selection below.</span>
+                                </div>
                             </div>
                         </div>
                         <div class="mb-3 row">
@@ -1953,6 +2022,15 @@ sub   brainpoolP512r1 2025-08-16 [E] [expires: 2050-08-10]</code></pre>
                 <td class="privkey private-data"><span data-show-qr></span></td>
             </tr>
         </script>
+        <script type="text/template" id="slip39-group-row-template">
+            <tr>
+                <td class="slip39-group-number"></td>
+                <td><input type="number" class="slip39-group-row-threshold form-control" value="1" min="1"></td>
+                <td><input type="number" class="slip39-group-row-count form-control" value="1" min="1"></td>
+                <td><input type="text" class="slip39-group-row-description form-control" placeholder="e.g. Family"></td>
+                <td><button type="button" class="btn btn-sm btn-outline-danger slip39-remove-group">Remove</button></td>
+            </tr>
+        </script>
         <script src="js/combined-libs.js"></script>
         <script>
             // Make libs.bitcoinjs available as global bitcoinjs for backward compatibility
@@ -1970,6 +2048,7 @@ sub   brainpoolP512r1 2025-08-16 [E] [expires: 2050-08-10]</code></pre>
         <script src="js/segwit-parameters.js"></script>
         <script src="js/electrum-mnemonic.js"></script>
         <script src="js/bip352-js.js"></script>
+        <script src="js/slip39-js.js"></script>
         <script src="js/entropy.js"></script>
         <script src="js/index.js"></script>
     </body>

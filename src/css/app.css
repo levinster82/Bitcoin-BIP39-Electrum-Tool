@@ -249,13 +249,17 @@ hr {
     font-weight: normal !important;
 }
 
-/* Electrum mode styling - gray out BIP39-specific fields */
+/* Electrum/SLIP-39 mode styling - gray out fields not editable in that mode */
 .disabled-for-electrum {
     opacity: 0.5;
     pointer-events: none;
 }
 
-.electrum-generated {
+/* .slip39-generated shares --electrum-bg/--electrum-text on purpose: both classes mean
+   "this field is machine-derived, not directly typed", just named after whichever
+   non-BIP39 mode produced it. */
+.electrum-generated,
+.slip39-generated {
     background-color: var(--electrum-bg);
     color: var(--electrum-text);
 }
@@ -320,8 +324,9 @@ hr {
     border-color: var(--input-border) !important;
 }
 
-/* Dark mode for electrum-generated fields */
-[data-theme="dark"] .electrum-generated {
+/* Dark mode for electrum-generated/slip39-generated fields */
+[data-theme="dark"] .electrum-generated,
+[data-theme="dark"] .slip39-generated {
     background-color: var(--electrum-bg) !important;
     color: var(--electrum-text) !important;
 }

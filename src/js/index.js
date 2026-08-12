@@ -7,6 +7,7 @@
     var bip32ExtendedKey = null;
     var network = bitcoinjs.bitcoin.networks.bitcoin;
     var addressRowTemplate = $("#address-row-template");
+    var slip39GroupRowTemplate = $("#slip39-group-row-template");
 
     var showIndex = true;
     var showAddress = true;
@@ -22,6 +23,25 @@
     var phraseChangeTimeoutEvent = null;
     var seedChangedTimeoutEvent = null;
     var rootKeyChangedTimeoutEvent = null;
+
+    // Set by splitSlip39Secret() right after a fresh split: caches the exact phrase text and
+    // passphrase it was generated with, alongside the master secret already known with certainty
+    // at that point. Whenever calcBip32RootKeyFromSeed()/findPhraseErrors() see the phrase field
+    // (and passphrase) still match this cache, they reuse the cached seed instead of trying to
+    // re-derive it via SLIP39.recoverSecret(). That matters because recoverSecret() strictly
+    // rejects shares from more groups (or more members within a group) than their embedded
+    // thresholds require, but the full backup text we display always includes every group/member
+    // - so "recovering" what we just generated would spuriously fail whenever any group is
+    // over-provisioned (e.g. three 1-of-1 groups with a group threshold of two), and it would do
+    // so on EVERY recompute that reuses the unchanged phrase text - not just the first one right
+    // after clicking GENERATE, but also e.g. switching derivation-path tabs afterward, which
+    // re-runs this same calc pipeline against the same (still over-provisioned) phrase text. The
+    // cache is invalidated (falls through to real recovery) as soon as either the phrase or the
+    // passphrase differs from what was last generated - e.g. the user pastes different shares in,
+    // or edits the passphrase after generating.
+    var slip39LastGeneratedPhrase = null;
+    var slip39LastGeneratedPassphrase = null;
+    var slip39LastGeneratedSeed = null;
 
     var generationProcesses = [];
 
@@ -70,6 +90,16 @@
     DOM.electrumSegwitPath = $("#electrum-segwit-path");
     DOM.electrumLegacyChange = $(".electrum-legacy-change");
     DOM.electrumSegwitChange = $(".electrum-segwit-change");
+    DOM.slip39Container = $(".slip39-container");
+    DOM.slip39GroupThreshold = $(".slip39-group-threshold");
+    DOM.slip39GroupsTableBody = $("#slip39-groups-table tbody");
+    DOM.slip39AddGroup = $(".slip39-add-group");
+    DOM.slip39OnlyStrengthOptions = $(".slip39-only");
+    // Rows/fields within .entropy-container that only make sense for BIP39 (mnemonic-length,
+    // PBKDF2 rounds, checksum, word indexes) - hidden in SLIP-39 mode, since that mode reuses
+    // the same "Show entropy details" checkbox and entropy textarea for custom master secret
+    // entry instead of having its own separate custom-secret field.
+    DOM.bip39OnlyEntropyFields = $(".bip39-only-entropy-field");
     DOM.autoCompute = $(".autoCompute");
     DOM.splitMnemonic = $(".splitMnemonic");
     DOM.showSplitMnemonic = $(".showSplitMnemonic");
@@ -419,6 +449,8 @@
         });
         DOM.showSplitMnemonic.on("change", toggleSplitMnemonic);
         DOM.passphrase.on("input", delayedPhraseChanged);
+        DOM.slip39AddGroup.on("click", addSlip39GroupRow);
+        DOM.slip39GroupsTableBody.on("click", ".slip39-remove-group", removeSlip39GroupRow);
         DOM.generate.on("click", generateClicked);
         DOM.clearAll.on("click", clearAllClicked);
         DOM.more.on("click", showMore);
@@ -550,16 +582,16 @@
     }
 
     function setEntropyVisibility() {
+        // GENERATE stays visible either way (see generateClicked()) - it doubles as a "use fresh
+        // randomness instead" shortcut even while entropy details are shown.
         if (isUsingOwnEntropy()) {
             DOM.entropyContainer.removeClass("hidden");
-            DOM.generateContainer.addClass("hidden");
             DOM.phrase.prop("readonly", true);
             DOM.entropy.focus();
             entropyChanged();
         }
         else {
             DOM.entropyContainer.addClass("hidden");
-            DOM.generateContainer.removeClass("hidden");
             DOM.phrase.prop("readonly", false);
             hidePending();
         }
@@ -613,16 +645,26 @@
             showValidationError(errorText);
             return;
         }
-        // Normalize whitespace before seed generation
-        phrase = phrase.trim().replace(/\s+/g, ' ');
+        var mnemonicType = DOM.mnemonicType.val();
+        if (mnemonicType === "slip39") {
+            // SLIP-39 shares are one per line (plus optional "#" comment headers) - only trim
+            // the outer whitespace, don't collapse the newlines the line-based parsing needs.
+            phrase = phrase.trim();
+        } else {
+            // Normalize whitespace before seed generation
+            phrase = phrase.trim().replace(/\s+/g, ' ');
+        }
         // Calculate and display
         var passphrase = DOM.passphrase.val();
         calcBip32RootKeyFromSeed(phrase, passphrase);
         calcForDerivationPath();
         calcBip85();
-        // Show the word indexes
-        showWordIndexes();
-        writeSplitPhrase(phrase);
+        if (mnemonicType !== "slip39") {
+            // Both of these are BIP39-wordlist-specific and write into panels that are hidden
+            // (and meaningless) in SLIP-39 mode - skip the wasted work on a multi-share phrase.
+            showWordIndexes();
+            writeSplitPhrase(phrase);
+        }
 
         // Update QR code if it's currently displayed
         updateQrIfNeeded();
@@ -724,16 +766,22 @@
         // Get the current phrase to detect changes
         var phrase = DOM.phrase.val();
         // Set the phrase from the entropy
-        setMnemonicFromEntropy();
+        if (DOM.mnemonicType.val() === "slip39") {
+            setSlip39FromEntropy();
+        } else {
+            setMnemonicFromEntropy();
+        }
         // Recalc addresses if the phrase has changed
         var newPhrase = DOM.phrase.val();
         if (newPhrase != phrase) {
             if (newPhrase.length == 0) {
                 clearAddressesList();
                 clearKeys();
-                // Don't hide validation error if it's showing the entropy minimum message
+                // Don't hide validation error if it's showing an entropy-length message (BIP39's
+                // "128 bits minimum" or SLIP-39's "Need exactly N bits") - those are shown via a
+                // setTimeout() so they'd otherwise get wiped by the very next line.
                 var currentFeedback = DOM.feedback.text();
-                if (currentFeedback !== "128 bits minimum entropy required") {
+                if (currentFeedback !== "128 bits minimum entropy required" && currentFeedback.indexOf("Need exactly ") !== 0) {
                     hideValidationError();
                 }
             }
@@ -844,10 +892,52 @@
         }
     }
 
-    // Handle switching between BIP39 and Electrum mnemonic types
+    // SLIP-39 group table: renumber the "Group" column after any add/remove so it always
+    // reflects each row's position (used as the group's display index, e.g. in the "# Group N"
+    // comment headers written into the generated share text).
+    function renumberSlip39Groups() {
+        DOM.slip39GroupsTableBody.find("tr").each(function(i) {
+            $(this).find(".slip39-group-number").text(i + 1);
+        });
+    }
+
+    function addSlip39GroupRow() {
+        var row = $(slip39GroupRowTemplate.html());
+        DOM.slip39GroupsTableBody.append(row);
+        renumberSlip39Groups();
+    }
+
+    function removeSlip39GroupRow(e) {
+        // Keep at least one group - SLIP39.fromArray() requires a non-empty group list.
+        if (DOM.slip39GroupsTableBody.find("tr").length <= 1) {
+            return;
+        }
+        $(e.target).closest("tr").remove();
+        renumberSlip39Groups();
+    }
+
+    // Reads the SLIP-39 group config table into the [[threshold, count, description], ...] shape
+    // SLIP39.fromArray()'s `groups` option expects.
+    function readSlip39GroupsConfig() {
+        var groups = [];
+        DOM.slip39GroupsTableBody.find("tr").each(function() {
+            var row = $(this);
+            var threshold = parseInt(row.find(".slip39-group-row-threshold").val(), 10);
+            var count = parseInt(row.find(".slip39-group-row-count").val(), 10);
+            var description = row.find(".slip39-group-row-description").val().trim();
+            if (description) {
+                groups.push([threshold, count, description]);
+            } else {
+                groups.push([threshold, count]);
+            }
+        });
+        return groups;
+    }
+
+    // Handle switching between BIP39, Electrum, and SLIP-39 mnemonic types
     function mnemonicTypeChanged() {
         var mnemonicType = DOM.mnemonicType.val();
-        
+
         if (mnemonicType === "electrum") {
             DOM.mnemonicLabel.text("Electrum");
             DOM.seedLabel.text("Electrum Seed");
@@ -868,22 +958,66 @@
             DOM.electrumLegacyPath.val("m/");
             $("#electrum-legacy form").removeClass("hidden");
             // Spacer removed
-            
+
             // Gray out/disable BIP39-specific fields (but keep passphrase enabled for Electrum)
             $(".entropy-container, .splitMnemonic").addClass("disabled-for-electrum");
             $(".entropy-container input, .entropy-container select, .phraseSplit").prop("disabled", true);
-            $(".seed, .root-key, .fingerprint").prop("readonly", true).addClass("electrum-generated");
-            
+            $(".seed, .root-key, .fingerprint").prop("readonly", true).addClass("electrum-generated").removeClass("slip39-generated");
+            // SLIP-39-only config panel doesn't apply here
+            DOM.slip39Container.addClass("hidden");
+
             // Restrict mnemonic length to 12 and 24 words for Electrum
             DOM.generatedStrength.find("option").addClass("hidden");
             DOM.generatedStrength.find("option[value='12']").removeClass("hidden");
             DOM.generatedStrength.find("option[value='24']").removeClass("hidden");
             // Default to 24 words for Electrum (as per user request)
             DOM.generatedStrength.val("24");
-            
-            // Show Electrum description, hide BIP39 description
-            $(".bip39-description, .bip39-spec-link").addClass("hidden");
+
+            // Show Electrum description, hide the others
+            $(".bip39-description, .bip39-spec-link, .slip39-description, .slip39-spec-link").addClass("hidden");
             $(".electrum-description, .electrum-spec-link").removeClass("hidden");
+        } else if (mnemonicType === "slip39") {
+            DOM.mnemonicLabel.text("SLIP-39");
+            DOM.seedLabel.text("SLIP-39 Master Secret");
+            DOM.passphraseLabel.text("SLIP-39 Passphrase (optional)");
+            // SLIP-39 recovers a standard BIP32 seed, so the existing BIP tabs derive from it
+            // exactly like they do for BIP39 - show them (and hide Electrum's tabs), same as the
+            // BIP39 branch below. SLIP-39 gets no derivation-path tab of its own.
+            $("#bip32-tab, #bip44-tab, #bip49-tab, #bip84-tab, #bip141-tab, #bip86-tab, #bip352-tab, #nip06-tab").removeClass("hidden");
+            DOM.electrumTabs.addClass("hidden").hide();
+            DOM.electrumTabPanels.removeClass("active");
+            DOM.electrumLegacyTab.removeClass("active");
+            DOM.electrumSegwitTab.removeClass("active");
+            $("#electrum-legacy-tab a, #electrum-segwit-tab a").removeClass("active");
+            $("#electrum-legacy form, #electrum-segwit form").addClass("hidden");
+            // Reactivate BIP44 tab as default
+            $("#bip44-tab").addClass("active");
+            $("#bip44-tab a").addClass("active");
+            $("#bip44").addClass("active show");
+            $("#bip44-tab a").tab("show");
+
+            // BIP39's split-mnemonic panel doesn't apply to SLIP-39 (its own group-config panel
+            // below is the equivalent) - but the entropy panel stays enabled and IS reused: it's
+            // how a custom SLIP-39 master secret gets entered (see setSlip39FromEntropy()), so
+            // unlike Electrum's treatment, don't disable it here. Just hide the sub-fields within
+            // it that are specific to BIP39's mnemonic encoding (mnemonic length, PBKDF2 rounds,
+            // checksum, word indexes) since they don't apply to a SLIP-39 master secret.
+            $(".splitMnemonic").addClass("disabled-for-electrum");
+            $(".phraseSplit").prop("disabled", true);
+            DOM.bip39OnlyEntropyFields.addClass("hidden");
+            $(".seed, .root-key, .fingerprint").prop("readonly", true).addClass("slip39-generated").removeClass("electrum-generated");
+            // Show the SLIP-39 group/threshold config panel
+            DOM.slip39Container.removeClass("hidden");
+
+            // Restrict the strength dropdown to the two SLIP-39 share lengths (20/33 words,
+            // i.e. 128-bit/256-bit secrets - see slip39SecretBits()), defaulting to 33/256-bit.
+            DOM.generatedStrength.find("option").addClass("hidden");
+            DOM.slip39OnlyStrengthOptions.removeClass("hidden");
+            DOM.generatedStrength.val("33");
+
+            // Show SLIP-39 description, hide the others
+            $(".bip39-description, .bip39-spec-link, .electrum-description, .electrum-spec-link").addClass("hidden");
+            $(".slip39-description, .slip39-spec-link").removeClass("hidden");
         } else {
             DOM.mnemonicLabel.text("BIP39");
             DOM.seedLabel.text("BIP39 Seed");
@@ -905,20 +1039,30 @@
             $("#bip44-tab a").addClass("active");
             $("#bip44").addClass("active show");
             $("#bip44-tab a").tab("show");
-            
+
             // Re-enable BIP39 fields
             $(".entropy-container, .passphrase, .splitMnemonic").removeClass("disabled-for-electrum");
             $(".entropy-container input, .entropy-container select, .passphrase, .phraseSplit").prop("disabled", false);
-            $(".seed, .root-key, .fingerprint").prop("readonly", false).removeClass("electrum-generated");
-            
-            // Restore all mnemonic length options for BIP39
+            DOM.bip39OnlyEntropyFields.removeClass("hidden");
+            $(".seed, .root-key, .fingerprint").prop("readonly", false).removeClass("electrum-generated").removeClass("slip39-generated");
+            // SLIP-39-only config panel doesn't apply here
+            DOM.slip39Container.addClass("hidden");
+
+            // Restore all mnemonic length options for BIP39, except the SLIP-39-only sizes
             DOM.generatedStrength.find("option").removeClass("hidden");
-            
-            // Show BIP39 description, hide Electrum description
-            $(".electrum-description, .electrum-spec-link").addClass("hidden");
+            DOM.slip39OnlyStrengthOptions.addClass("hidden");
+            // If a SLIP-39 secret size was left selected, fall back to the BIP39 default -
+            // that hidden option would otherwise stay "selected" with no visible match in the list.
+            var currentStrength = DOM.generatedStrength.val();
+            if (currentStrength === "20" || currentStrength === "33") {
+                DOM.generatedStrength.val("24");
+            }
+
+            // Show BIP39 description, hide the others
+            $(".electrum-description, .electrum-spec-link, .slip39-description, .slip39-spec-link").addClass("hidden");
             $(".bip39-description, .bip39-spec-link").removeClass("hidden");
         }
-        
+
         // Trigger phrase validation/processing if there's existing content
         delayedPhraseChanged();
     }
@@ -1225,9 +1369,8 @@
     }
 
     function generateClicked() {
-        if (isUsingOwnEntropy()) {
-            return;
-        }
+        // GENERATE works even while "Show entropy details" is checked - it's a shortcut back to
+        // fresh randomness, overriding whatever's currently in the entropy field/phrase.
         // Pressing enter on BIP85 index field triggers generate click event.
         // See https://github.com/iancoleman/bip39/issues/634
         // To cancel the incorrect generation process, stop here if generate is
@@ -1274,11 +1417,22 @@
         DOM.entropyMnemonicLength.val("raw");
         DOM.entropyContainer.find("input[name='entropy-type'][value='hexadecimal']").prop('checked', true);
         
-        // Don't change mnemonic type - let user keep their current selection (BIP39 or Electrum)
-        
-        // Reset word strength to default (24)
-        DOM.generatedStrength.val("24");
-        
+        // Don't change mnemonic type - let user keep their current selection (BIP39, Electrum,
+        // or SLIP-39)
+
+        // Reset word strength / secret size to that mode's default
+        DOM.generatedStrength.val(DOM.mnemonicType.val() === "slip39" ? "33" : "24");
+
+        // Reset SLIP-39 group config back to the default: 3 groups of 1-of-1, 2 required
+        DOM.slip39GroupThreshold.val("2");
+        DOM.slip39GroupsTableBody.empty();
+        addSlip39GroupRow();
+        addSlip39GroupRow();
+        addSlip39GroupRow();
+        slip39LastGeneratedPhrase = null;
+        slip39LastGeneratedPassphrase = null;
+        slip39LastGeneratedSeed = null;
+
         // Reset BIP derivation values to defaults
         DOM.bip44account.val("0");
         DOM.bip44change.val("0");
@@ -1451,6 +1605,100 @@
 
     // Private methods
 
+    // The strength dropdown's SLIP-39 options are share word counts (20/33, matching the sibling
+    // BIP39 options' plain-word-count convention), not bit counts - this converts to the actual
+    // secret size in bits. Only two SLIP-39 share lengths exist, so a direct mapping is exact.
+    function slip39SecretBits() {
+        return DOM.generatedStrength.val() === "33" ? 256 : 128;
+    }
+
+    // Splits secretBytes into SLIP-39 shares per the current group config, writes the resulting
+    // share text into the phrase field, and caches phrase/passphrase/seed (see
+    // slip39LastGeneratedPhrase's declaration) so the calc pipeline - now, and on every later
+    // recompute that reuses this same unchanged text - uses this known-correct secret directly
+    // instead of trying (and spuriously failing) to re-derive it via recovery. Shared between
+    // generateRandomPhrase()'s random-secret path and setSlip39FromEntropy()'s custom-secret
+    // path. Returns the generated text, or null if SLIP39.fromArray() rejected the current group
+    // config (after showing a validation error).
+    function splitSlip39Secret(secretBytes) {
+        var groupThreshold = parseInt(DOM.slip39GroupThreshold.val(), 10);
+        var groupsConfig = readSlip39GroupsConfig();
+        var passphrase = DOM.passphrase.val();
+
+        var slip;
+        try {
+            slip = SLIP39.fromArray(secretBytes, {
+                passphrase: passphrase || "",
+                threshold: groupThreshold,
+                groups: groupsConfig
+            });
+        } catch (e) {
+            showValidationError("SLIP-39 error: " + e.message);
+            return null;
+        }
+
+        // Collect every member's share mnemonic across every group, with a comment header per
+        // group so the generated text stays legible - lines starting with "#" (and blank lines)
+        // are ignored again on the way back in, by calcBip32RootKeyFromSeed().
+        var lines = [];
+        for (var g = 0; g < groupsConfig.length; g++) {
+            var threshold = groupsConfig[g][0];
+            var count = groupsConfig[g][1];
+            var description = groupsConfig[g][2];
+            lines.push("# Group " + (g + 1) + (description ? " (" + description + ")" : "") + ": " + threshold + "-of-" + count);
+            for (var m = 0; m < count; m++) {
+                lines.push(slip.fromPath("r/" + g + "/" + m).mnemonics[0]);
+            }
+        }
+        var words = lines.join("\n");
+        DOM.phrase.val(words);
+
+        seed = uint8ArrayToHex(secretBytes);
+        slip39LastGeneratedPhrase = words;
+        slip39LastGeneratedPassphrase = passphrase;
+        slip39LastGeneratedSeed = seed;
+        return words;
+    }
+
+    // SLIP-39 counterpart to setMnemonicFromEntropy(): reads the same "Show entropy details"
+    // textarea/type-radios, but instead of encoding the bits into a BIP39 mnemonic, requires them
+    // to be exactly the selected secret size (128 or 256 bits - no quantizing/hashing/truncating,
+    // unlike BIP39's flexible handling) and splits them via splitSlip39Secret(). Called from
+    // entropyChanged() when in SLIP-39 mode.
+    function setSlip39FromEntropy() {
+        clearEntropyFeedback();
+        var entropyStr = DOM.entropy.val();
+        var entropy;
+        if (entropyTypeAutoDetect) {
+            entropy = Entropy.fromString(entropyStr);
+        } else {
+            let base = DOM.entropyTypeInputs.filter(":checked").val();
+            entropy = Entropy.fromString(entropyStr, base);
+        }
+        if (entropy.binaryStr.length == 0) {
+            return;
+        }
+
+        showEntropyFeedback(entropy);
+
+        var requiredBits = slip39SecretBits();
+        if (entropy.binaryStr.length !== requiredBits) {
+            DOM.phrase.val("");
+            clearAddressesList();
+            clearKeys();
+            setTimeout(function() {
+                showValidationError("Need exactly " + requiredBits + " bits of entropy for the selected secret size, got " + entropy.binaryStr.length);
+            }, 10);
+            return;
+        }
+
+        var secretBytes = [];
+        for (var i = 0; i < entropy.binaryStr.length / 8; i++) {
+            secretBytes.push(parseInt(entropy.binaryStr.substring(i * 8, i * 8 + 8), 2));
+        }
+        splitSlip39Secret(secretBytes);
+    }
+
     function generateRandomPhrase() {
         if (!hasStrongRandom()) {
             var errorText = "This browser does not support strong randomness";
@@ -1458,10 +1706,10 @@
             return;
         }
         
-        // Check which mnemonic type is selected (BIP39 or Electrum)
+        // Check which mnemonic type is selected (BIP39, Electrum, or SLIP-39)
         var mnemonicType = DOM.mnemonicType.val();
         var words;
-        
+
         if (mnemonicType === "electrum") {
             // Generate Electrum mnemonic with wallet type based on active BIP tab
             var prefix = getElectrumPrefixFromTab();
@@ -1479,6 +1727,23 @@
                 showValidationError("Error generating Electrum mnemonic: " + e.message);
                 return;
             }
+        } else if (mnemonicType === "slip39") {
+            // Custom master secrets go through the "Show entropy details" checkbox instead (see
+            // setSlip39FromEntropy()) - GENERATE always produces a fresh random secret here,
+            // even while that checkbox is checked (it's a "use randomness instead" shortcut).
+            var secretBits = slip39SecretBits();
+            var buffer = new Uint8Array(secretBits / 8);
+            var secretBytes = Array.from(crypto.getRandomValues(buffer));
+
+            words = splitSlip39Secret(secretBytes);
+            if (!words) {
+                return;
+            }
+            // Show the entropy actually used - the SLIP-39 master secret IS this entropy, with
+            // no BIP39-style encoding step in between (see splitSlip39Secret()).
+            DOM.entropy.val(uint8ArrayToHex(secretBytes));
+            DOM.entropyMnemonicLength.val("raw");
+            return words;
         } else {
             // Generate BIP39 mnemonic using existing logic
             // get the amount of entropy to use
@@ -1499,10 +1764,22 @@
         }
     }
 
+    // Splits a SLIP-39 phrase field into share-mnemonic lines, dropping blank lines and "#"
+    // comment lines (the group-header comments generateRandomPhrase() writes). Shared between
+    // calcBip32RootKeyFromSeed() and findPhraseErrors() so pasting shares back in and generating
+    // them both parse the field the same way.
+    function slip39ShareLines(phrase) {
+        return phrase.split(/\r?\n/).map(function(line) {
+            return line.trim();
+        }).filter(function(line) {
+            return line.length > 0 && line.charAt(0) !== "#";
+        });
+    }
+
     function calcBip32RootKeyFromSeed(phrase, passphrase) {
         // Check which mnemonic type is selected for proper seed calculation
         var mnemonicType = DOM.mnemonicType.val();
-        
+
         if (mnemonicType === "electrum") {
             // Use Electrum seed generation with wallet type based on active BIP tab
             var prefix = getElectrumPrefixFromTab();
@@ -1512,22 +1789,44 @@
                     throw new Error("Invalid Electrum mnemonic for selected derivation path");
                 }
                 // Generate seed using Electrum method (different from BIP39)
-                var seedBuffer = electrumMnemonic.mnemonicToSeedSync(phrase, { 
+                var seedBuffer = electrumMnemonic.mnemonicToSeedSync(phrase, {
                     passphrase: passphrase || "",
-                    prefix: prefix 
+                    prefix: prefix
                 });
                 seed = seedBuffer.toString('hex');
             } catch (e) {
                 showValidationError("Electrum mnemonic error: " + e.message);
                 return;
             }
+        } else if (mnemonicType === "slip39") {
+            if (phrase === slip39LastGeneratedPhrase && (passphrase || "") === slip39LastGeneratedPassphrase) {
+                // The phrase field still holds exactly what splitSlip39Secret() last generated -
+                // reuse the master secret we already know instead of trying (and spuriously
+                // failing) to re-derive it via recovery. See slip39LastGeneratedPhrase's
+                // declaration; this covers every recompute that reuses the unchanged text, not
+                // just the one right after clicking GENERATE (e.g. switching derivation-path
+                // tabs also re-runs this function against the same phrase).
+                seed = slip39LastGeneratedSeed;
+            } else {
+                // Recover the master secret from whatever share mnemonics are currently in the
+                // phrase field, then use it directly as the BIP32 seed - per the SLIP-39 spec,
+                // the recovered master secret IS the seed, with no BIP39-style PBKDF2 stretching.
+                try {
+                    var shareLines = slip39ShareLines(phrase);
+                    var masterSecret = SLIP39.recoverSecret(shareLines, passphrase || "");
+                    seed = uint8ArrayToHex(masterSecret);
+                } catch (e) {
+                    showValidationError("SLIP-39 error: " + e.message);
+                    return;
+                }
+            }
         } else {
             // Use BIP39 seed generation with official bitcoinjs/bip39 library
             var seedBuffer = bip39.mnemonicToSeedSync(phrase, passphrase || "");
             seed = seedBuffer.toString('hex');
         }
-        
-        // Create BIP32 root key from the seed (same for both types)
+
+        // Create BIP32 root key from the seed (same for all three types)
         bip32RootKey = bitcoinjs.bip32.fromSeed(bitcoinjs.buffer.Buffer.from(seed, 'hex'), network);
     }
 
@@ -1645,6 +1944,34 @@
                 }
             } catch (e) {
                 return "Electrum validation error: " + e.message;
+            }
+            return false;
+        } else if (mnemonicType === "slip39") {
+            if (phrase === slip39LastGeneratedPhrase && (DOM.passphrase.val() || "") === slip39LastGeneratedPassphrase) {
+                // The phrase field still holds exactly what splitSlip39Secret() last generated -
+                // see slip39LastGeneratedPhrase's declaration for why recoverSecret() would
+                // otherwise spuriously reject it.
+                return false;
+            }
+            // Validate SLIP-39 shares: blank check, then each non-comment line individually
+            // (its own RS1024 checksum), then attempt a full recovery to catch insufficient or
+            // mismatched share sets (which SLIP39.recoverSecret() rejects on its own).
+            if (!phrase || phrase.trim().length == 0) {
+                return "Blank mnemonic";
+            }
+            var shareLines = slip39ShareLines(phrase);
+            if (shareLines.length == 0) {
+                return "Blank mnemonic";
+            }
+            for (var i = 0; i < shareLines.length; i++) {
+                if (!SLIP39.validateMnemonic(shareLines[i])) {
+                    return "Invalid SLIP-39 share: " + shareLines[i];
+                }
+            }
+            try {
+                SLIP39.recoverSecret(shareLines, DOM.passphrase.val() || "");
+            } catch (e) {
+                return "SLIP-39 error: " + e.message;
             }
             return false;
         } else {
@@ -3691,6 +4018,7 @@
         }
         return s;
     }
+
 
     function showWordIndexes() {
         var phrase = DOM.phrase.val();
