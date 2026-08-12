@@ -175,8 +175,11 @@ the actual bundled output rather than the submodule's own Node-side tests.
       a third `#mnemonic-type` option alongside BIP39/Electrum, reusing the
       existing BIP44/49/84/86/352/NIP06 tabs (no derivation-path tab of its
       own) and the existing "Show entropy details" panel for custom master
-      secret entry. See `CLAUDE.md`'s "SLIP-39 Library" section.
+      secret entry. See `CLAUDE.md`'s "SLIP-39 Architecture" section.
+- [x] Add browser spec files under `tests/spec/`: `tests-slip39.js` (UI
+      behavior) and `slip39vectors-fast.js` (all 45 official vectors from
+      trezor/python-shamir-mnemonic against the real UI). Also
+      `tests/vectors/slip39/validate-vectors.js` for a fast Node-side check
+      of the same 45 vectors against the shipped bundle, no browser needed.
 
-## Not yet done
-
-- [ ] Add a browser spec file under `tests/spec/` covering the UI.
+Nothing outstanding for this branch as of the last update to this file.
