@@ -5,9 +5,10 @@ scoping the `slip39-js` submodule integration, the fix chosen for it, and how it
 was carried through. The submodule is vendored at `libs/slip39-js/` (pinned to
 `v0.4.0-levinster82.2`, which contains the fix), `libs/slip39-bundle/` bundles it
 to `src/js/slip39-js.js`, and the bundle has been round-trip tested (split →
-validate → recover, single- and multi-group). UI integration in
-`src/index.html` / `src/js/index.js` is still outstanding — see the checklist
-at the bottom.
+validate → recover, single- and multi-group). UI integration is also done — see
+the checklist at the bottom, and `CLAUDE.md`'s "SLIP-39 Library" section for
+the architecture. This file stays scoped to the `crypto.timingSafeEqual` gap
+specifically, not a general changelog for the feature.
 
 This file is kept as the record of *why* the fix looks the way it does, since
 that reasoning doesn't otherwise show up in either repo's diff.
@@ -170,9 +171,12 @@ the actual bundled output rather than the submodule's own Node-side tests.
       entry `libs/slip39-js/index.js`, output `src/js/slip39-js.js`).
 - [x] Round-trip test the built bundle.
 - [x] Document the new submodule in `CLAUDE.md` alongside the BIP-352 section.
+- [x] Wire up `src/index.html` / `src/js/index.js` UI integration — SLIP-39 is
+      a third `#mnemonic-type` option alongside BIP39/Electrum, reusing the
+      existing BIP44/49/84/86/352/NIP06 tabs (no derivation-path tab of its
+      own) and the existing "Show entropy details" panel for custom master
+      secret entry. See `CLAUDE.md`'s "SLIP-39 Library" section.
 
 ## Not yet done
 
-- [ ] Wire up `src/index.html` / `src/js/index.js` UI integration (a SLIP-39
-      tab or equivalent — out of scope for this note).
-- [ ] Add a browser spec file under `tests/spec/` once there's a UI to test.
+- [ ] Add a browser spec file under `tests/spec/` covering the UI.

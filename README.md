@@ -4,6 +4,19 @@ A Bitcoin-focused fork of [iancoleman/bip39](https://github.com/iancoleman/bip39
 
 ## New Features (This Fork)
 
+### SLIP-39 Shamir's Secret-Sharing 🔐
+- **Real Cryptographic Secret Sharing**: Splits a master secret into a group/threshold tree of
+  mnemonic shares using actual Shamir's Secret-Sharing, not word redistribution
+- **Group/Threshold Configuration**: Configurable group threshold plus a dynamic table of groups,
+  each with its own threshold and share count — defaults to 2-of-3 groups, each 1-of-1
+- **Shared Derivation Tabs**: No separate derivation-path tab — the recovered/generated master
+  secret feeds the same BIP44/49/84/86/352/NIP06 tabs as BIP39 mode
+- **Custom Master Secret Entry**: Reuses the existing "Show entropy details" panel (binary, base 6,
+  dice, base 10, hex, or cards) to split a specific secret instead of a random one
+- **20-word (128-bit) or 33-word (256-bit) shares**, matching standard SLIP-39 share lengths
+- **Self-Describing Shares**: Each share mnemonic encodes its own group/threshold info, so recovery
+  doesn't depend on remembering your configuration
+
 ### BIP-352 Silent Payments 🔒
 - **Reusable Payment Addresses**: Privacy-preserving addresses that can be published publicly
 - **Dual-Key Architecture**: Separate scan and spend keys for enhanced privacy
@@ -75,6 +88,17 @@ A Bitcoin-focused fork of [iancoleman/bip39](https://github.com/iancoleman/bip39
 3. Click Generate or enter mnemonic
 4. Toggle "Change addresses" as needed
 
+### SLIP-39 Shamir's Secret-Sharing
+1. Select "SLIP-39" mnemonic type
+2. Set "Groups Required" and configure the groups table (threshold/shares/description per group),
+   or leave the 2-of-3 default
+3. Click Generate for a random master secret, or check "Show entropy details" to split a specific
+   one (binary, base 6, dice, base 10, hex, or cards)
+4. Select derivation path (BIP44, BIP49, BIP84, BIP86, BIP352, etc.) - same tabs as BIP39
+5. View addresses and private keys
+6. To recover later, paste back in *exactly* the shares needed to meet your thresholds (not every
+   share you have, if you have more than needed - see the group-config panel's note)
+
 ## Standalone Versions
 
 Download from releases:
@@ -86,7 +110,7 @@ Build from source:
 git clone https://github.com/levinster82/Bitcoin-BIP39-Electrum-Tool.git
 cd Bitcoin-BIP39-Electrum-Tool
 
-# Initialize git submodules (includes BIP-352 library)
+# Initialize git submodules (includes BIP-352 and SLIP-39 libraries)
 git submodule update --init --recursive
 
 # Build combined libraries
@@ -103,6 +127,12 @@ cd ../..
 
 # Build BIP-352 Silent Payments library (bundles the libs/bip352-js submodule)
 cd libs/bip352-bundle
+npm install
+npm run build
+cd ../..
+
+# Build SLIP-39 library (bundles the libs/slip39-js submodule)
+cd libs/slip39-bundle
 npm install
 npm run build
 cd ../..
