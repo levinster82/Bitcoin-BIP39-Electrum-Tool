@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "jasmine": "^3.9.0",
-    "selenium-webdriver": "^4.0.0",
+    "selenium-webdriver": "^4.47.0",
     "jimp": "^0.22.0",
     "qrcode-reader": "^1.0.4"
   },
