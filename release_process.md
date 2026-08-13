@@ -33,7 +33,26 @@ This aborts any push whose submodule commit is not present on its own remote.
 Do not add a `branch =` key to `.gitmodules` for either submodule — it would let
 `git submodule update --remote` drag the pointer off the release tag.
 
-## 2. Test
+## 2. `libs/electrum-mnemonic`, if the upstream package changed
+
+Unlike `bip352-js`/`slip39-js`, this one is **not** a submodule or a fork - `libs/electrum-mnemonic/`
+is a thin browserify harness around the third-party
+[`bitcoinjs/electrum-mnemonic`](https://github.com/bitcoinjs/electrum-mnemonic) npm package. No
+tag-pin dance needed; check for a new release and bump it like a normal dependency:
+
+```bash
+cd libs/electrum-mnemonic
+npm view electrum-mnemonic version   # compare against the installed version
+npm install electrum-mnemonic@latest --save
+npm run build                        # writes src/js/electrum-mnemonic.js
+```
+
+Commit the updated `package.json`/`package-lock.json` and the regenerated
+`src/js/electrum-mnemonic.js` together. As of this writing the upstream package has had no
+commits since 2020 and is effectively dormant, so this step is usually a no-op - worth a quick
+`npm view` check regardless, since a release can happen at any time.
+
+## 3. Test
 
 1. Submodule unit tests (no browser needed)
    `cd libs/bip352-js && npm install && npm test`
@@ -53,13 +72,13 @@ which does not match the `**/*[sS]pec.js` pattern in
 `tests/spec/support/jasmine.json`. The `npm test` script in `tests/package.json`
 points at a non-existent `spec/tests.js` and is inherited from upstream.
 
-## 3. Version and notes
+## 4. Version and notes
 
 1. Set the version in the release link in the `src/index.html` page header
 1. Update the version and tagline in the Standalone Versions section of `README.md`
 1. Add the new `# vX.Y.Z` section at the top of `changelog.md`
 
-## 4. Build
+## 5. Build
 
 Rebuild only the libraries that actually changed. Webpack re-emits identical
 bytes when its inputs are unchanged, so a no-op rebuild leaves the tree clean.
@@ -81,14 +100,14 @@ Each library build writes into `src/js/`; the combined build also regenerates
 1. Sign the checksum
    `gpg --armor --detach-sign bip39-electrum-standalone.html.sha256sum`
 
-## 5. Commit, tag, push
+## 6. Commit, tag, push
 
 1. Commit these changes with message `Release vX.Y.Z`
 1. Tag the commit `git tag vX.Y.Z`
 1. Push the commits `git push`
 1. Push the new tag `git push origin vX.Y.Z`
 
-## 6. Publish on GitHub
+## 7. Publish on GitHub
 
 Create a release from the tagged commit:
 
@@ -97,7 +116,7 @@ Create a release from the tagged commit:
 1. attach the `bip39-electrum-standalone.html.sha256sum` file
 1. attach the `bip39-electrum-standalone.html.sha256sum.asc` file
 
-## 7. Verify the published artifacts
+## 8. Verify the published artifacts
 
 1. Download the html and the checksum from the release, and confirm the hash
    `sha256sum -c bip39-electrum-standalone.html.sha256sum`
