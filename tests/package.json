@@ -12,10 +12,10 @@
     "url": "git://github.com/iancoleman/bip39.git"
   },
   "dependencies": {
-    "jasmine": "^3.9.0",
-    "selenium-webdriver": "^4.47.0",
-    "jimp": "^0.22.0",
-    "qrcode-reader": "^1.0.4"
+    "jasmine": "^6.3.0",
+    "jimp": "^1.6.1",
+    "qrcode-reader": "^1.0.4",
+    "selenium-webdriver": "^4.47.0"
   },
   "license": "MIT"
 }

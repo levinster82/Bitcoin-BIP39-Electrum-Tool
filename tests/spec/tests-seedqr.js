@@ -36,7 +36,8 @@ var fs = require('fs');
 var path = require('path');
 
 // QR code reading dependencies
-var Jimp = require('jimp');
+// jimp v1 exports Jimp as a named export, not the module default (unlike v0.x)
+var Jimp = require('jimp').Jimp;
 var jsQR = require('jsqr');
 
 var newDriver = null;
