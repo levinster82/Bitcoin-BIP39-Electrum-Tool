@@ -167,11 +167,11 @@ for (let i = 0; i < vectors.test_vectors.length; i++) {
 
     test(
         'Scan private key matches',
-        scanKey.privateKey.toString('hex') === vector.scan_key.private_key_hex
+        Buffer.from(scanKey.privateKey).toString('hex') === vector.scan_key.private_key_hex
     );
     test(
         'Scan public key matches',
-        scanKey.publicKey.toString('hex') === vector.scan_key.public_key_hex
+        Buffer.from(scanKey.publicKey).toString('hex') === vector.scan_key.public_key_hex
     );
     test(
         'Scan xprv matches',
@@ -184,11 +184,11 @@ for (let i = 0; i < vectors.test_vectors.length; i++) {
 
     test(
         'Spend private key matches',
-        spendKey.privateKey.toString('hex') === vector.spend_key.private_key_hex
+        Buffer.from(spendKey.privateKey).toString('hex') === vector.spend_key.private_key_hex
     );
     test(
         'Spend public key matches',
-        spendKey.publicKey.toString('hex') === vector.spend_key.public_key_hex
+        Buffer.from(spendKey.publicKey).toString('hex') === vector.spend_key.public_key_hex
     );
     test(
         'Spend xprv matches',
