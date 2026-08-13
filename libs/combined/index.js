@@ -1,5 +1,8 @@
 /* bech32 */
-const bech32Module = require('bech32')
+// v2 namespaces its exports ({ bech32, bech32m }) instead of exposing
+// toWords/encode/decode at the top level like v1 did - keep exposing the
+// same shape app code already expects (libs.bech32.toWords/.encode).
+const bech32Module = require('bech32').bech32
 
 /* biginteger */
 const BigIntegerModule = require('javascript-biginteger')

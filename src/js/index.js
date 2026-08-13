@@ -1247,7 +1247,7 @@
             return {
                 address: address,
                 privateKey: key.toWIF(),
-                publicKey: key.publicKey.toString('hex'),
+                publicKey: bitcoinjs.buffer.Buffer.from(key.publicKey).toString('hex'),
                 path: derivationPath,
                 key: key
             };
@@ -2340,14 +2340,14 @@
             );
 
             // Display scan key
-            DOM.bip352scanKeyPriv.val(scanKey.privateKey.toString('hex'));
-            DOM.bip352scanKeyPub.val(scanKey.publicKey.toString('hex'));
+            DOM.bip352scanKeyPriv.val(bitcoinjs.buffer.Buffer.from(scanKey.privateKey).toString('hex'));
+            DOM.bip352scanKeyPub.val(bitcoinjs.buffer.Buffer.from(scanKey.publicKey).toString('hex'));
             DOM.bip352scanXprv.val(scanKey.toBase58());
             DOM.bip352scanXpub.val(scanKey.neutered().toBase58());
 
             // Display spend key
-            DOM.bip352spendKeyPriv.val(spendKey.privateKey.toString('hex'));
-            DOM.bip352spendKeyPub.val(spendKey.publicKey.toString('hex'));
+            DOM.bip352spendKeyPriv.val(bitcoinjs.buffer.Buffer.from(spendKey.privateKey).toString('hex'));
+            DOM.bip352spendKeyPub.val(bitcoinjs.buffer.Buffer.from(spendKey.publicKey).toString('hex'));
             DOM.bip352spendXprv.val(spendKey.toBase58());
             DOM.bip352spendXpub.val(spendKey.neutered().toBase58());
 
@@ -2432,8 +2432,8 @@
         var nostrKey = calcBip32ExtendedKey(path);
         
         // Get the raw private and public keys (32 bytes each)
-        var privateKeyHex = nostrKey.privateKey.toString('hex');
-        var publicKeyHex = nostrKey.publicKey.slice(1).toString('hex'); // Remove the 0x02/0x03 prefix for Nostr
+        var privateKeyHex = bitcoinjs.buffer.Buffer.from(nostrKey.privateKey).toString('hex');
+        var publicKeyHex = bitcoinjs.buffer.Buffer.from(nostrKey.publicKey).slice(1).toString('hex'); // Remove the 0x02/0x03 prefix for Nostr
         
         // Display the hex keys
         DOM.nostrPrivateKey.val(privateKeyHex);
@@ -2463,7 +2463,7 @@
         var rootKey = bip32RootKey.toBase58();
         DOM.rootKey.val(rootKey);
         // Display the fingerprint
-        var fingerprint = bip32RootKey.fingerprint.toString('hex');
+        var fingerprint = bitcoinjs.buffer.Buffer.from(bip32RootKey.fingerprint).toString('hex');
         DOM.fingerprint.val(fingerprint);
         var xprvkeyB58 = "NA";
         if (!bip32ExtendedKey.isNeutered()) {
@@ -2639,8 +2639,8 @@
                         self.index = index;
                         self.path = keyPath;
                         self.address = silentPaymentAddress; // Silent Payment address (sp1q...)
-                        self.pubkey = keyData.publicKey.toString('hex');
-                        self.privkey = keyData.privateKey.toString('hex');
+                        self.pubkey = bitcoinjs.buffer.Buffer.from(keyData.publicKey).toString('hex');
+                        self.privkey = bitcoinjs.buffer.Buffer.from(keyData.privateKey).toString('hex');
 
                         var indexText = keyPath + " (" + keyType + ")";
                         addAddressToList(indexText, silentPaymentAddress, self.pubkey, self.privkey);
