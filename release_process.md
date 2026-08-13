@@ -3,18 +3,19 @@
 Once all code changes for this version have been committed, a release can be
 created with the following steps.
 
-## 1. Submodule, if `libs/bip352-js` changed
+## 1. Submodules, if `libs/bip352-js` or `libs/slip39-js` changed
 
-`libs/bip352-js` is a git submodule pinned to a release tag on its `master`
-branch. Skip this section if the library was untouched this cycle.
+Both `libs/bip352-js` and `libs/slip39-js` are git submodules pinned to a release
+tag on their own `master` branch. Skip this section entirely if neither library
+was touched this cycle; otherwise repeat these steps per library that changed.
 
-1. Commit the change in the bip352-js repo, then tag it there
+1. Commit the change in the library's own repo, then tag it there
    `git tag -a vX.Y.Z -m "vX.Y.Z — summary"`
 1. Push the commit and the tag `git push origin master && git push origin vX.Y.Z`
 1. Point the submodule at the new tag
-   `git -C libs/bip352-js fetch --tags && git -C libs/bip352-js checkout vX.Y.Z`
-1. Rebuild the bundle (see Build below) and commit the new pointer together with
-   the regenerated `src/js/bip352-js.js`
+   `git -C libs/<name>-js fetch --tags && git -C libs/<name>-js checkout vX.Y.Z`
+1. Rebuild the matching bundle (see Build below) and commit the new pointer
+   together with the regenerated `src/js/<name>-js.js`
 
 A detached HEAD in the submodule is expected: a gitlink always records a commit,
 never a tag or branch name.
@@ -28,19 +29,23 @@ it once, globally for this repo:
 git config push.recurseSubmodules check
 ```
 
-This aborts any push whose submodule commit is not present on the submodule's
-remote. Do not add a `branch =` key to `.gitmodules` — it would let
+This aborts any push whose submodule commit is not present on its own remote.
+Do not add a `branch =` key to `.gitmodules` for either submodule — it would let
 `git submodule update --remote` drag the pointer off the release tag.
 
 ## 2. Test
 
 1. Submodule unit tests (no browser needed)
    `cd libs/bip352-js && npm install && npm test`
+   `cd libs/slip39-js && npm install && npm test`
+1. Vector validation against the shipped bundles (no browser needed)
+   `cd tests/vectors/bip352 && node validate-vectors.js`
+   `node tests/vectors/slip39/validate-vectors.js` (run from the repo root)
 1. Serve the app for the browser suite `cd src && python -m http.server`
 1. Run each spec file explicitly, from `tests/`:
    `jasmine spec/tests-part1.js` — repeat for `tests-part2.js` through
    `tests-part5.js`, `tests-nip06.js`, `tests-bip352.js`, `tests-seedqr.js`,
-   and `trezorvectors-fast.js`
+   `tests-slip39.js`, `trezorvectors-fast.js`, and `slip39vectors-fast.js`
 1. Ensure all tests pass
 
 A bare `jasmine` run discovers nothing: the spec files are named `tests-*.js`,
@@ -65,6 +70,8 @@ bytes when its inputs are unchanged, so a no-op rebuild leaves the tree clean.
    `cd libs/electrum-mnemonic && npm install && npm run build`
 1. BIP-352 Silent Payments bundle
    `cd libs/bip352-bundle && npm install && npm run build`
+1. SLIP-39 Shamir's Secret-Sharing bundle
+   `cd libs/slip39-bundle && npm install && npm run build`
 1. Generate the standalone `python compile.py`
 
 Each library build writes into `src/js/`; the combined build also regenerates
