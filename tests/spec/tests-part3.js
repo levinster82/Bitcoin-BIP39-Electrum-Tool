@@ -358,7 +358,7 @@ describe('BIP39 Tool Tests', function() {
     });
 
 // Shows details about the entered entropy (hexadecimal)
-it('Shows details about the entered entropy', async function() {
+it('Shows details for 128-bit hexadecimal entropy (12 words)', async function() {
     const result = await new Promise((resolve) => {
         testEntropyFeedback(resolve,
             {
@@ -374,7 +374,7 @@ it('Shows details about the entered entropy', async function() {
     });
 });
 
-it("Shows details about the entered entropy", async function() {
+it("Shows details for 160-bit hexadecimal entropy (15 words)", async function() {
     const result = await new Promise((resolve) => {
         testEntropyFeedback(resolve,
             {
@@ -390,7 +390,7 @@ it("Shows details about the entered entropy", async function() {
     });
 });
 
-it("Shows details about the entered entropy", async function() {
+it("Shows details for 192-bit hexadecimal entropy (18 words)", async function() {
     const result = await new Promise((resolve) => {
         testEntropyFeedback(resolve,
             {
@@ -406,7 +406,7 @@ it("Shows details about the entered entropy", async function() {
     });
 });
 
-it("Shows details about the entered entropy", async function() {
+it("Shows details for a single card", async function() {
     const result = await new Promise((resolve) => {
         testEntropyFeedback(resolve,
             {
@@ -421,7 +421,7 @@ it("Shows details about the entered entropy", async function() {
     });
 });
 
-it("Shows details about the entered entropy", async function() {
+it("Shows details for a full card deck", async function() {
     const result = await new Promise((resolve) => {
         testEntropyFeedback(resolve,
             {
@@ -436,7 +436,7 @@ it("Shows details about the entered entropy", async function() {
     });
 });
 
-it("Shows details about the entered entropy", async function() {
+it("Shows details for a full deck with 1 duplicate card", async function() {
     const result = await new Promise((resolve) => {
         testEntropyFeedback(resolve,
             {
@@ -451,7 +451,7 @@ it("Shows details about the entered entropy", async function() {
     });
 });
 
-it("Shows details about the entered entropy", async function() {
+it("Shows details for a full deck with 2 duplicate cards", async function() {
     const result = await new Promise((resolve) => {
         testEntropyFeedback(resolve,
             {
@@ -466,7 +466,7 @@ it("Shows details about the entered entropy", async function() {
     });
 });
 
-it("Shows details about the entered entropy", async function() {
+it("Shows details for a full deck with 4 duplicate cards", async function() {
     const result = await new Promise((resolve) => {
         testEntropyFeedback(resolve,
             {
@@ -481,7 +481,7 @@ it("Shows details about the entered entropy", async function() {
     });
 });
 
-it("Shows details about the entered entropy", async function() {
+it("Shows details for two full card decks (long entropy hashed to 256 bits)", async function() {
     const result = await new Promise((resolve) => {
         testEntropyFeedback(resolve,
             // Fixed: Long entropy is hashed to 256 bits (24 words max)
@@ -497,7 +497,7 @@ it("Shows details about the entered entropy", async function() {
     });
 });
 
-it("Shows details about the entered entropy", async function() {
+it("Detects duplicate cards case-insensitively (uppercase repeat)", async function() {
     const result = await new Promise((resolve) => {
         testEntropyFeedback(resolve,
             // Case insensitivity to duplicate cards
@@ -513,7 +513,7 @@ it("Shows details about the entered entropy", async function() {
     });
 });
 
-it("Shows details about the entered entropy", async function() {
+it("Detects duplicate cards case-insensitively (lowercase repeat)", async function() {
     const result = await new Promise((resolve) => {
         testEntropyFeedback(resolve,
             {
@@ -528,7 +528,7 @@ it("Shows details about the entered entropy", async function() {
     });
 });
 
-it("Shows details about the entered entropy", async function() {
+it("Shows details for a full deck with 1 missing card", async function() {
     const result = await new Promise((resolve) => {
         testEntropyFeedback(resolve,
             // Missing cards are detected
@@ -544,7 +544,7 @@ it("Shows details about the entered entropy", async function() {
     });
 });
 
-it("Shows details about the entered entropy", async function() {
+it("Shows details for a full deck with 2 missing cards", async function() {
     const result = await new Promise((resolve) => {
         testEntropyFeedback(resolve,
             {
@@ -559,7 +559,7 @@ it("Shows details about the entered entropy", async function() {
     });
 });
 
-it("Shows details about the entered entropy", async function() {
+it("Shows details for a full deck with 4 missing cards", async function() {
     const result = await new Promise((resolve) => {
         testEntropyFeedback(resolve,
             {
@@ -574,7 +574,7 @@ it("Shows details about the entered entropy", async function() {
     });
 });
 
-it("Shows details about the entered entropy", async function() {
+it("Does not show a missing-card message beyond 6 missing cards", async function() {
     const result = await new Promise((resolve) => {
         testEntropyFeedback(resolve,
             // More than six missing cards does not show message
@@ -590,7 +590,7 @@ it("Shows details about the entered entropy", async function() {
     });
 });
 
-it("Shows details about the entered entropy", async function() {
+it("Shows bits-per-event for a single dice roll", async function() {
     // multiple decks does not affect the bits per event
     // since the bits are hardcoded in entropy.js
     const result = await new Promise((resolve) => {
@@ -605,7 +605,7 @@ it("Shows details about the entered entropy", async function() {
     });
 });
 
-it("Shows details about the entered entropy", async function() {
+it("Shows bits-per-event for 2 dice rolls", async function() {
     const result = await new Promise((resolve) => {
         testEntropyFeedback(resolve,
             {
@@ -618,7 +618,7 @@ it("Shows details about the entered entropy", async function() {
     });
 });
 
-it("Shows details about the entered entropy", async function() {
+it("Shows bits-per-event for 3 dice rolls", async function() {
     const result = await new Promise((resolve) => {
         testEntropyFeedback(resolve,
             {
@@ -631,7 +631,7 @@ it("Shows details about the entered entropy", async function() {
     });
 });
 
-it("Shows details about the entered entropy", async function() {
+it("Shows bits-per-event for 4 dice rolls", async function() {
     const result = await new Promise((resolve) => {
         testEntropyFeedback(resolve,
             {
@@ -644,7 +644,7 @@ it("Shows details about the entered entropy", async function() {
     });
 });
 
-it("Shows details about the entered entropy", async function() {
+it("Shows bits-per-event for 5 dice rolls", async function() {
     const result = await new Promise((resolve) => {
         testEntropyFeedback(resolve,
             {
@@ -657,7 +657,7 @@ it("Shows details about the entered entropy", async function() {
     });
 });
 
-it("Shows details about the entered entropy", async function() {
+it("Shows bits-per-event for 6 dice rolls", async function() {
     const result = await new Promise((resolve) => {
         testEntropyFeedback(resolve,
             {
@@ -670,7 +670,7 @@ it("Shows details about the entered entropy", async function() {
     });
 });
 
-it("Shows details about the entered entropy", async function() {
+it("Warns that repeated dice patterns are easy to guess", async function() {
     const result = await new Promise((resolve) => {
         testEntropyFeedback(resolve,
             {

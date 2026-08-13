@@ -740,7 +740,7 @@ it('Can generate more rows in the table', async function() {
 });
 
 // A custom number of additional addresses can be generated
-it('Can generate more rows in the table', async function() {
+it('Can generate a custom number of additional rows in the table', async function() {
     await driver.findElement(By.css('.phrase'))
         .sendKeys('abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about');
     await driver.sleep(generateDelay);
@@ -901,7 +901,7 @@ it('Shows error for derivation path not starting with m', async function() {
 });
 
 // Derivation path containing invalid characters shows useful error
-it('Shows error for derivation path not starting with m', async function() {
+it('Shows error for derivation path with invalid characters', async function() {
     await driver.findElement(By.css('#bip32-tab a'))
         .click();
     await driver.findElement(By.css('#bip32 .path'))
