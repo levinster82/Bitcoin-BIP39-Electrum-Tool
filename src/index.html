@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="utf-8" />
-        <title>BIP39 - Mnemonic Code</title>
+        <title>Bitcoin BIP39 + SLIP39 + Electrum Mnemonic Tool</title>
         <link rel="stylesheet" href="css/bootstrap.css">
         <link rel="stylesheet" href="css/app.css">
         <meta content="Bitcoin mnemonic converter - Mnemonic code for generating deterministic keys" name="description"/>
@@ -26,7 +26,7 @@
                     <div class="header-content">
                         <h1 class="text-center"><a href="https://github.com/levinster82/Bitcoin-BIP39-Electrum-Tool/releases/latest" target="_blank" style="color: inherit; text-decoration: none;">Bitcoin Mnemonic Code Converter</a></h1>
                         <div class="text-center version">
-                            <a href="https://github.com/levinster82/Bitcoin-BIP39-Electrum-Tool/releases/latest" target="_blank" style="color: inherit; text-decoration: none;">v1.2.0</a>
+                            <a href="https://github.com/levinster82/Bitcoin-BIP39-Electrum-Tool/releases/latest" target="_blank" style="color: inherit; text-decoration: none;">v1.3.0</a>
                         </div>
                     </div>
                     <button class="theme-toggle" onclick="toggleTheme()" id="theme-toggle" aria-label="Toggle dark/light theme">
@@ -1812,7 +1812,7 @@
 
                     <h4>Quick Start</h4>
                     <ol>
-                        <li>Download <code>bip39-electrum-standalone.html</code> from <a href="https://github.com/levinster82/Bitcoin-BIP39-Electrum-Tool/releases/latest">GitHub releases</a></li>
+                        <li>Download <code>bip39-slip39-electrum-standalone.html</code> from <a href="https://github.com/levinster82/Bitcoin-BIP39-Electrum-Tool/releases/latest">GitHub releases</a></li>
                         <li>Transfer to offline computer</li>
                         <li>Open in browser</li>
                     </ol>
@@ -1822,19 +1822,19 @@
                     <h5>Step 1: Download Files</h5>
                     <p>Download these 3 files from <a href="https://github.com/levinster82/Bitcoin-BIP39-Electrum-Tool/releases/latest">GitHub releases</a>:</p>
                     <ul>
-                        <li><code>bip39-electrum-standalone.html</code> - The tool</li>
-                        <li><code>bip39-electrum-standalone.html.sha256sum</code> - Checksum file</li>
-                        <li><code>bip39-electrum-standalone.html.sha256sum.asc</code> - GPG signature</li>
+                        <li><code>bip39-slip39-electrum-standalone.html</code> - The tool</li>
+                        <li><code>bip39-slip39-electrum-standalone.html.sha256sum</code> - Checksum file</li>
+                        <li><code>bip39-slip39-electrum-standalone.html.sha256sum.asc</code> - GPG signature</li>
                     </ul>
 
                     <h5>Step 2: Verify File Integrity</h5>
                     <p>Ensure the file hasn't been tampered with:</p>
-                    <pre><code>sha256sum -c bip39-electrum-standalone.html.sha256sum</code></pre>
-                    <p><strong>Expected result:</strong> <code>bip39-electrum-standalone.html: OK</code></p>
+                    <pre><code>sha256sum -c bip39-slip39-electrum-standalone.html.sha256sum</code></pre>
+                    <p><strong>Expected result:</strong> <code>bip39-slip39-electrum-standalone.html: OK</code></p>
 
                     <h5>Step 3: Verify GPG Signature</h5>
                     <p>Confirm the files are authentic:</p>
-                    <pre><code>gpg --verify bip39-electrum-standalone.html.sha256sum.asc bip39-electrum-standalone.html.sha256sum</code></pre>
+                    <pre><code>gpg --verify bip39-slip39-electrum-standalone.html.sha256sum.asc bip39-slip39-electrum-standalone.html.sha256sum</code></pre>
 
                     <details>
                         <summary><strong>First time? Set up GPG key verification</strong></summary>
@@ -1858,7 +1858,7 @@ sub   brainpoolP512r1 2025-08-16 [E] [expires: 2050-08-10]</code></pre>
                     </details>
 
                     <div class="alert alert-success" role="alert" style="margin-top: 20px;">
-                        <strong>✅ Verification Complete!</strong> You can now safely open <code>bip39-electrum-standalone.html</code> in your offline browser.
+                        <strong>✅ Verification Complete!</strong> You can now safely open <code>bip39-slip39-electrum-standalone.html</code> in your offline browser.
                     </div>
 
                 </div>

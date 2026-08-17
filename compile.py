@@ -4,7 +4,7 @@ import datetime
 import hashlib
 from io import open
 
-# This script generates the bip39-electrum-standalone.html file.
+# This script generates the bip39-slip39-electrum-standalone.html file.
 
 # It removes script and style tags and replaces with the file content.
 
@@ -43,7 +43,7 @@ for style in styles:
 
 # Write the standalone file
 
-standalone_filename = 'bip39-electrum-standalone.html'
+standalone_filename = 'bip39-slip39-electrum-standalone.html'
 f = open(standalone_filename, 'w', encoding="utf-8")
 f.write(page)
 f.close()

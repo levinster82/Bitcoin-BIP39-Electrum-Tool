@@ -1,4 +1,4 @@
-# Bitcoin BIP39 + Electrum Mnemonic Tool
+# Bitcoin BIP39 + SLIP39 + Electrum Mnemonic Tool
 
 A Bitcoin-focused fork of [iancoleman/bip39](https://github.com/iancoleman/bip39).
 
@@ -102,7 +102,7 @@ A Bitcoin-focused fork of [iancoleman/bip39](https://github.com/iancoleman/bip39
 ## Standalone Versions
 
 Download from releases:
-- [Latest Release](https://github.com/levinster82/Bitcoin-BIP39-Electrum-Tool/releases/latest)    `bip39-electrum-standalone.html` - v1.2.0 - BIP-392 Key Expressions!
+- [Latest Release](https://github.com/levinster82/Bitcoin-BIP39-Electrum-Tool/releases/latest)    `bip39-slip39-electrum-standalone.html` - v1.3.0 - SLIP-39 Shamir's Secret-Sharing!
 
 Build from source:
 ```bash

@@ -1,5 +1,10 @@
 node_modules
 CLAUDE.md
+bip39-slip39-electrum-standalone.html
+bip39-slip39-electrum-standalone.html.sha256sum
+bip39-slip39-electrum-standalone.html.sha256sum.asc
+
+# Artifact names from earlier releases, kept so stale local copies stay ignored.
 bip39-standalone.html
 bip39-electrum-standalone.html
 bip39-electrum-standalone.html.sha256sum

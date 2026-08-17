@@ -95,10 +95,18 @@ bytes when its inputs are unchanged, so a no-op rebuild leaves the tree clean.
 
 Each library build writes into `src/js/`; the combined build also regenerates
 `src/css/bootstrap.css`. `compile.py` writes both
-`bip39-electrum-standalone.html` and `bip39-electrum-standalone.html.sha256sum`.
+`bip39-slip39-electrum-standalone.html` and `bip39-slip39-electrum-standalone.html.sha256sum`.
 
-1. Sign the checksum
-   `gpg --armor --detach-sign bip39-electrum-standalone.html.sha256sum`
+1. Sign the checksum, naming the key explicitly
+   `rm -f bip39-slip39-electrum-standalone.html.sha256sum.asc`
+   `gpg --armor --local-user E3BCAA9688A7BF6A --detach-sign bip39-slip39-electrum-standalone.html.sha256sum`
+
+`--local-user` is not optional: this keyring holds more than one secret key and has no
+`default-key` set, so a bare `gpg --detach-sign` picks the first suitable key rather than the
+`levinster82 <levinster82@protonmail.com>` key every previous release was signed with — producing
+a signature that fails to verify against the published key. The stale `.asc` must be removed
+first, or gpg prompts to overwrite. Confirm before attaching:
+`gpg --verify bip39-slip39-electrum-standalone.html.sha256sum.asc bip39-slip39-electrum-standalone.html.sha256sum`
 
 ## 6. Commit, tag, push
 
@@ -112,15 +120,15 @@ Each library build writes into `src/js/`; the combined build also regenerates
 Create a release from the tagged commit:
 
 1. include the changelog for this release as text for the release
-1. attach the `bip39-electrum-standalone.html` file
-1. attach the `bip39-electrum-standalone.html.sha256sum` file
-1. attach the `bip39-electrum-standalone.html.sha256sum.asc` file
+1. attach the `bip39-slip39-electrum-standalone.html` file
+1. attach the `bip39-slip39-electrum-standalone.html.sha256sum` file
+1. attach the `bip39-slip39-electrum-standalone.html.sha256sum.asc` file
 
 ## 8. Verify the published artifacts
 
 1. Download the html and the checksum from the release, and confirm the hash
-   `sha256sum -c bip39-electrum-standalone.html.sha256sum`
+   `sha256sum -c bip39-slip39-electrum-standalone.html.sha256sum`
 1. Download the signature from the release and verify it
-   `gpg --verify bip39-electrum-standalone.html.sha256sum.asc bip39-electrum-standalone.html.sha256sum`
+   `gpg --verify bip39-slip39-electrum-standalone.html.sha256sum.asc bip39-slip39-electrum-standalone.html.sha256sum`
 1. Open the downloaded file with no network connection and confirm it loads and
    generates a mnemonic

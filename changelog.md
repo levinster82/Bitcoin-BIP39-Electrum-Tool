@@ -1,3 +1,60 @@
+# v1.3.0
+
+## ⚠️ Renamed Download
+
+- **The standalone file is now `bip39-slip39-electrum-standalone.html`** (previously
+  `bip39-electrum-standalone.html`), along with its `.sha256sum` and `.sha256sum.asc`
+  companions. Verification commands are otherwise unchanged - substitute the new name:
+  `sha256sum -c bip39-slip39-electrum-standalone.html.sha256sum`
+- The project is likewise now "Bitcoin BIP39 + SLIP39 + Electrum Mnemonic Tool", reflected in
+  the README and the page title
+
+## 🌟 New Features
+
+- **SLIP-39 Shamir's Secret-Sharing** - Split a master secret into a group/threshold tree of
+  mnemonic shares, selectable from the Mnemonic Type dropdown alongside BIP39 and Electrum
+  - Full multi-group support: an overall group threshold plus per-group threshold, share count,
+    and optional description, configured in an add/remove group table (defaults to 2-of-3 groups,
+    each 1-of-1)
+  - Secret sizes of 128-bit (20-word shares) and 256-bit (33-word shares)
+  - Optional SLIP-39 passphrase
+  - Custom master secrets via the existing "Show entropy details" panel - binary, base 6, dice,
+    base 10, hex, or cards, validated to an exact bit-length match
+  - Recovery as well as generation: paste a sufficient set of shares back into the mnemonic field
+    to reconstruct the secret and derive addresses
+  - Feeds the same BIP44/49/84/86/352/NIP06 tabs as BIP39 - per the SLIP-39 spec the recovered
+    master secret is used *directly* as the BIP32 seed, with no BIP39-style PBKDF2 stretching, so
+    SLIP-39 has no derivation-path tab of its own
+  - Note: recovery requires *exactly* the shares your thresholds call for, not every share you
+    hold - supplying extra shares is rejected by design, not silently accepted
+  - The old "Show split mnemonic cards" feature (which redistributed words across 3 cards and was
+    never real secret sharing) is now hidden, superseded by SLIP-39
+
+## 🐛 Bug Fixes
+
+- **Two Tabs Active At Once** - Switching mnemonic types could leave two derivation tabs marked
+  active simultaneously (e.g. BIP39 with BIP86 selected, then switching to SLIP-39, left both
+  BIP44 and BIP86 active). A latent bug in the original two-way BIP39/Electrum logic that only
+  surfaced once a third mode that also shows the BIP tabs existed
+
+## 🔧 Internal Improvements
+
+- **slip39-js v0.4.0-levinster82.2** - New git submodule and browser bundle harness
+  (`libs/slip39-bundle`), including an upstream fix replacing `crypto.timingSafeEqual` (which has
+  no browser equivalent) with a pure-JS constant-time compare
+- **Bitcoin library majors** - bitcoinjs-lib 6.1.7→7.0.1, bip32 4→5, bech32 1→2, bs58 4→6,
+  bip38 2→3, moved together since bip32 nodes feed directly into bitcoinjs-lib's payments
+  functions. Includes fixes for two breaking changes: bech32 v2's namespaced exports, and
+  bip32 v5 returning `Uint8Array` instead of `Buffer` from `.privateKey`/`.publicKey`/
+  `.fingerprint`, which would otherwise have displayed garbled hex rather than erroring
+- **Test suite** - grown from 217 specs across 9 files to 270 across 11, adding 8 SLIP-39 UI specs
+  plus all 45 official SLIP-39 vectors from trezor/python-shamir-mnemonic run through the real
+  browser UI, and a Node-side vector validator needing no browser
+- **Build and test tooling** - jquery 3→4, css-loader 6→7, webpack-cli 6→7, fast-levenshtein 2→3,
+  jasmine 3→6, jimp 0→1, selenium-webdriver 4.0→4.47
+
+*Release Date: August 17, 2026*
+
 # v1.2.0
 
 ## 🌟 New Features
